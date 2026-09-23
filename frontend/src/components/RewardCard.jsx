@@ -124,9 +124,28 @@ export const RewardCard = ({
         ) : null}
       </div>
 
-      {/* Visual Artwork */}
-      <div className="d-flex align-items-center justify-content-center py-2" style={{ minHeight: '68px' }}>
-        {renderAsset()}
+      {/* Visual Artwork with Already-Taken Icon Overlay */}
+      <div className="d-flex align-items-center justify-content-center py-2 position-relative" style={{ minHeight: '68px' }}>
+        <div style={{ opacity: isClaimed ? 0.6 : 1, filter: isClaimed ? 'brightness(0.85) grayscale(20%)' : 'none', transition: 'all 0.3s ease' }}>
+          {renderAsset()}
+        </div>
+
+        {/* Prominent 'Already Taken / Claimed' stamp overlay over the icon */}
+        {isClaimed && (
+          <div
+            className="position-absolute d-flex align-items-center justify-content-center rounded-circle"
+            style={{
+              width: '38px',
+              height: '38px',
+              backgroundColor: '#10B981',
+              boxShadow: '0 0 16px rgba(16, 185, 129, 0.7), 0 3px 8px rgba(0,0,0,0.4)',
+              border: '2.5px solid #ffffff'
+            }}
+            title="Reward already claimed"
+          >
+            <Check size={22} color="#ffffff" strokeWidth={3.5} />
+          </div>
+        )}
       </div>
 
       {/* Title & Subtitle */}
