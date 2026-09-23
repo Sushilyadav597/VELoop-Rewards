@@ -231,16 +231,53 @@ veloop-daily-streak/
 
 ---
 
-## 🌐 Deployment Recommendations
+## 🚀 Deployment Guide (Vercel)
 
-- **Frontend**: Deploy on [Vercel](https://vercel.com) or [Netlify](https://netlify.com)
-  - Build command: `npm run build`
-  - Output directory: `dist`
-  - Environment variable: `VITE_API_URL=https://your-backend.onrender.com`
-- **Backend**: Deploy on [Render](https://render.com) or [Railway](https://railway.app)
-  - Start command: `npm start`
-  - Environment variables: `PORT`, `MONGO_URI`, `JWT_SECRET`, `CLIENT_URL`
-- **Database**: [MongoDB Atlas](https://www.mongodb.com/atlas) Free Tier M0 Cluster
+### Option 1: Unified All-in-One Vercel Deployment (Pre-configured)
+This repository is pre-configured with [`vercel.json`](file:///vercel.json) and [`api/index.js`](file:///api/index.js) to run both the Vite Frontend and Express Backend together on Vercel!
+
+#### Step 1: Cloud Database (MongoDB Atlas)
+Because local MongoDB (`127.0.0.1`) cannot be accessed from Vercel servers:
+1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/atlas).
+2. Go to **Network Access** > **Add IP Address** > Select **Allow Access From Anywhere (`0.0.0.0/0`)**.
+3. Go to **Database Access** > Add a user with a secure password.
+4. Click **Connect** > Drivers > Copy your connection URI:
+   `mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/veloop_rewards`
+
+#### Step 2: Push Repository to GitHub
+```bash
+git add .
+git commit -m "feat: configure Vercel deployment"
+git push origin main
+```
+
+#### Step 3: Import into Vercel
+1. Go to [vercel.com](https://vercel.com) and log in.
+2. Click **Add New...** > **Project** > Import your GitHub repository.
+3. Keep the **Root Directory** as `./` (default).
+4. Add the following **Environment Variables** in the Vercel dashboard:
+   - `MONGO_URI`: `mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/veloop_rewards`
+   - `JWT_SECRET`: `veloop_super_secure_jwt_secret_key_2026_internship_production`
+   - `NODE_ENV`: `production`
+5. Click **Deploy**!
+   - Your frontend will be live on `https://your-app.vercel.app`
+   - Your API will be served automatically from `https://your-app.vercel.app/api/*`
+
+---
+
+### Option 2: Split Deployment (Frontend on Vercel + Backend on Render/Railway)
+If you prefer a dedicated continuous backend process:
+1. **Deploy Backend to [Render.com](https://render.com)**:
+   - Root directory: `backend`
+   - Build command: `npm install`
+   - Start command: `npm start`
+   - Environment variables: `MONGO_URI`, `JWT_SECRET`, `CLIENT_URL=https://your-frontend.vercel.app`
+2. **Deploy Frontend to [Vercel](https://vercel.com)**:
+   - Root directory: `frontend`
+   - Framework preset: `Vite`
+   - Build command: `npm run build`
+   - Output directory: `dist`
+   - Environment variable: `VITE_API_URL=https://your-backend.onrender.com`
 
 ---
 

@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "Full-Stack MERN Daily Streak System Workspace",
   "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
+    "build": "npm --prefix frontend run build",
     "install:all": "npm --prefix backend install && npm --prefix frontend install",
     "seed": "npm --prefix backend run seed",
     "test:backend": "npm --prefix backend test",

@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 let isConnected = false;
 
 const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) {
+    isConnected = true;
+    return true;
+  }
+
   const primaryURI = process.env.MONGO_URI;
   const localURI = 'mongodb://127.0.0.1:27017/veloop_rewards';
 
