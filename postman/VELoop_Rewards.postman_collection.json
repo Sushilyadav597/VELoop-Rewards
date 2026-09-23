@@ -1,0 +1,401 @@
+{
+  "info": {
+    "name": "VELoop Rewards - Daily Streak API Suite",
+    "description": "Comprehensive Postman test collection for VELoop Rewards Daily Streak MERN internship project.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001/api",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "1.1 Login (demo_day2)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Token received', function () { pm.expect(jsonData.token).to.be.a('string'); });",
+                  "pm.collectionVariables.set('authToken', jsonData.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"demo_day2\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "1.2 Get Current User & Wallet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Daily Streak Operations",
+      "item": [
+        {
+          "name": "2.1 Get Daily Streak State",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Streak object returned', function () { pm.expect(jsonData.streak).to.exist; });",
+                  "pm.test('7 Rewards returned', function () { pm.expect(jsonData.rewards.length).to.eql(7); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/daily-streak",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "daily-streak"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.2 Get Lightweight Streak Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/daily-streak/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "daily-streak",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.3 Claim Eligible Streak Reward (Day 2)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.test('Claim processed', function () { pm.expect(pm.response.code).to.be.oneOf([200, 400, 409]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"day\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/daily-streak/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "daily-streak",
+                "claim"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.4 Get Streak Claim History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/daily-streak/history",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "daily-streak",
+                "history"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Security & Anti-Cheat Negative Tests",
+      "item": [
+        {
+          "name": "3.1 Negative: Fake Reward Attack (Tampered Body)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success) {",
+                  "  pm.test('Server awarded authoritative 10 VEs, not 999999', function () {",
+                  "    pm.expect(jsonData.claimedReward.amount).to.eql(10);",
+                  "  });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"day\": 2,\n  \"reward\": 999999,\n  \"currency\": \"VES\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/daily-streak/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "daily-streak",
+                "claim"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3.2 Negative: Illegal Day Jump (Attempt Day 7 Jump)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 400 Bad Request', function () { pm.response.to.have.status(400); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"day\": 7\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/daily-streak/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "daily-streak",
+                "claim"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3.3 Negative: Unauthorized Request (Missing Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 401 Unauthorized', function () { pm.response.to.have.status(401); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/daily-streak",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "daily-streak"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Evaluator Time Machine & Audit Logs",
+      "item": [
+        {
+          "name": "4.1 Fast-Forward Virtual Server Time (+24 Hours)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hours\": 24\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dev/advance-time",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dev",
+                "advance-time"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4.2 Reset Virtual Clock",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/dev/reset-clock",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dev",
+                "reset-clock"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4.3 Inspect MongoDB Audit Log",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/dev/audit-logs?limit=25",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dev",
+                "audit-logs"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "25"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

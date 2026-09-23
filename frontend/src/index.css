@@ -1,0 +1,104 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+:root {
+  --bg-deep: #070514;
+  --bg-base: #0c0822;
+  --bg-card: #150f38;
+  --bg-card-alt: #1c154a;
+  --bg-card-glow: rgba(139, 92, 246, 0.15);
+  
+  --accent-gold: #f59e0b;
+  --accent-gold-light: #fbbf24;
+  --accent-gold-glow: rgba(245, 158, 11, 0.35);
+  
+  --accent-purple: #8b5cf6;
+  --accent-purple-light: #a78bfa;
+  --accent-purple-glow: rgba(139, 92, 246, 0.4);
+
+  --accent-green: #10b981;
+  --accent-green-dark: #059669;
+  --accent-green-glow: rgba(16, 185, 129, 0.3);
+
+  --border-subtle: rgba(139, 92, 246, 0.2);
+  --border-highlight: rgba(245, 158, 11, 0.6);
+
+  --text-white: #ffffff;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Animations */
+@keyframes floatAnimation {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes gentlePulse {
+  0% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.55); }
+  100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+}
+
+@keyframes purplePulse {
+  0% { box-shadow: 0 0 12px rgba(139, 92, 246, 0.2); }
+  50% { box-shadow: 0 0 22px rgba(139, 92, 246, 0.45); }
+  100% { box-shadow: 0 0 12px rgba(139, 92, 246, 0.2); }
+}
+
+@keyframes shimmerEffect {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.anim-float {
+  animation: floatAnimation 4s ease-in-out infinite;
+}
+
+.anim-glow-gold {
+  animation: gentlePulse 2.5s ease-in-out infinite;
+}
+
+.anim-glow-purple {
+  animation: purplePulse 3s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: #2a1f60;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-purple);
+}

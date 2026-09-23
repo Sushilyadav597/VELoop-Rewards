@@ -1,0 +1,21 @@
+{
+  "name": "veloop-rewards-workspace",
+  "version": "1.0.0",
+  "description": "Full-Stack MERN Daily Streak System Workspace",
+  "private": true,
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "seed": "npm --prefix backend run seed",
+    "test:backend": "npm --prefix backend test",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev"
+  },
+  "keywords": [
+    "mern",
+    "veloop",
+    "streak",
+    "rewards"
+  ],
+  "author": "VELoop Intern",
+  "license": "ISC"
+}
