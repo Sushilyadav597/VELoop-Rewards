@@ -33,11 +33,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Apply rate limiter to /api
-app.use('/api', apiLimiter);
+// Apply rate limiter to /api and root API endpoints
+app.use(['/api', '/auth', '/daily-streak', '/wallet', '/dev'], apiLimiter);
 
-// Health & System Info
-app.get('/health', (req, res) => {
+// Health & System Info (accessible at both /health and /api/health)
+app.get(['/health', '/api/health'], (req, res) => {
   res.json({
     status: 'healthy',
     service: 'VELoop Rewards - Daily Streak Backend API',
@@ -46,14 +46,22 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Mount API Routes
+// Mount API Routes (under both /api and root prefix to ensure compatibility
+// whether requests arrive rewritten with or without the /api prefix)
 app.use('/api/auth', authRoutes);
-app.use('/api/daily-streak', streakRoutes);
-app.use('/api/wallet', walletRoutes);
-app.use('/api/dev', devRoutes);
+app.use('/auth', authRoutes);
 
-// Root Welcome Endpoint
-app.get('/', (req, res) => {
+app.use('/api/daily-streak', streakRoutes);
+app.use('/daily-streak', streakRoutes);
+
+app.use('/api/wallet', walletRoutes);
+app.use('/wallet', walletRoutes);
+
+app.use('/api/dev', devRoutes);
+app.use('/dev', devRoutes);
+
+// Root Welcome Endpoint (accessible at / and /api)
+app.get(['/', '/api'], (req, res) => {
   res.json({
     message: 'Welcome to VELoop Rewards Daily Streak API',
     documentation: '/docs/API_DOCUMENTATION.md',

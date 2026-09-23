@@ -44,7 +44,11 @@ export const DailyStreakPage = () => {
   if (isLoading && !streak) {
     return (
       <div className={styles.pageContainer}>
-        <StreakLoader />
+        <StreakLoader
+          onRetry={() => refreshStreak(true)}
+          onContinue={() => refreshStreak(false)}
+          error={error}
+        />
       </div>
     );
   }

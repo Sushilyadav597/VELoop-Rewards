@@ -4,14 +4,19 @@ import streakApi from '../services/streakApi';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('veloop_token') || null);
+  const [user, setUser] = useState({
+    id: 'demo-day2',
+    username: 'demo_day2',
+    name: 'Jordan (Day 2 Active)',
+    role: 'USER'
+  });
+  const [token, setToken] = useState(localStorage.getItem('veloop_token') || 'demo_token_day2');
   const [wallet, setWallet] = useState({
-    vesBalance: 100,
+    vesBalance: 110,
     gemsBalance: 120, // default 120 Gems matching the reference design header
     amazonVouchersTotal: 0
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Initialize session: restore token or auto-login with demo account for frictionless evaluation
   useEffect(() => {

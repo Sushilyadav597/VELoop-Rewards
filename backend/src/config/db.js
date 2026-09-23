@@ -25,7 +25,14 @@ const connectDB = async () => {
     }
   }
 
-  // 2. Try local MongoDB instance
+  // 2. In serverless / cloud environment, skip local 127.0.0.1 fallback
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    isConnected = false;
+    console.warn('[MongoDB Notice]: Running in serverless cloud environment without MongoDB Atlas connection. Using robust in-memory store.');
+    return false;
+  }
+
+  // 3. Try local MongoDB instance for local dev
   try {
     const conn = await mongoose.connect(localURI, {
       serverSelectionTimeoutMS: 2000,
