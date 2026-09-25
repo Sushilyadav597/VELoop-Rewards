@@ -10,10 +10,10 @@ const INITIAL_DEFAULT_REWARDS = [
   { day: 1, title: 'Daily Reward', subtitle: '5 VEs', amount: 5, currency: 'VES', assetType: 'coin', status: 'CLAIMED', isToday: false },
   { day: 2, title: 'Daily Reward', subtitle: '10 VEs', amount: 10, currency: 'VES', assetType: 'coin', badge: 'Today', status: 'AVAILABLE', isToday: true },
   { day: 3, title: 'Daily Reward', subtitle: '15 VEs', amount: 15, currency: 'VES', assetType: 'coin', status: 'LOCKED', isToday: false },
-  { day: 4, title: 'Daily Reward', subtitle: '20 VEs', amount: 20, currency: 'VES', assetType: 'coin', status: 'LOCKED', isToday: false },
-  { day: 5, title: 'Daily Reward', subtitle: '25 VEs', amount: 25, currency: 'VES', assetType: 'coin', status: 'LOCKED', isToday: false },
-  { day: 6, title: 'Daily Reward', subtitle: 'Surprise Box', amount: 30, currency: 'VES', assetType: 'gift-box', status: 'LOCKED', isToday: false },
-  { day: 7, title: 'Amazon Card', subtitle: '₹5 Voucher', amount: 5, currency: 'INR', assetType: 'amazon-card', badge: 'Grand', status: 'LOCKED', isToday: false }
+  { day: 4, title: 'Daily Reward', subtitle: 'Amazon Gift Card', amount: 1, currency: 'INR', assetType: 'gift-box', badge: 'Gift Card', status: 'LOCKED', isToday: false },
+  { day: 5, title: 'Daily Reward', subtitle: 'Amazon Gift Card', amount: 2, currency: 'INR', assetType: 'amazon-card', badge: 'Gift Card', status: 'LOCKED', isToday: false },
+  { day: 6, title: 'Daily Reward', subtitle: '30 VEs', amount: 30, currency: 'VES', assetType: 'gift-box', badge: 'Coin', status: 'LOCKED', isToday: false },
+  { day: 7, title: 'Amazon Card', subtitle: '₹5 Voucher', amount: 5, currency: 'INR', assetType: 'crown', badge: 'Grand', status: 'LOCKED', isToday: false }
 ];
 
 const INITIAL_DEFAULT_STREAK = {

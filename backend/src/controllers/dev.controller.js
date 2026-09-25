@@ -62,6 +62,8 @@ const resetUserStreak = async (req, res, next) => {
     if (getDBStatus()) {
       await StreakCycle.updateMany({ userId, status: 'ACTIVE' }, { status: 'RESET', resetReason: 'Manual test reset' });
     }
+    const { resetRotatingClaimsForUser } = require('../services/rotatingReward.service');
+    await resetRotatingClaimsForUser(userId);
     // New active cycle
     const newCycle = await streakService.getOrCreateActiveCycle(userId);
 

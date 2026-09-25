@@ -6,6 +6,8 @@ export const streakApi = {
   getStatus: () => api.get('/daily-streak/status'),
   claimReward: (payload = {}) => api.post('/daily-streak/claim', payload),
   getHistory: () => api.get('/daily-streak/history'),
+  getRotatingDrop: () => api.get('/daily-streak/rotating-drop'),
+  claimRotatingDrop: () => api.post('/daily-streak/rotating-drop/claim'),
 
   // Wallet Endpoints
   getWallet: () => api.get('/wallet'),

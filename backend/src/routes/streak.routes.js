@@ -4,6 +4,8 @@ const streakController = require('../controllers/streak.controller');
 const { requireAuth } = require('../middleware/auth.middleware');
 const { claimLimiter } = require('../middleware/rateLimiter.middleware');
 
+const rotatingController = require('../controllers/rotatingReward.controller');
+
 // All streak routes require authentication
 router.use(requireAuth);
 
@@ -19,4 +21,9 @@ router.post('/claim', claimLimiter, streakController.claimStreak);
 // GET /api/daily-streak/history
 router.get('/history', streakController.getHistory);
 
+// Dynamic 24h Rotating Daily Reward Routes
+router.get('/rotating-drop', rotatingController.getTodayDrop);
+router.post('/rotating-drop/claim', claimLimiter, rotatingController.claimTodayDrop);
+
 module.exports = router;
+

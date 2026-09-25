@@ -15,6 +15,7 @@ import HistoryModal from '../../components/HistoryModal';
 import EvaluatorToolbar from '../../components/EvaluatorToolbar';
 import StreakLoader from '../../components/StreakLoader';
 import StreakSkeleton from '../../components/StreakSkeleton';
+import DailyRotatingDrop from '../../components/DailyRotatingDrop';
 import styles from './DailyStreak.module.css';
 
 export const DailyStreakPage = () => {
@@ -89,6 +90,9 @@ export const DailyStreakPage = () => {
 
         {/* 3 Metric Stats Cards */}
         <StreakStats streak={streak} />
+
+        {/* 24-Hour Rotating Surprise Drop Showcase */}
+        <DailyRotatingDrop />
 
         {/* Ultimate Day 7 Crown Showcase Card */}
         <UltimateReward
