@@ -13,13 +13,36 @@ const WalletTransaction = require('../src/models/WalletTransaction');
 const { DEFAULT_STREAK_CONFIG, DEFAULT_REWARDS } = require('../src/config/streakConfig');
 
 const seedDatabase = async () => {
-  const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/veloop_rewards';
-  console.log(`Connecting to MongoDB at: ${mongoURI}`);
+  const primaryURI = process.env.MONGO_URI;
+  const localURI = 'mongodb://127.0.0.1:27017/veloop_rewards';
+
+  let connected = false;
+  if (primaryURI && !primaryURI.includes('127.0.0.1')) {
+    try {
+      console.log(`Connecting to MongoDB at: ${primaryURI}`);
+      await mongoose.connect(primaryURI, { serverSelectionTimeoutMS: 3000 });
+      connected = true;
+      console.log('MongoDB Atlas connected successfully for seeding.');
+    } catch (err) {
+      console.warn(`Seeding notice: Could not connect to primary MONGO_URI (${err.message}). Trying local MongoDB...`);
+    }
+  }
+
+  if (!connected) {
+    try {
+      console.log(`Connecting to local MongoDB at: ${localURI}`);
+      await mongoose.connect(localURI, { serverSelectionTimeoutMS: 3000 });
+      connected = true;
+      console.log('Local MongoDB connected successfully for seeding.');
+    } catch (localErr) {
+      console.error('Seeding notice:', localErr.message);
+      console.log('Note: If MongoDB is not yet running on your computer, the backend also has an in-memory auto-seeder!');
+      process.exit(0);
+    }
+  }
+
 
   try {
-    await mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 5001 });
-    console.log('MongoDB connected successfully for seeding.');
-
     // 1. Seed Streak Configuration
     await StreakConfig.deleteMany({});
     await StreakConfig.create({
