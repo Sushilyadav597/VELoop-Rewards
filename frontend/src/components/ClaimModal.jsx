@@ -1,137 +1,173 @@
 import React from 'react';
-import { CheckCircle2, X, Sparkles, ArrowRight, Wallet } from 'lucide-react';
-import GoldCoins from '../assets/GoldCoins';
-import RoyalCrown from '../assets/RoyalCrown';
-import GiftBox from '../assets/GiftBox';
-import AmazonCard from '../assets/AmazonCard';
+import styles from '../styles/globals.module.css';
 
-export const ClaimModal = ({ claimData, onClose }) => {
-  if (!claimData) return null;
+/**
+ * ClaimModal (Step 9 Polish):
+ * Displays the authoritative reward returned by the backend after successful claim.
+ * Formats INR gift cards with ₹ (never $).
+ * Never fabricates or alters rewards locally.
+ */
+export const ClaimModal = ({ isOpen, claimData, onClose }) => {
+  if (!isOpen || !claimData) return null;
 
-  const reward = claimData.claimedReward || {};
-  const wallet = claimData.wallet || {};
+  // Extract authoritative backend payload
+  const payload = claimData.data || claimData;
+  const reward = payload.reward || payload.claimedReward;
+  const wallet = payload.wallet;
+  const transactionId = payload.transactionId || payload.transaction?.transactionId;
 
-  const renderRewardAsset = () => {
-    if (reward.rewardType === 'ULTIMATE_GIFT_CARD' || reward.day === 7) {
-      return <RoyalCrown size={70} className="anim-float" />;
-    }
-    if (reward.rewardType === 'GIFT_CARD') {
-      return reward.day === 4 ? <GiftBox size={65} className="anim-float" /> : <AmazonCard size={65} />;
-    }
-    return <GoldCoins size={65} />;
-  };
+  const isGiftCard = reward?.currency === 'INR' || (reward?.rewardType && reward.rewardType.includes('GIFT_CARD'));
 
   return (
     <div
-      className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3"
       style={{
-        backgroundColor: 'rgba(5, 3, 15, 0.85)',
-        backdropFilter: 'blur(8px)',
-        zIndex: 1060
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(5, 4, 15, 0.88)',
+        backdropFilter: 'blur(10px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '1.25rem'
       }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="claim-modal-title"
     >
       <div
-        className="card border-0 text-center p-4 position-relative overflow-hidden anim-glow-gold"
+        className={styles.glassCard}
         style={{
-          maxWidth: '420px',
+          maxWidth: '480px',
           width: '100%',
-          backgroundColor: '#150f38',
-          border: '1.5px solid #F59E0B',
-          borderRadius: '24px',
-          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7)'
+          padding: '2.5rem 2.25rem',
+          textAlign: 'center',
+          border: '2px solid var(--reward-gold)',
+          boxShadow: '0 0 45px rgba(245, 158, 11, 0.3)',
+          animation: 'fadeInScale 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
+          position: 'relative'
         }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="btn btn-sm text-secondary position-absolute top-0 end-0 m-3 p-1 border-0"
-          aria-label="Close"
-        >
-          <X size={18} />
-        </button>
-
-        {/* Success Icon */}
-        <div className="d-flex justify-content-center mb-2">
-          <div
-            className="d-flex align-items-center justify-content-center rounded-circle"
-            style={{
-              width: '56px',
-              height: '56px',
-              backgroundColor: 'rgba(16, 185, 129, 0.2)',
-              border: '2px solid #10B981'
-            }}
-          >
-            <CheckCircle2 size={32} className="text-success" />
-          </div>
+        {/* Celebration Header Icon */}
+        <div style={{ fontSize: '3.6rem', marginBottom: '0.8rem', filter: 'drop-shadow(0 0 12px rgba(245, 158, 11, 0.5))' }}>
+          {isGiftCard ? '🎁' : '🎉'}
         </div>
 
-        <h4 className="fw-bold text-white mb-1">
-          Reward Claimed!
-        </h4>
-        <p className="text-secondary small mb-3">
-          Your Day {reward.day} reward has been verified and added to your wallet.
+        <h2
+          id="claim-modal-title"
+          style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.35rem', letterSpacing: '-0.02em' }}
+        >
+          Check-In Verified!
+        </h2>
+        
+        <p style={{ color: 'var(--success-color)', fontWeight: 600, fontSize: '0.95rem', marginBottom: '1.6rem' }}>
+          {claimData.message || `Day ${reward?.day} streak successfully recorded!`}
         </p>
 
-        {/* Reward Asset Preview */}
-        <div className="my-2 d-flex justify-content-center">
-          {renderRewardAsset()}
-        </div>
-
-        {/* Claimed Amount Banner */}
+        {/* Backend Confirmed Reward Highlight */}
         <div
-          className="py-2 px-3 my-2 d-inline-block mx-auto"
           style={{
-            background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.25) 100%)',
-            border: '1px solid rgba(245, 158, 11, 0.4)',
-            borderRadius: '14px'
+            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+            border: '1px solid rgba(245, 158, 11, 0.35)',
+            borderRadius: '14px',
+            padding: '1.4rem 1rem',
+            marginBottom: '1.6rem'
           }}
         >
-          <span className="fs-3 fw-bolder text-warning">
-            {reward.currency === 'INR' ? `₹${reward.amount}` : `+${reward.amount}`}
-          </span>
-          <span className="ms-2 text-white fw-bold">
-            {reward.currency === 'INR' ? 'Amazon Gift Card' : 'VEs'}
-          </span>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>
+            Day {reward?.day} Confirmed Reward
+          </div>
+          
+          <div
+            style={{
+              fontSize: '2.4rem',
+              fontWeight: 900,
+              color: 'var(--reward-gold)',
+              margin: '0.35rem 0',
+              letterSpacing: '-0.02em'
+            }}
+          >
+            {isGiftCard ? (
+              <>₹{reward?.amount} <span style={{ fontSize: '1.1rem', fontWeight: 700 }}>Amazon Voucher</span></>
+            ) : (
+              <>+{reward?.amount} <span style={{ fontSize: '1.15rem', fontWeight: 700 }}>{reward?.currency || 'VEs'}</span></>
+            )}
+          </div>
+
+          <div style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+            {reward?.title}
+          </div>
         </div>
 
-        {/* Wallet Balance Summary Card */}
-        <div
-          className="p-3 my-3 text-start"
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(139, 92, 246, 0.2)',
-            borderRadius: '14px'
-          }}
-        >
-          <div className="d-flex align-items-center gap-2 mb-2 text-muted small">
-            <Wallet size={15} />
-            <span>Updated Wallet Balance</span>
-          </div>
-          <div className="d-flex justify-content-between text-white small">
-            <span>VEs Balance:</span>
-            <span className="fw-bold text-warning">{wallet.vesBalance ?? '---'} VEs</span>
-          </div>
-          {wallet.amazonVouchersTotal > 0 && (
-            <div className="d-flex justify-content-between text-white small mt-1">
-              <span>Amazon Vouchers:</span>
-              <span className="fw-bold text-success">₹{wallet.amazonVouchersTotal}</span>
+        {/* Updated Authoritative Wallet Balances from Backend */}
+        {wallet && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '0.75rem',
+              padding: '0.85rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              borderRadius: '10px',
+              marginBottom: '1.4rem',
+              border: '1px solid var(--border-subtle)'
+            }}
+          >
+            <div>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', display: 'block' }}>
+                Updated VEs
+              </span>
+              <strong style={{ color: 'var(--text-primary)', fontSize: '1.15rem', fontWeight: 800 }}>
+                🪙 {wallet.vesBalance ?? 0}
+              </strong>
             </div>
-          )}
-          <div className="text-muted mt-2 pt-2 border-top border-secondary border-opacity-25" style={{ fontSize: '0.7rem' }}>
-            Ref: {claimData.transaction?.referenceId || 'STREAK-CONFIRMED'}
-          </div>
-        </div>
 
+            <div>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', display: 'block' }}>
+                Amazon Vouchers
+              </span>
+              <strong style={{ color: 'var(--reward-gold)', fontSize: '1.15rem', fontWeight: 800 }}>
+                🎟️ ₹{wallet.amazonVouchersTotal ?? 0}
+              </strong>
+            </div>
+          </div>
+        )}
+
+        {/* Transaction Reference ID from Backend */}
+        {transactionId && (
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', marginBottom: '1.6rem', fontFamily: 'monospace' }}>
+            Reference TX: {transactionId}
+          </div>
+        )}
+
+        {/* Dismiss Button */}
         <button
           onClick={onClose}
-          className="btn w-100 py-2 fw-bold text-dark border-0 mt-2"
-          style={{
-            background: 'linear-gradient(90deg, #F59E0B 0%, #FBBF24 100%)',
-            borderRadius: '12px'
-          }}
+          className={styles.goldButton}
+          style={{ width: '100%', padding: '0.85rem', fontSize: '1rem' }}
+          autoFocus
         >
-          Awesome, Continue!
+          Continue Streaking! ⚡
         </button>
       </div>
+
+      <style>{`
+        @keyframes fadeInScale {
+          from {
+            opacity: 0;
+            transform: scale(0.93);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 };

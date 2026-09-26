@@ -3,23 +3,31 @@ const mongoose = require('mongoose');
 const auditLogSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.Mixed,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      index: true,
+      default: null
+    },
+    action: {
+      type: String,
+      required: [true, 'Audit action is required'],
       index: true
+    },
+    entity: {
+      type: String,
+      default: 'STREAK'
+    },
+    entityId: {
+      type: String,
+      default: null
     },
     event: {
       type: String,
-      enum: [
-        'STREAK_CLAIM_REQUEST',
-        'STREAK_CLAIM_SUCCESS',
-        'STREAK_CLAIM_REJECTED',
-        'STREAK_RESET',
-        'DUPLICATE_CLAIM',
-        'INVALID_CLAIM',
-        'USER_LOGIN',
-        'USER_REGISTER',
-        'DEV_TIME_ADVANCE'
-      ],
-      required: true
+      default: null
+    },
+    metadata: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
     },
     details: {
       type: mongoose.Schema.Types.Mixed,
@@ -32,13 +40,11 @@ const auditLogSchema = new mongoose.Schema(
     userAgent: {
       type: String,
       default: ''
-    },
-    timestamp: {
-      type: Date,
-      default: Date.now
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
 module.exports = mongoose.model('AuditLog', auditLogSchema);

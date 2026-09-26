@@ -4,47 +4,57 @@ const walletTransactionSchema = new mongoose.Schema(
   {
     transactionId: {
       type: String,
-      required: true,
+      required: [true, 'Transaction ID is required'],
       unique: true,
       index: true
     },
     userId: {
-      type: mongoose.Schema.Types.Mixed,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'User reference is required'],
       index: true
     },
-    currency: {
-      type: String,
-      required: true
+    walletId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Wallet',
+      index: true
     },
     type: {
       type: String,
       enum: ['CREDIT', 'DEBIT'],
       default: 'CREDIT'
     },
+    rewardType: {
+      type: String,
+      default: 'VES'
+    },
     amount: {
       type: Number,
-      required: true
+      required: [true, 'Transaction amount is required']
+    },
+    currency: {
+      type: String,
+      required: [true, 'Currency is required']
     },
     source: {
       type: String,
       default: 'DAILY_STREAK'
     },
-    referenceId: {
-      type: String,
-      required: true
-    },
     streakDay: {
       type: Number,
       default: null
     },
+    referenceId: {
+      type: String,
+      required: [true, 'Reference ID is required']
+    },
     balanceBefore: {
       type: Number,
-      required: true
+      required: [true, 'Balance before is required']
     },
     balanceAfter: {
       type: Number,
-      required: true
+      required: [true, 'Balance after is required']
     },
     status: {
       type: String,
@@ -52,7 +62,9 @@ const walletTransactionSchema = new mongoose.Schema(
       default: 'COMPLETED'
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
 module.exports = mongoose.model('WalletTransaction', walletTransactionSchema);

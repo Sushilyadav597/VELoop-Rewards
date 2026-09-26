@@ -5,19 +5,21 @@ const streakConfigSchema = new mongoose.Schema(
     configKey: {
       type: String,
       default: 'DEFAULT',
-      unique: true
+      unique: true,
+      trim: true
     },
     cycleDays: {
       type: Number,
-      default: 7
+      default: 7,
+      min: [1, 'Cycle days must be at least 1']
     },
     claimCooldownMs: {
       type: Number,
-      default: 24 * 60 * 60 * 1000 // 24 hours
+      default: 24 * 60 * 60 * 1000 // 24 hours cooldown
     },
     claimGracePeriodMs: {
       type: Number,
-      default: 24 * 60 * 60 * 1000 // 24 hours
+      default: 24 * 60 * 60 * 1000 // 24 hours grace window
     },
     autoResetOnMissed: {
       type: Boolean,
@@ -26,9 +28,15 @@ const streakConfigSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true
+    },
+    metadata: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
 module.exports = mongoose.model('StreakConfig', streakConfigSchema);

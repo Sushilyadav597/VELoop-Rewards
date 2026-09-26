@@ -9,7 +9,8 @@ const streakCycleSchema = new mongoose.Schema(
       index: true
     },
     userId: {
-      type: mongoose.Schema.Types.Mixed,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
       index: true
     },

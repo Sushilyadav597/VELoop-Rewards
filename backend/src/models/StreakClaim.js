@@ -4,25 +4,44 @@ const streakClaimSchema = new mongoose.Schema(
   {
     claimId: {
       type: String,
-      required: true,
+      required: [true, 'Claim ID is required'],
       unique: true,
       index: true
     },
     userId: {
-      type: mongoose.Schema.Types.Mixed,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'User reference is required'],
       index: true
+    },
+    rewardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'StreakReward',
+      default: null
     },
     cycleId: {
       type: String,
-      required: true,
+      required: [true, 'Cycle reference ID is required'],
       index: true
     },
     day: {
       type: Number,
-      required: true,
-      min: 1,
-      max: 30
+      required: [true, 'Streak day is required'],
+      min: [1, 'Streak day must be between 1 and 30'],
+      max: [30, 'Streak day must be between 1 and 30']
+    },
+    rewardType: {
+      type: String,
+      required: [true, 'Reward type is required']
+    },
+    amount: {
+      type: Number,
+      required: [true, 'Amount is required'],
+      min: [0, 'Amount cannot be negative']
+    },
+    currency: {
+      type: String,
+      required: [true, 'Currency is required']
     },
     rewardSnapshot: {
       title: String,
@@ -32,14 +51,14 @@ const streakClaimSchema = new mongoose.Schema(
       amount: Number,
       assetType: String
     },
+    transactionId: {
+      type: String,
+      required: [true, 'Transaction reference ID is required']
+    },
     status: {
       type: String,
       enum: ['SUCCESS', 'FAILED'],
       default: 'SUCCESS'
-    },
-    transactionId: {
-      type: String,
-      required: true
     },
     claimedAt: {
       type: Date,
@@ -50,10 +69,12 @@ const streakClaimSchema = new mongoose.Schema(
       default: ''
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
-// Crucial compound unique constraint matching Section 62 to prevent duplicate claims
+// Compound unique index to strictly prevent duplicate claims per user, cycle, and streak day
 streakClaimSchema.index({ userId: 1, cycleId: 1, day: 1 }, { unique: true });
 
 module.exports = mongoose.model('StreakClaim', streakClaimSchema);

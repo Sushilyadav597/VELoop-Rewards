@@ -2,27 +2,22 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      lowercase: true
+      required: [true, 'Name is required'],
+      trim: true
     },
     email: {
       type: String,
-      required: true,
+      required: [true, 'Email is required'],
       unique: true,
       trim: true,
-      lowercase: true
+      lowercase: true,
+      index: true
     },
     passwordHash: {
       type: String,
-      required: true
-    },
-    name: {
-      type: String,
-      default: 'VELoop Member'
+      required: [true, 'Password hash is required']
     },
     role: {
       type: String,
@@ -34,7 +29,9 @@ const userSchema = new mongoose.Schema(
       default: true
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
 module.exports = mongoose.model('User', userSchema);

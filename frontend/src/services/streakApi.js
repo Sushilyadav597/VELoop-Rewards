@@ -1,30 +1,36 @@
 import api from './api';
 
-export const streakApi = {
-  // Streak Endpoints
-  getStreak: () => api.get('/daily-streak'),
-  getStatus: () => api.get('/daily-streak/status'),
-  claimReward: (payload = {}) => api.post('/daily-streak/claim', payload),
-  getHistory: () => api.get('/daily-streak/history'),
-  getRotatingDrop: () => api.get('/daily-streak/rotating-drop'),
-  claimRotatingDrop: () => api.post('/daily-streak/rotating-drop/claim'),
-
-  // Wallet Endpoints
-  getWallet: () => api.get('/wallet'),
-  getTransactions: () => api.get('/wallet/transactions'),
-
-  // Auth Endpoints
-  login: (credentials) => api.post('/auth/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
-  demoLogin: (accountType) => api.post('/auth/demo-login', { accountType }),
-  getMe: () => api.get('/auth/me'),
-
-  // Evaluator Simulation Endpoints
-  advanceTime: (hours = 24) => api.post('/dev/advance-time', { hours }),
-  resetClock: () => api.post('/dev/reset-clock'),
-  resetUserStreak: () => api.post('/dev/reset-user-streak'),
-  testConcurrency: () => api.post('/dev/test-concurrency'),
-  getAuditLogs: (limit = 30) => api.get(`/dev/audit-logs?limit=${limit}`)
+/**
+ * Get complete daily streak information (streak status + 7 reward cards)
+ * GET /api/daily-streak
+ */
+export const getDailyStreak = async () => {
+  return await api.get('/daily-streak');
 };
 
-export default streakApi;
+/**
+ * Get concise daily streak status
+ * GET /api/daily-streak/status
+ */
+export const getDailyStreakStatus = async () => {
+  return await api.get('/daily-streak/status');
+};
+
+/**
+ * Authoritatively claim today's streak reward
+ * POST /api/daily-streak/claim
+ * Sends strictly empty body {} - backend decides all parameters
+ */
+export const claimDailyStreak = async () => {
+  return await api.post('/daily-streak/claim', {});
+};
+
+/**
+ * Get paginated claim history for authenticated user
+ * GET /api/daily-streak/history?page=1&limit=20
+ */
+export const getStreakHistory = async ({ page = 1, limit = 20 } = {}) => {
+  return await api.get('/daily-streak/history', {
+    params: { page, limit }
+  });
+};
