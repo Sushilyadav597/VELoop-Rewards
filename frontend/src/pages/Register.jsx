@@ -108,6 +108,7 @@ export const Register = () => {
           <ErrorState
             error={apiError}
             status={apiError.status}
+            title="Registration Failed"
             onDismiss={() => setApiError(null)}
           />
         )}

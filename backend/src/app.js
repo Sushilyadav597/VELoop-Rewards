@@ -28,13 +28,17 @@ app.use(express.urlencoded({ extended: true }));
 app.get(['/api/health', '/health'], (req, res) => {
   res.status(200).json({
     success: true,
+    status: 'healthy',
     message: 'VELoop Rewards API is running'
   });
 });
+
+const devRoutes = require('./routes/dev.routes');
 
 // Mount Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/daily-streak', streakRoutes);
 app.use('/api/wallet', walletRoutes);
+app.use('/api/dev', devRoutes);
 
 module.exports = app;

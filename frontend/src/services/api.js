@@ -31,8 +31,9 @@ api.interceptors.response.use(
 
     // If 401 Unauthorized, token is expired or invalid
     if (status === 401) {
-      // Clear token to allow clean redirect to login
+      // Clear credentials to allow clean redirect to login
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     }
 
     const enhancedError = new Error(message);

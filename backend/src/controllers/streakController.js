@@ -68,7 +68,9 @@ const claim = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: 'Daily streak reward claimed successfully',
-      data: result
+      data: result,
+      claimedReward: result.reward,
+      ...result
     });
   } catch (error) {
     const status = error.statusCode || 500;

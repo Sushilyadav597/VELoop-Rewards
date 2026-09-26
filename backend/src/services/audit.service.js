@@ -5,14 +5,15 @@ const { getServerTime } = require('../utils/time.utils');
 
 const inMemoryAuditLogs = [];
 
-const logAuditEvent = async ({ userId, event, details = {}, req = null }) => {
+const logAuditEvent = async ({ userId, action, event, details = {}, req = null }) => {
   const timestamp = getServerTime();
   const ipAddress = req?.headers?.['x-forwarded-for'] || req?.socket?.remoteAddress || '127.0.0.1';
   const userAgent = req?.headers?.['user-agent'] || 'internal';
 
   const logEntry = {
     userId: (userId && mongoose.isValidObjectId(userId)) ? userId : null,
-    event,
+    action: action || event || 'SYSTEM_ACTION',
+    event: event || action,
     details,
     ipAddress,
     userAgent,

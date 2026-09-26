@@ -19,8 +19,19 @@ export const ErrorState = ({
 
   // Contextual title and messaging based on HTTP status codes
   if (statusCode === 401) {
-    displayTitle = 'Session Expired';
-    displayMessage = 'Your authentication session has expired or is invalid. Please log in again to continue.';
+    const isTokenExpiration = !error?.message ||
+      error.message.toLowerCase().includes('token') ||
+      error.message.toLowerCase().includes('jwt') ||
+      error.message.toLowerCase().includes('session') ||
+      error.message.toLowerCase().includes('expired');
+
+    if (isTokenExpiration) {
+      displayTitle = title !== 'System Notice' ? title : 'Session Expired';
+      displayMessage = 'Your authentication session has expired or is invalid. Please log in again to continue.';
+    } else {
+      displayTitle = title !== 'System Notice' ? title : 'Sign In Failed';
+      displayMessage = error.message;
+    }
   } else if (statusCode === 403) {
     displayTitle = 'Action Restricted';
     displayMessage = 'You do not have authorization to perform this operation.';

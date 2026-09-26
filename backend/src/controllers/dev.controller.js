@@ -58,7 +58,7 @@ const resetClock = async (req, res, next) => {
  */
 const resetUserStreak = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user?.userId || req.user?.id;
     if (getDBStatus()) {
       await StreakCycle.updateMany({ userId, status: 'ACTIVE' }, { status: 'RESET', resetReason: 'Manual test reset' });
     }
@@ -92,7 +92,7 @@ const resetUserStreak = async (req, res, next) => {
  */
 const testConcurrency = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user?.userId || req.user?.id;
 
     // Trigger two claims simultaneously
     const promise1 = streakService.claimReward({ userId, clientPayload: {}, req })
