@@ -44,13 +44,18 @@ app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health Check Endpoint
-app.get(['/api/health', '/health'], (req, res) => {
+// Health Check Endpoint & Root Welcome
+app.get(['/', '/api', '/api/health', '/health'], (req, res) => {
   res.status(200).json({
     success: true,
     status: 'healthy',
     message: 'VELoop Rewards API is running',
-    port: process.env.PORT || 5001,
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      streak: '/api/daily-streak',
+      wallet: '/api/wallet'
+    },
     timestamp: new Date().toISOString()
   });
 });
