@@ -1,13 +1,32 @@
 import axios from 'axios';
 
-// Base API instance configured with environment variables
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+// Resolve API base URL dynamically based on environment variables
+const resolveApiBaseUrl = () => {
+  // If explicitly defined via VITE_API_BASE_URL (e.g. 'http://localhost:5001/api')
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  // If defined via VITE_API_URL (e.g. 'http://localhost:5001')
+  if (import.meta.env.VITE_API_URL) {
+    const raw = import.meta.env.VITE_API_URL.replace(/\/+$/, '');
+    return raw.endsWith('/api') ? raw : `${raw}/api`;
+  }
+  // In production (e.g. Vercel deployment), default to same-origin '/api'
+  if (import.meta.env.PROD) {
+    return '/api';
+  }
+  // Standard default for local MERN development
+  return 'http://localhost:5001/api';
+};
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true
 });
 
 // Request Interceptor: inject Bearer JWT from localStorage

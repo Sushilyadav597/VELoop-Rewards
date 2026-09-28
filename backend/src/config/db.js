@@ -1,4 +1,12 @@
+const path = require('path');
 const mongoose = require('mongoose');
+
+// Ensure environment variables are loaded if connectDB is called directly
+if (!process.env.MONGO_URI) {
+  require('dotenv').config({ path: path.resolve(__dirname, '../../../backend/.env') });
+  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+  require('dotenv').config();
+}
 
 let isConnected = false;
 
@@ -17,7 +25,10 @@ const connectDB = async () => {
   } catch (error) {
     isConnected = false;
     console.error(`MongoDB connection failed: ${error.message}`);
-    process.exit(1);
+    if (require.main === module) {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 

@@ -182,7 +182,7 @@ export const Register = () => {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="At least 6 characters"
               required
               className={styles.formInput}
               autoComplete="new-password"

@@ -46,7 +46,7 @@ export const ErrorState = ({
     displayMessage = 'The server encountered an error processing your request. Please try again in a few moments.';
   } else if (displayMessage.toLowerCase().includes('network') || displayMessage.toLowerCase().includes('failed to fetch')) {
     displayTitle = 'Network Connection Issue';
-    displayMessage = 'Unable to reach the VELoop Rewards API. Please verify your internet connection.';
+    displayMessage = 'Unable to reach the VELoop Rewards API. Please verify the backend server is running on port 5001 and your connection is active.';
   }
 
   return (

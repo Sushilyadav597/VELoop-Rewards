@@ -6,19 +6,39 @@ const walletRoutes = require('./routes/walletRoutes');
 
 const app = express();
 
-// Configure CORS for React frontend communication
-const clientURL = process.env.CLIENT_URL || 'http://localhost:5173';
+// Configure CORS for React frontend communication (supports 5173, 5174, etc.)
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174',
+  process.env.CLIENT_URL
+].filter(Boolean);
 
-app.use(cors({
+const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl, postman) or matching frontend
-    if (!origin || origin === clientURL || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
-      return callback(null, true);
+    // Allow requests with no origin (mobile, curl, postman)
+    if (!origin) return callback(null, true);
+
+    // Allow any localhost/127.0.0.1 port (e.g. 5173, 5174) or configured clientURL
+    if (
+      origin.startsWith('http://localhost:') ||
+      origin.startsWith('http://127.0.0.1:') ||
+      allowedOrigins.includes(origin)
+    ) {
+      return callback(null, origin);
     }
-    return callback(null, true);
+    return callback(null, origin);
   },
-  credentials: true
-}));
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Body parsing middleware
 app.use(express.json());
@@ -29,7 +49,9 @@ app.get(['/api/health', '/health'], (req, res) => {
   res.status(200).json({
     success: true,
     status: 'healthy',
-    message: 'VELoop Rewards API is running'
+    message: 'VELoop Rewards API is running',
+    port: process.env.PORT || 5001,
+    timestamp: new Date().toISOString()
   });
 });
 

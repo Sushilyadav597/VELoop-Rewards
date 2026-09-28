@@ -56,19 +56,6 @@ export const Login = () => {
     }
   };
 
-  const handleInstantSushilLogin = async () => {
-    setLoading(true);
-    setFormError('');
-    setApiError(null);
-    try {
-      await login('sushilyadav0622@gmail.com', 'password123');
-      navigate(from, { replace: true });
-    } catch (err) {
-      setApiError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div
@@ -143,7 +130,7 @@ export const Login = () => {
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="sushilyadav0622@gmail.com or Sushil Yadav"
+              placeholder="you@example.com or username"
               required
               className={styles.formInput}
               autoComplete="username"
@@ -180,7 +167,7 @@ export const Login = () => {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="Enter your password"
               required
               className={styles.formInput}
               autoComplete="current-password"
@@ -201,27 +188,7 @@ export const Login = () => {
             {loading ? 'Signing In...' : 'Sign In ⚡'}
           </button>
 
-          {/* 1-Click Instant Sign In Button for Sushil */}
-          <button
-            type="button"
-            onClick={handleInstantSushilLogin}
-            disabled={loading}
-            style={{
-              width: '100%',
-              marginTop: '0.75rem',
-              padding: '0.75rem',
-              fontSize: '0.92rem',
-              fontWeight: 700,
-              backgroundColor: 'rgba(245, 158, 11, 0.15)',
-              border: '1px solid rgba(245, 158, 11, 0.5)',
-              color: '#fbbf24',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            ⚡ 1-Click Sign In as Sushil Yadav
-          </button>
+
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '1.65rem', fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
@@ -246,27 +213,6 @@ export const Login = () => {
             <span>💡 Quick Autofill Accounts:</span>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            <button
-              type="button"
-              onClick={() => {
-                setEmail('Sushil Yadav');
-                setPassword('password123');
-                setFormError('');
-                setApiError(null);
-              }}
-              style={{
-                background: 'rgba(245, 158, 11, 0.15)',
-                border: '1px solid rgba(245, 158, 11, 0.35)',
-                color: '#fcd34d',
-                borderRadius: '6px',
-                padding: '0.35rem 0.65rem',
-                fontSize: '0.78rem',
-                cursor: 'pointer',
-                fontWeight: 600
-              }}
-            >
-              Sushil Yadav
-            </button>
             <button
               type="button"
               onClick={() => {
@@ -308,6 +254,27 @@ export const Login = () => {
               }}
             >
               demo_day2 (day2@veloop.io)
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('vip@veloop.io');
+                setPassword('password123');
+                setFormError('');
+                setApiError(null);
+              }}
+              style={{
+                background: 'rgba(245, 158, 11, 0.15)',
+                border: '1px solid rgba(245, 158, 11, 0.35)',
+                color: '#fcd34d',
+                borderRadius: '6px',
+                padding: '0.35rem 0.65rem',
+                fontSize: '0.78rem',
+                cursor: 'pointer',
+                fontWeight: 600
+              }}
+            >
+              demo_day7 (vip@veloop.io)
             </button>
           </div>
         </div>
