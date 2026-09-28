@@ -62,10 +62,10 @@ app.get(['/', '/api', '/api/health', '/health'], (req, res) => {
 
 const devRoutes = require('./routes/dev.routes');
 
-// Mount Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/daily-streak', streakRoutes);
-app.use('/api/wallet', walletRoutes);
-app.use('/api/dev', devRoutes);
+// Mount Routes (supports both /api/path and /path for resilient frontend compatibility)
+app.use(['/api/auth', '/auth'], authRoutes);
+app.use(['/api/daily-streak', '/daily-streak'], streakRoutes);
+app.use(['/api/wallet', '/wallet'], walletRoutes);
+app.use(['/api/dev', '/dev'], devRoutes);
 
 module.exports = app;

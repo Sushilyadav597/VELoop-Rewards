@@ -2,13 +2,9 @@ import axios from 'axios';
 
 // Resolve API base URL dynamically based on environment variables
 const resolveApiBaseUrl = () => {
-  // If explicitly defined via VITE_API_BASE_URL (e.g. 'http://localhost:5001/api')
-  if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
-  }
-  // If defined via VITE_API_URL (e.g. 'http://localhost:5001')
-  if (import.meta.env.VITE_API_URL) {
-    const raw = import.meta.env.VITE_API_URL.replace(/\/+$/, '');
+  const envUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL;
+  if (envUrl) {
+    const raw = envUrl.replace(/\/+$/, '');
     return raw.endsWith('/api') ? raw : `${raw}/api`;
   }
   // In production (e.g. Vercel deployment), default to same-origin '/api'
