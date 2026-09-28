@@ -10,13 +10,35 @@ if (!process.env.MONGO_URI) {
 
 let isConnected = false;
 
+const cleanMongoURI = (rawURI) => {
+  if (!rawURI) return '';
+  let uri = rawURI.trim().replace(/^["']|["']$/g, '');
+  const qIndex = uri.indexOf('?');
+  if (qIndex !== -1) {
+    const base = uri.substring(0, qIndex);
+    const queryPart = uri.substring(qIndex + 1).replace(/\?/g, '&');
+    const params = new URLSearchParams(queryPart);
+    const uniqueParams = new URLSearchParams();
+    for (const [key, value] of params.entries()) {
+      if (!uniqueParams.has(key)) {
+        uniqueParams.set(key, value);
+      }
+    }
+    const queryString = uniqueParams.toString();
+    return queryString ? `${base}?${queryString}` : base;
+  }
+  return uri;
+};
+
 const connectDB = async () => {
   try {
-    const mongoURI = process.env.MONGO_URI;
+    const rawMongoURI = process.env.MONGO_URI;
 
-    if (!mongoURI) {
+    if (!rawMongoURI) {
       throw new Error('MONGO_URI is not defined in environment variables');
     }
+
+    const mongoURI = cleanMongoURI(rawMongoURI);
 
     const conn = await mongoose.connect(mongoURI);
     isConnected = true;
