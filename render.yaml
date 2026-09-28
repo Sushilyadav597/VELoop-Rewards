@@ -1,0 +1,39 @@
+services:
+  # ==========================================
+  # 1. Backend Web Service (Node.js / Express)
+  # ==========================================
+  - type: web
+    name: veloop-rewards-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false
+
+  # ==========================================
+  # 2. Frontend Static Site (React / Vite)
+  # ==========================================
+  - type: static
+    name: veloop-rewards-frontend
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    routes:
+      # React Router SPA catch-all rewrite rule
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        sync: false
