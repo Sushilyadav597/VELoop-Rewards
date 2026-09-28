@@ -56,6 +56,8 @@ const authenticate = async (req, res, next) => {
     // 5. Attach safe user object to request
     req.user = {
       id: user._id.toString(),
+      userId: user._id.toString(),
+      _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role

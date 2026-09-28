@@ -2,7 +2,8 @@ const { getOrCreateWallet, getWalletTransactions } = require('../services/wallet
 
 const getWallet = async (req, res, next) => {
   try {
-    const wallet = await getOrCreateWallet(req.user.userId);
+    const userId = req.user?.userId || req.user?.id;
+    const wallet = await getOrCreateWallet(userId);
     res.json({
       success: true,
       wallet: {
@@ -19,7 +20,8 @@ const getWallet = async (req, res, next) => {
 
 const getTransactions = async (req, res, next) => {
   try {
-    const transactions = await getWalletTransactions(req.user.userId);
+    const userId = req.user?.userId || req.user?.id;
+    const transactions = await getWalletTransactions(userId);
     res.json({
       success: true,
       transactions
