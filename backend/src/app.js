@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const authRoutes = require('./routes/authRoutes');
-const streakRoutes = require('./routes/streakRoutes');
-const walletRoutes = require('./routes/walletRoutes');
+const authRoutes = require('./routes/auth.routes');
+const streakRoutes = require('./routes/streak.routes');
+const walletRoutes = require('./routes/wallet.routes');
 
 const app = express();
 
@@ -67,5 +67,8 @@ app.use(['/api/auth', '/auth'], authRoutes);
 app.use(['/api/daily-streak', '/daily-streak'], streakRoutes);
 app.use(['/api/wallet', '/wallet'], walletRoutes);
 app.use(['/api/dev', '/dev'], devRoutes);
+
+const errorHandler = require('./middleware/errorHandler.middleware');
+app.use(errorHandler);
 
 module.exports = app;

@@ -51,11 +51,11 @@ export const Navbar = () => {
           {isAuthenticated ? (
             <>
               <NavLink
-                to="/dashboard"
+                to="/daily-streak"
                 className={navLinkClass}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span>⚡</span> Dashboard
+                <span>🔥</span> Daily Streak
               </NavLink>
               <NavLink
                 to="/streak-history"

@@ -23,3 +23,20 @@ export const login = async ({ email, password }) => {
 export const getCurrentUser = async () => {
   return await api.get('/auth/me');
 };
+
+/**
+ * Instant demo login for evaluation / testing
+ * POST /api/auth/demo-login
+ */
+export const demoLogin = async (accountType = 'new') => {
+  return await api.post('/auth/demo-login', { accountType });
+};
+
+const authApi = {
+  register,
+  login,
+  getCurrentUser,
+  demoLogin
+};
+
+export default authApi;

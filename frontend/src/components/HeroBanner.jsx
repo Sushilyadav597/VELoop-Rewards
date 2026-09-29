@@ -1,110 +1,151 @@
 import React from 'react';
 import { Flame, Calendar, ChevronRight } from 'lucide-react';
 import CalendarHero from '../assets/CalendarHero';
+import GiftBox from '../assets/GiftBox';
 
 export const HeroBanner = ({ streak, onOpenHistory }) => {
   const currentStreakDays = streak?.currentStreak ?? 1;
 
   return (
-    <div
-      className="card border-0 mb-4 overflow-hidden position-relative"
-      style={{
-        background: 'linear-gradient(135deg, #18113c 0%, #110c2e 50%, #0a071c 100%)',
-        borderRadius: '20px',
-        border: '1px solid rgba(139, 92, 246, 0.28)',
-        boxShadow: '0 12px 35px rgba(0, 0, 0, 0.45)'
-      }}
-    >
-      {/* Background ambient lighting */}
+    <div className="mb-3 mb-md-4">
+      {/* Main Hero Card Container */}
       <div
-        className="position-absolute"
+        className="card border-0 overflow-hidden position-relative hover-lift anim-shine"
         style={{
-          width: '260px',
-          height: '260px',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, transparent 70%)',
-          top: '-60px',
-          left: '20px',
-          pointerEvents: 'none'
+          background: 'linear-gradient(135deg, #181045 0%, #110a2e 50%, #0a061c 100%)',
+          borderRadius: '22px',
+          border: '1.2px solid rgba(139, 92, 246, 0.4)',
+          boxShadow: '0 16px 45px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
         }}
-      />
-      <div
-        className="position-absolute"
-        style={{
-          width: '200px',
-          height: '200px',
-          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%)',
-          bottom: '-50px',
-          right: '50px',
-          pointerEvents: 'none'
-        }}
-      />
+      >
+        {/* Ambient background glow orbs */}
+        <div
+          className="position-absolute"
+          style={{
+            width: '260px',
+            height: '260px',
+            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%)',
+            top: '-50px',
+            left: '-20px',
+            pointerEvents: 'none'
+          }}
+        />
+        <div
+          className="position-absolute"
+          style={{
+            width: '240px',
+            height: '240px',
+            background: 'radial-gradient(circle, rgba(245, 158, 11, 0.18) 0%, transparent 70%)',
+            bottom: '-40px',
+            right: '-20px',
+            pointerEvents: 'none'
+          }}
+        />
 
-      <div className="card-body p-3 p-md-4">
-        <div className="row align-items-center g-3">
-          {/* Left Column: 3D Calendar Hero Illustration */}
-          <div className="col-12 col-md-auto text-center text-md-start d-flex justify-content-center">
-            <div className="anim-float">
-              <CalendarHero size={110} />
-            </div>
-          </div>
-
-          {/* Middle/Center Column: Hero Titles */}
-          <div className="col-12 col-md text-center text-md-start">
-            <h2 className="h4 h3-md fw-bold mb-1 text-white">
-              Daily Check-In{' '}
-              <span
+        <div className="card-body p-3 p-md-4 position-relative z-1">
+          <div className="row align-items-center justify-content-between g-2 g-md-3">
+            {/* Left Column: 3D Calendar Hero Illustration */}
+            <div className="col-auto col-md-auto text-start d-flex justify-content-start">
+              <div
+                className="anim-float"
                 style={{
-                  background: 'linear-gradient(90deg, #F59E0B 0%, #FBBF24 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
+                  transformOrigin: 'center bottom',
+                  filter: 'drop-shadow(0 6px 16px rgba(139, 92, 246, 0.35))'
                 }}
               >
-                Rewards
-              </span>
-            </h2>
-            <p className="text-secondary small mb-2 mb-md-0" style={{ maxWidth: '440px' }}>
-              Check in every day and earn exciting rewards! Maintain your streak to unlock the ultimate gift.
-            </p>
-          </div>
-
-          {/* Right Column: Streak Badges */}
-          <div className="col-12 col-md-auto d-flex flex-row flex-md-column justify-content-center align-items-center align-items-md-end gap-2">
-            {/* Streak Pill */}
-            <div
-              className="d-flex align-items-center gap-2 px-3 py-2"
-              style={{
-                background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.28) 100%)',
-                border: '1px solid rgba(245, 158, 11, 0.4)',
-                borderRadius: '12px'
-              }}
-            >
-              <Flame size={18} fill="#F59E0B" color="#F59E0B" />
-              <div>
-                <div className="fw-bold text-warning small line-height-1">
-                  {currentStreakDays} Day Streak
-                </div>
-                <div className="text-muted" style={{ fontSize: '0.72rem' }}>
-                  Keep it going!
-                </div>
+                <CalendarHero size={92} className="d-none d-sm-block" />
+                <CalendarHero size={74} className="d-block d-sm-none" />
               </div>
             </div>
 
-            {/* Streak Calendar / History Button */}
-            <button
-              onClick={onOpenHistory}
-              className="btn btn-sm d-flex align-items-center gap-1 text-secondary px-3 py-1 border-0"
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.06)',
-                borderRadius: '8px',
-                fontSize: '0.78rem'
-              }}
-            >
-              <Calendar size={13} className="text-info" />
-              <span>Streak Calendar</span>
-              <ChevronRight size={13} />
-            </button>
+            {/* Middle Column: Hero Titles & Description */}
+            <div className="col text-center px-1 px-md-3">
+              <h2
+                className="fw-extrabold mb-1 text-white tracking-tight"
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(1.2rem, 3.4vw, 1.75rem)',
+                  lineHeight: '1.2'
+                }}
+              >
+                Login Daily &amp; Earn <br />
+                <span
+                  style={{
+                    background: 'linear-gradient(90deg, #FFFBEB 0%, #FDE68A 25%, #FBBF24 60%, #F59E0B 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    filter: 'drop-shadow(0 2px 10px rgba(245, 158, 11, 0.35))'
+                  }}
+                >
+                  Bigger Rewards!
+                </span>
+              </h2>
+              <p
+                className="small mb-0 mx-auto"
+                style={{
+                  color: '#94A3B8',
+                  fontSize: 'clamp(0.74rem, 1.8vw, 0.86rem)',
+                  maxWidth: '380px',
+                  lineHeight: '1.4'
+                }}
+              >
+                Maintain your streak and unlock exciting rewards every day.
+              </p>
+            </div>
+
+            {/* Right Column: 3D Gift Box Illustration */}
+            <div className="col-auto col-md-auto text-end d-flex justify-content-end">
+              <div
+                className="anim-float"
+                style={{
+                  animationDelay: '1.8s',
+                  transformOrigin: 'center bottom',
+                  filter: 'drop-shadow(0 6px 16px rgba(245, 158, 11, 0.35))'
+                }}
+              >
+                <GiftBox size={86} className="d-none d-sm-block" />
+                <GiftBox size={70} className="d-block d-sm-none" />
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Row of 2 Distinct Streak Action Pills (matching Page 63 directly below Hero) */}
+      <div className="d-flex align-items-center justify-content-between gap-2 mt-2 mt-md-3">
+        {/* Left: Amber Streak Pill */}
+        <div
+          className="d-flex align-items-center gap-2 px-3 py-1.5 hover-lift"
+          style={{
+            background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.16) 0%, rgba(217, 119, 6, 0.25) 100%)',
+            border: '1.2px solid rgba(245, 158, 11, 0.55)',
+            borderRadius: '999px',
+            boxShadow: '0 0 16px rgba(245, 158, 11, 0.15)'
+          }}
+        >
+          <Flame size={16} fill="#F59E0B" color="#F59E0B" style={{ filter: 'drop-shadow(0 0 6px rgba(245, 158, 11, 0.6))' }} />
+          <span className="fw-bold text-warning small" style={{ fontSize: '0.84rem' }}>
+            {currentStreakDays} Day Streak
+          </span>
+        </div>
+
+        {/* Right: Purple Streak Calendar Button */}
+        <button
+          onClick={onOpenHistory}
+          className="btn btn-sm d-flex align-items-center gap-1.5 px-3 py-1.5 border-0 hover-lift"
+          style={{
+            background: 'linear-gradient(90deg, rgba(139, 92, 246, 0.18) 0%, rgba(99, 102, 241, 0.25) 100%)',
+            border: '1.2px solid rgba(139, 92, 246, 0.45)',
+            borderRadius: '999px',
+            color: '#C4B5FD',
+            fontSize: '0.84rem',
+            boxShadow: '0 0 14px rgba(139, 92, 246, 0.15)'
+          }}
+        >
+          <Calendar size={14} className="text-purple-300" />
+          <span className="fw-semibold">Streak Calendar</span>
+          <ChevronRight size={14} />
+        </button>
       </div>
     </div>
   );

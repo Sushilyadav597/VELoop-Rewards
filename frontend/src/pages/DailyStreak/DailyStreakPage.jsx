@@ -41,7 +41,7 @@ export const DailyStreakPage = () => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
-  // If initial load in progress, show branded loader
+  // If initial load in progress, show branded loader (Section 69, 70)
   if (isLoading && !streak) {
     return (
       <div className={styles.pageContainer}>
@@ -54,7 +54,7 @@ export const DailyStreakPage = () => {
     );
   }
 
-  // Get Day 7 reward definition for Ultimate Reward card
+  // Get Day 7 reward definition for Ultimate Reward card (Section 22, 23)
   const ultimateReward = rewards.find((r) => r.day === 7) || {
     amount: 5,
     subtitle: 'Amazon Gift Card'
@@ -63,7 +63,7 @@ export const DailyStreakPage = () => {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.contentWrapper}>
-        {/* Navigation Bar / Header */}
+        {/* Navigation Bar / Header (Section 82 & 83, Page 62 & 63) */}
         <StreakHeader
           onOpenAuth={() => setAuthModalOpen(true)}
           onOpenHistory={() => setHistoryModalOpen(true)}
@@ -82,25 +82,25 @@ export const DailyStreakPage = () => {
           </div>
         )}
 
-        {/* Hero Banner Section */}
-        <HeroBanner
-          streak={streak}
-          onOpenHistory={() => setHistoryModalOpen(true)}
-        />
+        {/* Hero & Ultimate Reward Section: Responsive 2-Col on Desktop, Stacked on Mobile (Page 62 & 63) */}
+        <div className="row g-2 g-md-3 mb-2 mb-md-3 align-items-stretch">
+          <div className="col-12 col-lg-7 d-flex flex-column justify-content-between">
+            <HeroBanner
+              streak={streak}
+              onOpenHistory={() => setHistoryModalOpen(true)}
+            />
+            <StreakStats streak={streak} />
+          </div>
 
-        {/* 3 Metric Stats Cards */}
-        <StreakStats streak={streak} />
+          <div className="col-12 col-lg-5 mb-2 mb-md-3 mb-lg-0">
+            <UltimateReward
+              ultimateReward={ultimateReward}
+              currentStreak={streak?.currentStreak || 0}
+            />
+          </div>
+        </div>
 
-        {/* 24-Hour Rotating Surprise Drop Showcase */}
-        <DailyRotatingDrop />
-
-        {/* Ultimate Day 7 Crown Showcase Card */}
-        <UltimateReward
-          ultimateReward={ultimateReward}
-          currentStreak={streak?.currentStreak || 0}
-        />
-
-        {/* 7 Daily Reward Cards Responsive Grid */}
+        {/* 7 Daily Reward Cards Responsive Grid (Desktop: 7-Row, Mobile: 4+3 Grid) */}
         <RewardGrid
           rewards={rewards}
           isClaiming={isClaiming}
@@ -109,10 +109,13 @@ export const DailyStreakPage = () => {
           onCountdownExpire={() => refreshStreak(false)}
         />
 
-        {/* Supporting Benefits Information Section */}
+        {/* Supporting Benefits Information Section (Page 62 & 63) */}
         <WhyStreak />
 
-        {/* Official Trust Strip */}
+        {/* 24-Hour Rotating Surprise Drop Bonus Showcase */}
+        <DailyRotatingDrop />
+
+        {/* Official Trust Strip (Page 62 & 63) */}
         <TrustFooter />
       </div>
 
@@ -128,6 +131,7 @@ export const DailyStreakPage = () => {
 
       {/* Claim Confirmed Celebration Modal */}
       <ClaimModal
+        isOpen={Boolean(claimSuccessData)}
         claimData={claimSuccessData}
         onClose={closeSuccessModal}
       />

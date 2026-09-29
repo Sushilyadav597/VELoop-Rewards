@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const AmazonCard = ({ size = 64, className = '' }) => {
+export const AmazonCard = ({ size = 60, className = '' }) => {
   return (
     <svg
       width={size}
@@ -11,69 +11,67 @@ export const AmazonCard = ({ size = 64, className = '' }) => {
       className={className}
     >
       <defs>
-        <linearGradient id="cardDark" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#1E163B" />
-          <stop offset="100%" stopColor="#0F0B24" />
+        <linearGradient id="amazonCardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="60%" stopColor="#F8FAFC" />
+          <stop offset="100%" stopColor="#E2E8F0" />
         </linearGradient>
-        <linearGradient id="amazonSmile" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient id="amazonSmileGrad" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#F59E0B" />
-          <stop offset="100%" stopColor="#FBBF24" />
+          <stop offset="100%" stopColor="#FF9900" />
         </linearGradient>
-        <filter id="cardGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000000" floodOpacity="0.35" />
         </filter>
       </defs>
 
-      <g filter="url(#cardGlow)">
-        {/* Card Body */}
+      <g filter="url(#cardShadow)">
+        {/* Crisp Card Body (matching Page 63 Day 5 asset) */}
         <rect
-          x="12"
-          y="22"
-          width="76"
-          height="52"
-          rx="7"
-          fill="url(#cardDark)"
-          stroke="#4C358A"
-          strokeWidth="1.5"
+          x="14"
+          y="18"
+          width="72"
+          height="64"
+          rx="12"
+          fill="url(#amazonCardBg)"
+          stroke="#E2E8F0"
+          strokeWidth="1.2"
         />
 
         {/* Amazon Lowercase 'a' */}
         <text
-          x="44"
-          y="48"
-          fill="#FFFFFF"
-          fontSize="26"
-          fontWeight="bold"
-          fontFamily="Arial, sans-serif"
-          letterSpacing="-1"
+          x="50"
+          y="54"
+          textAnchor="middle"
+          fill="#111827"
+          fontSize="36"
+          fontWeight="900"
+          fontFamily="system-ui, -apple-system, sans-serif"
+          letterSpacing="-1.5"
         >
           a
         </text>
 
-        {/* Amazon Iconic Curved Smile Arrow */}
+        {/* Amazon Curved Smile Arrow */}
         <path
-          d="M32 54 C40 60 54 60 62 53"
-          stroke="url(#amazonSmile)"
-          strokeWidth="3.2"
+          d="M32 58 C42 67 58 67 68 58"
+          stroke="url(#amazonSmileGrad)"
+          strokeWidth="3.5"
           strokeLinecap="round"
           fill="none"
         />
-        {/* Arrow Tip */}
+        {/* Smile Arrow Head */}
         <path
-          d="M60 50 L65 52 L62 56 Z"
-          fill="url(#amazonSmile)"
+          d="M66 54.5 L72 57 L69 61.5 Z"
+          fill="url(#amazonSmileGrad)"
         />
-
-        {/* Top Accent Strip */}
-        <rect x="13" y="23" width="74" height="4" rx="2" fill="url(#amazonSmile)" opacity="0.8" />
       </g>
 
-      {/* Sparkles */}
-      <circle cx="20" cy="30" r="1.5" fill="#FBBF24" />
-      <circle cx="82" cy="65" r="1.5" fill="#FBBF24" />
+      {/* Subtle sparkle */}
+      <circle cx="82" cy="22" r="2" fill="#F59E0B" opacity="0.8" />
     </svg>
   );
 };
 
 export default AmazonCard;
+

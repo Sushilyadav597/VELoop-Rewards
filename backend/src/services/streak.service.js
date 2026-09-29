@@ -401,6 +401,9 @@ const claimReward = async ({ userId, clientPayload = {}, req = null }) => {
           userId,
           cycleId: cycle.cycleId,
           day: nextDayToClaim,
+          rewardType: configuredReward.rewardType,
+          amount: configuredReward.amount,
+          currency: configuredReward.currency,
           rewardSnapshot: {
             title: configuredReward.title,
             subtitle: configuredReward.subtitle,
