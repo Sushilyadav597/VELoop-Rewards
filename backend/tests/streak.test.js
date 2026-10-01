@@ -5,14 +5,14 @@
 
 const assert = require('assert');
 
-const BASE_URL = 'http://localhost:5001/api';
+const BASE_URL = 'http://127.0.0.1:5001/api';
 
 async function runTests() {
   console.log('🧪 Starting Automated Backend Verification Suite...\n');
 
   try {
     // 1. Health check
-    const healthRes = await fetch('http://localhost:5001/health');
+    const healthRes = await fetch('http://127.0.0.1:5001/health');
     const health = await healthRes.json();
     assert.strictEqual(health.status, 'healthy', 'Health check failed');
     console.log('✔ Health Check: OK');
@@ -107,8 +107,11 @@ async function runTests() {
     console.log('=========================================\n');
   } catch (err) {
     console.error('❌ Verification Test Failed:', err.message);
+    if (err.cause) console.error('Cause:', err.cause);
+    if (err.stack) console.error(err.stack);
     process.exit(1);
   }
 }
 
 runTests();
+

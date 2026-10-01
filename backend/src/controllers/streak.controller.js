@@ -7,7 +7,8 @@ const { logAuditEvent } = require('../services/audit.service');
  */
 const getStreak = async (req, res, next) => {
   try {
-    const status = await streakService.getStreakStatus(req.user.userId);
+    const userId = req.user ? req.user.userId : null;
+    const status = await streakService.getStreakStatus(userId);
     res.json(status);
   } catch (err) {
     next(err);
@@ -20,7 +21,8 @@ const getStreak = async (req, res, next) => {
  */
 const getStatus = async (req, res, next) => {
   try {
-    const status = await streakService.getStreakStatus(req.user.userId);
+    const userId = req.user ? req.user.userId : null;
+    const status = await streakService.getStreakStatus(userId);
     res.json({
       success: true,
       serverTime: status.serverTime,

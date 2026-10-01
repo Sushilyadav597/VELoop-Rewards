@@ -4,10 +4,13 @@ import { useAuth } from '../../context/AuthContext';
 import StreakHeader from '../../components/StreakHeader';
 import HeroBanner from '../../components/HeroBanner';
 import StreakStats from '../../components/StreakStats';
+import StreakProgress from '../../components/StreakProgress';
 import UltimateReward from '../../components/UltimateReward';
 import RewardGrid from '../../components/RewardGrid';
 import WhyStreak from '../../components/WhyStreak';
-import TrustFooter from '../../components/TrustFooter';
+import Footer from '../../components/Footer';
+import SuccessState from '../../components/SuccessState';
+import ErrorState from '../../components/ErrorState';
 import CpaDemo from '../../components/CpaDemo';
 import ClaimModal from '../../components/ClaimModal';
 import AuthModal from '../../components/AuthModal';
@@ -18,6 +21,28 @@ import StreakSkeleton from '../../components/StreakSkeleton';
 import DailyRotatingDrop from '../../components/DailyRotatingDrop';
 import styles from './DailyStreak.module.css';
 
+/**
+ * DailyStreakPage Component (Section 17):
+ * Main production-grade daily streak orchestrator.
+ * Follows the required component hierarchy:
+ * DailyStreakPage
+ * ├── StreakHeader
+ * ├── HeroBanner
+ * ├── StreakStats
+ * ├── StreakProgress
+ * ├── RewardGrid
+ * │   └── RewardCard
+ * ├── UltimateReward
+ * ├── ClaimButton
+ * ├── ClaimModal
+ * ├── CountdownTimer
+ * ├── SuccessState
+ * ├── ErrorState
+ * ├── StreakLoader
+ * ├── StreakSkeleton
+ * ├── WhyStreak
+ * └── Footer
+ */
 export const DailyStreakPage = () => {
   const {
     streak,
@@ -36,12 +61,13 @@ export const DailyStreakPage = () => {
     refreshStreak
   } = useStreak();
 
-  const { user } = useAuth();
+  const { user, wallet } = useAuth();
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
+  const [showInlineSuccess, setShowInlineSuccess] = useState(true);
 
-  // If initial load in progress, show branded loader (Section 69, 70)
+  // If initial load in progress, show branded loader
   if (isLoading && !streak) {
     return (
       <div className={styles.pageContainer}>
@@ -54,40 +80,60 @@ export const DailyStreakPage = () => {
     );
   }
 
-  // Get Day 7 reward definition for Ultimate Reward card (Section 22, 23)
+  // Get Day 7 reward definition for Ultimate Reward card
   const ultimateReward = rewards.find((r) => r.day === 7) || {
     amount: 5,
     subtitle: 'Amazon Gift Card'
   };
 
+  // Find today's reward
+  const todayReward = rewards.find((r) => r.isToday || r.day === streak?.currentDay) || rewards[0];
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.contentWrapper}>
-        {/* Navigation Bar / Header (Section 82 & 83, Page 62 & 63) */}
+        {/* Navigation Bar / Header */}
         <StreakHeader
           onOpenAuth={() => setAuthModalOpen(true)}
           onOpenHistory={() => setHistoryModalOpen(true)}
         />
 
-        {/* Error message banner if any (Section 92: friendly messages, no raw errors) */}
+        {/* Context-aware friendly error alert */}
         {error && (
-          <div className={styles.errorBanner}>
-            <span>{error}</span>
-            <button
-              onClick={() => refreshStreak(false)}
-              className="btn btn-sm btn-outline-danger ms-2"
-            >
-              Refresh
-            </button>
-          </div>
+          <ErrorState
+            error={error}
+            onRetry={() => refreshStreak(false)}
+            onDismiss={() => {}}
+            title="Notice"
+          />
         )}
 
-        {/* Hero & Ultimate Reward Section: Responsive 2-Col on Desktop, Stacked on Mobile (Page 62 & 63) */}
+        {/* Inline celebratory confirmation message if recently claimed */}
+        {claimSuccessData && showInlineSuccess && (
+          <SuccessState
+            rewardReceived={
+              claimSuccessData.claimedReward?.currency === 'INR'
+                ? `₹${claimSuccessData.claimedReward?.amount} Amazon Voucher`
+                : `+${claimSuccessData.claimedReward?.amount || todayReward?.amount || 10} VEs`
+            }
+            updatedBalance={wallet?.vesBalance}
+            updatedStreak={streak?.currentStreak}
+            message="Reward Claimed Successfully! Added to your wallet."
+            onDismiss={() => setShowInlineSuccess(false)}
+          />
+        )}
+
+        {/* Hero & Ultimate Reward Section: Responsive 2-Col on Desktop/Tablet, Stacked on Mobile */}
         <div className="row g-2 g-md-3 mb-2 mb-md-3 align-items-stretch">
           <div className="col-12 col-lg-7 d-flex flex-column justify-content-between">
             <HeroBanner
               streak={streak}
+              todayReward={todayReward}
+              serverTime={serverTime}
+              isClaiming={isClaiming}
+              onClaim={(day) => initiateClaim(day)}
               onOpenHistory={() => setHistoryModalOpen(true)}
+              onCountdownExpire={() => refreshStreak(false)}
             />
             <StreakStats streak={streak} />
           </div>
@@ -100,6 +146,18 @@ export const DailyStreakPage = () => {
           </div>
         </div>
 
+        {/* 7-Day Streak Progression Bar / Stepper (Section 5) */}
+        <StreakProgress
+          rewards={rewards}
+          streak={streak}
+          onSelectDay={(day) => {
+            const target = rewards.find((r) => r.day === day);
+            if (target?.status === 'AVAILABLE') {
+              initiateClaim(day);
+            }
+          }}
+        />
+
         {/* 7 Daily Reward Cards Responsive Grid (Desktop: 7-Row, Mobile: 4+3 Grid) */}
         <RewardGrid
           rewards={rewards}
@@ -109,17 +167,17 @@ export const DailyStreakPage = () => {
           onCountdownExpire={() => refreshStreak(false)}
         />
 
-        {/* Supporting Benefits Information Section (Page 62 & 63) */}
+        {/* Supporting Benefits Information Section */}
         <WhyStreak />
 
         {/* 24-Hour Rotating Surprise Drop Bonus Showcase */}
         <DailyRotatingDrop />
 
-        {/* Official Trust Strip (Page 62 & 63) */}
-        <TrustFooter />
+        {/* SaaS Platform Footer with Trust Strip */}
+        <Footer />
       </div>
 
-      {/* CPA Advertisement Demo Modal (Section 7, 68) */}
+      {/* CPA Advertisement Demo Modal */}
       <CpaDemo
         isOpen={cpaModalOpen}
         day={pendingClaimDay}

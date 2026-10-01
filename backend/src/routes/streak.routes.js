@@ -1,29 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const streakController = require('../controllers/streak.controller');
-const { requireAuth } = require('../middleware/auth.middleware');
+const { requireAuth, optionalAuth } = require('../middleware/auth.middleware');
 const { claimLimiter } = require('../middleware/rateLimiter.middleware');
 
 const rotatingController = require('../controllers/rotatingReward.controller');
 
-// All streak routes require authentication
-router.use(requireAuth);
-
-// GET /api/daily-streak
-router.get('/', streakController.getStreak);
+// GET /api/daily-streak (supports optional auth: guest view or user-specific streak)
+router.get('/', optionalAuth, streakController.getStreak);
 
 // GET /api/daily-streak/status
-router.get('/status', streakController.getStatus);
+router.get('/status', optionalAuth, streakController.getStatus);
 
-// POST /api/daily-streak/claim (rate-limited and protected)
-router.post('/claim', claimLimiter, streakController.claimStreak);
+// POST /api/daily-streak/claim (rate-limited and authenticated)
+router.post('/claim', requireAuth, claimLimiter, streakController.claimStreak);
 
 // GET /api/daily-streak/history
-router.get('/history', streakController.getHistory);
+router.get('/history', requireAuth, streakController.getHistory);
 
 // Dynamic 24h Rotating Daily Reward Routes
-router.get('/rotating-drop', rotatingController.getTodayDrop);
-router.post('/rotating-drop/claim', claimLimiter, rotatingController.claimTodayDrop);
+router.get('/rotating-drop', optionalAuth, rotatingController.getTodayDrop);
+router.post('/rotating-drop/claim', requireAuth, claimLimiter, rotatingController.claimTodayDrop);
+
 
 module.exports = router;
 

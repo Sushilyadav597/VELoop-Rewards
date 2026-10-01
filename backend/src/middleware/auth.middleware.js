@@ -43,7 +43,31 @@ const requireAuth = (req, res, next) => {
   }
 };
 
+/**
+ * Optional Auth: If Bearer JWT is valid, injects req.user; otherwise proceeds with req.user = null.
+ */
+const optionalAuth = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.user = {
+        userId: decoded.userId,
+        username: decoded.username,
+        role: decoded.role || 'USER'
+      };
+    }
+  } catch (err) {
+    // Non-blocking: proceed as guest
+    req.user = null;
+  }
+  next();
+};
+
 module.exports = {
   requireAuth,
+  optionalAuth,
   JWT_SECRET
 };
+

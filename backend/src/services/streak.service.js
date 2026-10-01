@@ -147,9 +147,67 @@ const evaluateMissedStreak = async (cycle, config) => {
 };
 
 /**
+/**
+ * Public streak status when no user is logged in
+ */
+const getPublicStreakStatus = async () => {
+  const config = await getActiveConfig();
+  const now = getServerTime();
+  const rewards = await getAllRewards();
+  const totalDays = config.cycleDays || 7;
+
+  const cardStates = rewards.map((reward) => {
+    const day = reward.day;
+    const isToday = day === 1;
+    return {
+      day,
+      status: isToday ? 'AVAILABLE' : 'LOCKED',
+      badge: reward.badge,
+      title: reward.title,
+      subtitle: reward.subtitle,
+      rewardType: reward.rewardType,
+      currency: reward.currency,
+      amount: reward.amount,
+      assetType: reward.assetType,
+      isToday,
+      nextClaimAt: null
+    };
+  });
+
+  const nextRewardObj = rewards.find(r => r.day === 1) || rewards[0];
+
+  return {
+    success: true,
+    serverTime: now.toISOString(),
+    streak: {
+      cycleId: 'DEMO-PUBLIC',
+      cycleNumber: 1,
+      currentStreak: 0,
+      currentDay: 1,
+      checkedIn: 0,
+      totalRewards: totalDays,
+      isEligibleToday: true,
+      nextClaimAt: null,
+      cooldownRemainingMs: 0,
+      cycleCompleted: false,
+      nextReward: {
+        amount: nextRewardObj ? nextRewardObj.amount : 5,
+        currency: nextRewardObj ? nextRewardObj.currency : 'VES',
+        rewardType: nextRewardObj ? nextRewardObj.rewardType : 'COINS',
+        subtitle: nextRewardObj ? nextRewardObj.subtitle : '5 VEs'
+      }
+    },
+    rewards: cardStates
+  };
+};
+
+/**
  * Get comprehensive daily streak status (Section 56, 57, 94)
  */
 const getStreakStatus = async (userId) => {
+  if (!userId) {
+    return await getPublicStreakStatus();
+  }
   const userIdStr = userId.toString();
   const config = await getActiveConfig();
   let cycle = await getOrCreateActiveCycle(userId);
@@ -157,6 +215,7 @@ const getStreakStatus = async (userId) => {
   // Missed day evaluation
   const missedCheck = await evaluateMissedStreak(cycle, config);
   cycle = missedCheck.cycle;
+
 
   const now = getServerTime();
   const totalDays = config.cycleDays || 7;
@@ -505,6 +564,8 @@ const claimReward = async ({ userId, clientPayload = {}, req = null }) => {
       success: true,
       message: `Day ${nextDayToClaim} claimed successfully!`,
       serverTime: now.toISOString(),
+      updatedStreak,
+      currentStreak: updatedStreak,
       claimedReward: {
         day: nextDayToClaim,
         title: configuredReward.title,

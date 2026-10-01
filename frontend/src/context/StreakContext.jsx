@@ -68,11 +68,9 @@ export const StreakProvider = ({ children }) => {
     }
   }, [streakState]);
 
-  // Load initial streak state when token changes or unblock loader safely
+  // Load initial streak state on mount and when token changes
   useEffect(() => {
-    if (token) {
-      refreshStreak(false);
-    }
+    refreshStreak(false);
     // Safety timer to prevent any infinite blocking spinner during cold starts
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -81,36 +79,59 @@ export const StreakProvider = ({ children }) => {
   }, [token, refreshStreak]);
 
   /**
-   * Start claim flow: User clicks Claim -> disable button -> Open CPA Verification modal
-   * Section 7, 41, 68, 91
+   * Primary Direct Claim flow (Section 8):
+   * User clicks Claim -> disable button -> show loading spinner -> POST /claim -> celebration modal
    */
-  const initiateClaim = (day) => {
+  const initiateClaim = async (day) => {
     if (isClaiming) return;
     setError(null);
-    setPendingClaimDay(day);
+    const targetDay = day || pendingClaimDay || streakState?.currentDay || 1;
+    setPendingClaimDay(targetDay);
+    return await finalizeAuthoritativeClaim(targetDay);
+  };
+
+  /**
+   * Optional CPA Demonstration trigger for evaluation/testing
+   */
+  const openCpaModal = (day) => {
+    setPendingClaimDay(day || streakState?.currentDay || 1);
     setCpaModalOpen(true);
   };
 
   /**
-   * Called once CPA Demo verification is completed
-   * Sends actual authoritative request to POST /api/daily-streak/claim
+   * Authoritative claim processing:
+   * Sends request to backend POST /api/daily-streak/claim
    */
-  const finalizeAuthoritativeClaim = async () => {
+  const finalizeAuthoritativeClaim = async (overrideDay) => {
     setIsClaiming(true);
     setError(null);
 
+    const targetDay = overrideDay || pendingClaimDay || streakState?.currentDay || 1;
+
     try {
-      // Send claim request to backend.
-      // Notice: backend ignores any client-tampered reward/amount and derives everything safely!
-      const result = await streakApi.claimReward({ day: pendingClaimDay });
+      // Auto-authenticate with demo user if no token exists yet
+      let activeToken = token || localStorage.getItem('token');
+      if (!activeToken && demoLogin) {
+        try {
+          const authRes = await demoLogin('new');
+          if (authRes?.token) {
+            activeToken = authRes.token;
+          }
+        } catch (e) {
+          console.warn('[Auto-demo login notice]:', e.message);
+        }
+      }
+
+      // Send claim request to backend
+      const result = await streakApi.claimReward({ day: targetDay });
 
       if (result.success) {
         // Trigger celebratory confetti effect
         confetti({
-          particleCount: 80,
-          spread: 70,
+          particleCount: 85,
+          spread: 75,
           origin: { y: 0.6 },
-          colors: ['#F59E0B', '#8B5CF6', '#10B981', '#FBBF24']
+          colors: ['#F59E0B', '#8B5CF6', '#10B981', '#FBBF24', '#FEF08A']
         });
 
         // 1. Update backend wallet state
@@ -120,7 +141,7 @@ export const StreakProvider = ({ children }) => {
           refreshWallet();
         }
 
-        // 2. Refresh authoritative streak data from backend (Section 93)
+        // 2. Refresh authoritative streak data from backend
         await refreshStreak(false);
 
         setClaimSuccessData(result);
@@ -131,7 +152,6 @@ export const StreakProvider = ({ children }) => {
       console.error('[Claim error]:', err);
       setError(err.message || 'Reward claim could not be processed.');
       setCpaModalOpen(false);
-      // Refresh to ensure UI shows authoritative state even on rejection
       await refreshStreak(false);
       throw err;
     } finally {
@@ -143,6 +163,7 @@ export const StreakProvider = ({ children }) => {
   const closeSuccessModal = () => {
     setClaimSuccessData(null);
   };
+
 
   return (
     <StreakContext.Provider
@@ -159,6 +180,7 @@ export const StreakProvider = ({ children }) => {
         claimSuccessData,
         refreshStreak,
         initiateClaim,
+        openCpaModal,
         finalizeAuthoritativeClaim,
         closeSuccessModal
       }}
