@@ -2,58 +2,61 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { StreakProvider } from './context/StreakContext';
+import { ToastProvider } from './context/ToastContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
+import Dashboard from './pages/Dashboard';
 import DailyStreakPage from './pages/DailyStreak/DailyStreakPage';
-import StreakHistory from './pages/StreakHistory';
+import LuckySpinPage from './pages/LuckySpinPage';
+import TasksPage from './pages/TasksPage';
+import LeaderboardPage from './pages/LeaderboardPage';
+import BadgesPage from './pages/BadgesPage';
 import Wallet from './pages/Wallet';
+import StreakHistory from './pages/StreakHistory';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Navbar from './components/Navbar';
 
 export const App = () => {
   return (
     <AuthProvider>
       <StreakProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Primary Daily Streak Experience (matching reference design Page 62 & 63) */}
-            <Route path="/" element={<DailyStreakPage />} />
-            <Route path="/daily-streak" element={<DailyStreakPage />} />
-            <Route path="/dashboard" element={<DailyStreakPage />} />
+        <ToastProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Flagship Dashboard Page */}
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
 
-            {/* Authenticated Account Pages with standard navigation */}
-            <Route
-              path="/streak-history"
-              element={
-                <ProtectedRoute>
-                  <div>
-                    <Navbar />
-                    <StreakHistory />
-                  </div>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/wallet"
-              element={
-                <ProtectedRoute>
-                  <div>
-                    <Navbar />
-                    <Wallet />
-                  </div>
-                </ProtectedRoute>
-              }
-            />
+              {/* Complete Daily Streak & Rotating Drops Experience */}
+              <Route path="/daily-streak" element={<DailyStreakPage />} />
 
-            {/* Authentication Pages */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+              {/* Interactive Lucky Spin Feature */}
+              <Route path="/lucky-spin" element={<LuckySpinPage />} />
 
-            {/* Fallback to primary daily streak experience */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </BrowserRouter>
+              {/* Activities & Tasks Experience */}
+              <Route path="/tasks" element={<TasksPage />} />
+
+              {/* Global Leaderboard Standings */}
+              <Route path="/leaderboard" element={<LeaderboardPage />} />
+
+              {/* Achievements & Badges Gallery */}
+              <Route path="/badges" element={<BadgesPage />} />
+
+              {/* Cryptographic Rewards Wallet & Ledger */}
+              <Route path="/wallet" element={<Wallet />} />
+
+              {/* Check-In History */}
+              <Route path="/streak-history" element={<StreakHistory />} />
+
+              {/* Authentication */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+
+              {/* Fallback to Dashboard */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </ToastProvider>
       </StreakProvider>
     </AuthProvider>
   );

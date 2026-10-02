@@ -19,6 +19,7 @@ import EvaluatorToolbar from '../../components/EvaluatorToolbar';
 import StreakLoader from '../../components/StreakLoader';
 import StreakSkeleton from '../../components/StreakSkeleton';
 import DailyRotatingDrop from '../../components/DailyRotatingDrop';
+import Navbar from '../../components/Navbar';
 import styles from './DailyStreak.module.css';
 
 /**
@@ -91,8 +92,9 @@ export const DailyStreakPage = () => {
 
   return (
     <div className={styles.pageContainer}>
+      <Navbar />
       <div className={styles.contentWrapper}>
-        {/* Navigation Bar / Header */}
+        {/* Sub-Header with Streak Title & quick actions */}
         <StreakHeader
           onOpenAuth={() => setAuthModalOpen(true)}
           onOpenHistory={() => setHistoryModalOpen(true)}
