@@ -29,11 +29,12 @@ const signToken = (user) => {
 const register = async (req, res, next) => {
   try {
     const { username, email, password, name } = req.body;
+    const effectiveUsername = (username || name || (email && email.split('@')[0]) || 'user').trim();
 
-    if (!username || !email || !password) {
+    if (!email || !password) {
       return res.status(400).json({
         success: false,
-        error: 'Please provide username, email, and password.'
+        error: 'Please provide email and password.'
       });
     }
 
@@ -43,7 +44,7 @@ const register = async (req, res, next) => {
     let user = null;
     if (getDBStatus()) {
       try {
-        const existing = await User.findOne({ $or: [{ email }, { username }] });
+        const existing = await User.findOne({ $or: [{ email }, { username: effectiveUsername }] });
         if (existing) {
           return res.status(400).json({
             success: false,
@@ -51,10 +52,10 @@ const register = async (req, res, next) => {
           });
         }
         user = await User.create({
-          username: username.toLowerCase(),
+          username: effectiveUsername.toLowerCase(),
           email: email.toLowerCase(),
           passwordHash,
-          name: name || username
+          name: name || effectiveUsername
         });
       } catch (err) {
         console.warn('[Register DB fallback]:', err.message);
@@ -66,10 +67,10 @@ const register = async (req, res, next) => {
       user = {
         _id: id,
         id,
-        username: username.toLowerCase(),
+        username: effectiveUsername.toLowerCase(),
         email: email.toLowerCase(),
         passwordHash,
-        name: name || username,
+        name: name || effectiveUsername,
         role: 'USER'
       };
       inMemoryUsers.set(user.username, user);

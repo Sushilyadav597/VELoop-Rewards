@@ -38,25 +38,27 @@ const getTodayDropStatus = async (userId) => {
   let isClaimedToday = false;
   let claimRecord = null;
 
-  const userIdStr = userId.toString();
+  if (userId) {
+    const userIdStr = userId.toString();
 
-  if (getDBStatus()) {
-    try {
-      claimRecord = await DailyRotatingClaim.findOne({
-        $or: [{ userId }, { userId: userIdStr }],
-        dateKey
-      });
-      if (claimRecord) isClaimedToday = true;
-    } catch (err) {
-      console.warn('[RotatingReward DB fetch notice]:', err.message);
+    if (getDBStatus()) {
+      try {
+        claimRecord = await DailyRotatingClaim.findOne({
+          $or: [{ userId }, { userId: userIdStr }],
+          dateKey
+        });
+        if (claimRecord) isClaimedToday = true;
+      } catch (err) {
+        console.warn('[RotatingReward DB fetch notice]:', err.message);
+      }
     }
-  }
 
-  if (!claimRecord) {
-    const memoryKey = `${userIdStr}_${dateKey}`;
-    if (inMemoryRotatingClaims.has(memoryKey)) {
-      isClaimedToday = true;
-      claimRecord = inMemoryRotatingClaims.get(memoryKey);
+    if (!claimRecord) {
+      const memoryKey = `${userIdStr}_${dateKey}`;
+      if (inMemoryRotatingClaims.has(memoryKey)) {
+        isClaimedToday = true;
+        claimRecord = inMemoryRotatingClaims.get(memoryKey);
+      }
     }
   }
 

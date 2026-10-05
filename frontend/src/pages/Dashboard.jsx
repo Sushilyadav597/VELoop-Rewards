@@ -96,8 +96,8 @@ export const Dashboard = () => {
     try {
       // 1. API request made to backend
       const res = await claimToday();
-      const amountClaimed = todayReward?.amount || 100;
-      const currencyClaimed = todayReward?.currency || 'VES';
+      const amountClaimed = res?.claimedReward?.amount || todayReward?.amount || 5;
+      const currencyClaimed = res?.claimedReward?.currency || todayReward?.currency || 'VES';
 
       // 2. Confetti micro celebration
       try {
@@ -113,7 +113,7 @@ export const Dashboard = () => {
       setClaimedRewardInfo({
         amount: amountClaimed,
         currency: currencyClaimed,
-        title: `Day ${streak?.currentDay || 1} Daily Check-In`
+        title: res?.claimedReward?.title || `Day ${streak?.currentDay || 1} Daily Check-In`
       });
       setClaimRewardModalOpen(true);
 

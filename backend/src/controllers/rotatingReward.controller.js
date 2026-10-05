@@ -7,7 +7,8 @@ const { logAuditEvent } = require('../services/audit.service');
  */
 const getTodayDrop = async (req, res, next) => {
   try {
-    const data = await rotatingService.getTodayDropStatus(req.user.userId);
+    const userId = req.user ? req.user.userId : null;
+    const data = await rotatingService.getTodayDropStatus(userId);
     res.json(data);
   } catch (err) {
     next(err);

@@ -26,7 +26,7 @@ const INITIAL_DEFAULT_STREAK = {
 };
 
 export const StreakProvider = ({ children }) => {
-  const { user, token, updateWalletBalances, refreshWallet } = useAuth();
+  const { user, token, updateWalletBalances, refreshWallet, demoLogin } = useAuth();
 
   const [streakState, setStreakState] = useState(INITIAL_DEFAULT_STREAK);
   const [rewards, setRewards] = useState(INITIAL_DEFAULT_REWARDS);
@@ -88,6 +88,13 @@ export const StreakProvider = ({ children }) => {
     const targetDay = day || pendingClaimDay || streakState?.currentDay || 1;
     setPendingClaimDay(targetDay);
     return await finalizeAuthoritativeClaim(targetDay);
+  };
+
+  /**
+   * Alias for direct dashboard check-in claim
+   */
+  const claimToday = async (day) => {
+    return await initiateClaim(day);
   };
 
   /**
@@ -180,6 +187,7 @@ export const StreakProvider = ({ children }) => {
         claimSuccessData,
         refreshStreak,
         initiateClaim,
+        claimToday,
         openCpaModal,
         finalizeAuthoritativeClaim,
         closeSuccessModal
