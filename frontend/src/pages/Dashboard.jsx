@@ -22,7 +22,6 @@ import Navbar from '../components/Navbar';
 import WeeklyStreakBar from '../components/WeeklyStreakBar';
 import AnimatedCounter from '../components/AnimatedCounter';
 import TaskCard from '../components/TaskCard';
-import LuckySpinWheel from '../components/LuckySpinWheel';
 import LoadingState from '../components/LoadingState';
 import Countdown from '../components/Countdown';
 
@@ -230,7 +229,7 @@ export const Dashboard = () => {
             </button>
 
             <button
-              onClick={() => navigate('/lucky-spin')}
+              onClick={() => navigate('/tasks')}
               className="btn-press"
               style={{
                 padding: '11px 20px',
@@ -247,7 +246,7 @@ export const Dashboard = () => {
                 boxShadow: '0 4px 16px rgba(139, 92, 246, 0.35)'
               }}
             >
-              <Sparkles size={18} /> Lucky Spin
+              <Sparkles size={18} /> Earn Extra Points
             </button>
           </div>
         </div>
@@ -491,61 +490,49 @@ export const Dashboard = () => {
         </div>
 
         {/* =========================================================================
-            4. TWO-COLUMN INTERACTIVE SHOWCASE:
-               Left: Active Interactive Tasks (Complete with animated points)
-               Right: Lucky Spin Widget
+            4. ACTIVE INTERACTIVE TASKS & ACTIVITIES
             ========================================================================= */}
-        <div className="row g-4 mb-4 align-items-stretch">
-          {/* Left Column: Active Tasks */}
-          <div className="col-12 col-lg-7 d-flex flex-column">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-              <div>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>
-                  Active Tasks & Activities
-                </h3>
-                <p style={{ color: '#94A3B8', fontSize: '0.84rem', margin: '2px 0 0' }}>
-                  Complete activities to instantly earn extra VEs coins.
-                </p>
-              </div>
-
-              <button
-                onClick={() => navigate('/tasks')}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#A78BFA',
-                  fontSize: '0.86rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}
-              >
-                View All Tasks <ArrowRight size={14} />
-              </button>
+        <div className="mb-4">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '10px' }}>
+            <div>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>
+                Active Tasks & Activities
+              </h3>
+              <p style={{ color: '#94A3B8', fontSize: '0.84rem', margin: '2px 0 0' }}>
+                Complete activities to instantly earn extra VEs coins.
+              </p>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
-              {tasks.slice(0, 3).map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  onComplete={handleTaskComplete}
-                  isCompact={true}
-                />
-              ))}
-            </div>
+            <button
+              onClick={() => navigate('/tasks')}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#A78BFA',
+                fontSize: '0.86rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              View All Tasks <ArrowRight size={14} />
+            </button>
           </div>
 
-          {/* Right Column: Lucky Spin Interactive Widget */}
-          <div className="col-12 col-lg-5 d-flex flex-column">
-            <LuckySpinWheel
-              onPointsEarned={() => {
-                refreshWallet();
-              }}
-              onOpenWallet={() => navigate('/wallet')}
-            />
+          <div className="row g-4 align-items-stretch">
+            {tasks.slice(0, 3).map((task) => (
+              <div key={task.id} className="col-12 col-md-4 d-flex">
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <TaskCard
+                    task={task}
+                    onComplete={handleTaskComplete}
+                    isCompact={true}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

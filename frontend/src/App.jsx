@@ -7,7 +7,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 import Dashboard from './pages/Dashboard';
 import DailyStreakPage from './pages/DailyStreak/DailyStreakPage';
-import LuckySpinPage from './pages/LuckySpinPage';
 import TasksPage from './pages/TasksPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import BadgesPage from './pages/BadgesPage';
@@ -29,9 +28,6 @@ export const App = () => {
 
               {/* Complete Daily Streak & Rotating Drops Experience */}
               <Route path="/daily-streak" element={<DailyStreakPage />} />
-
-              {/* Interactive Lucky Spin Feature */}
-              <Route path="/lucky-spin" element={<LuckySpinPage />} />
 
               {/* Activities & Tasks Experience */}
               <Route path="/tasks" element={<TasksPage />} />

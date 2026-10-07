@@ -102,9 +102,6 @@ export const Navbar = () => {
             <NavLink to="/daily-streak" style={navLinkStyle}>
               <Flame size={15} color="#F59E0B" /> Daily Streak
             </NavLink>
-            <NavLink to="/lucky-spin" style={navLinkStyle}>
-              <Sparkles size={15} color="#EC4899" /> Lucky Spin
-            </NavLink>
             <NavLink to="/tasks" style={navLinkStyle}>
               <Target size={15} color="#10B981" /> Tasks
             </NavLink>
@@ -328,9 +325,6 @@ export const Navbar = () => {
           </NavLink>
           <NavLink to="/daily-streak" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
             <Flame size={16} color="#F59E0B" /> Daily Streak
-          </NavLink>
-          <NavLink to="/lucky-spin" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
-            <Sparkles size={16} color="#EC4899" /> Lucky Spin
           </NavLink>
           <NavLink to="/tasks" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
             <Target size={16} color="#10B981" /> Tasks & Earn
