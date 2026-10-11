@@ -21,75 +21,76 @@ export const WeeklyStreakBar = ({
   return (
     <div
       style={{
-        background: 'linear-gradient(145deg, rgba(26, 17, 60, 0.7) 0%, rgba(13, 9, 32, 0.85) 100%)',
+        background: 'linear-gradient(145deg, rgba(26, 17, 60, 0.75) 0%, rgba(13, 9, 32, 0.9) 100%)',
         border: '1.2px solid rgba(245, 158, 11, 0.35)',
         borderRadius: '20px',
-        padding: '1.5rem',
+        padding: 'clamp(1rem, 2.5vw, 1.5rem)',
         boxShadow: '0 12px 30px rgba(0, 0, 0, 0.3), 0 0 25px rgba(245, 158, 11, 0.12)'
       }}
     >
       {/* Top Banner: Title and Streak Counters */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.85rem', marginBottom: '1.15rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div
             style={{
-              width: '42px',
-              height: '42px',
+              width: '40px',
+              height: '40px',
               borderRadius: '12px',
               background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.2) 100%)',
               border: '1.5px solid rgba(245, 158, 11, 0.5)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 16px rgba(245, 158, 11, 0.35)'
+              boxShadow: '0 0 16px rgba(245, 158, 11, 0.35)',
+              flexShrink: 0
             }}
           >
-            <Flame size={24} fill="#F59E0B" color="#F59E0B" />
+            <Flame size={22} fill="#F59E0B" color="#F59E0B" />
           </div>
 
           <div>
-            <div style={{ fontSize: '0.74rem', color: '#FBBF24', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.06em' }}>
+            <div style={{ fontSize: '0.72rem', color: '#FBBF24', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.06em' }}>
               DAILY CHECK-IN SYSTEM
             </div>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#FFFFFF', margin: 0, letterSpacing: '-0.01em' }}>
+            <h3 style={{ fontSize: 'clamp(1.15rem, 3vw, 1.45rem)', fontWeight: 900, color: '#FFFFFF', margin: 0, letterSpacing: '-0.01em' }}>
               🔥 {currentStreak} DAY STREAK
             </h3>
           </div>
         </div>
 
         {/* Milestone & Longest Streak Pills */}
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <div
             style={{
-              padding: '6px 14px',
+              padding: '5px 12px',
               borderRadius: '999px',
               background: 'rgba(255, 255, 255, 0.05)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
-              fontSize: '0.78rem',
+              fontSize: '0.75rem',
               color: '#CBD5E1',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '5px'
             }}
           >
-            <Trophy size={14} color="#FBBF24" />
-            <span>Longest: <strong style={{ color: '#FFFFFF' }}>{longestStreak} Days</strong></span>
+            <Trophy size={13} color="#FBBF24" />
+            <span>Longest: <strong style={{ color: '#FFFFFF' }}>{longestStreak}d</strong></span>
           </div>
 
           <div
             style={{
-              padding: '6px 14px',
+              padding: '5px 12px',
               borderRadius: '999px',
-              background: 'rgba(139, 92, 246, 0.12)',
+              background: 'rgba(139, 92, 246, 0.14)',
               border: '1px solid rgba(139, 92, 246, 0.35)',
-              fontSize: '0.78rem',
+              fontSize: '0.75rem',
               color: '#C4B5FD',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '5px'
             }}
           >
-            <Award size={14} color="#A78BFA" />
+            <Award size={13} color="#A78BFA" />
             <span>Next: <strong style={{ color: '#FFFFFF' }}>{nextMilestone}</strong></span>
           </div>
         </div>
@@ -100,9 +101,9 @@ export const WeeklyStreakBar = ({
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
-          gap: '8px',
-          padding: '12px 8px',
-          background: 'rgba(10, 6, 26, 0.65)',
+          gap: 'clamp(3px, 1vw, 8px)',
+          padding: 'clamp(8px, 1.5vw, 12px) clamp(4px, 1vw, 8px)',
+          background: 'rgba(10, 6, 26, 0.7)',
           borderRadius: '16px',
           border: '1px solid rgba(255, 255, 255, 0.06)'
         }}
@@ -120,29 +121,29 @@ export const WeeklyStreakBar = ({
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '10px 4px',
+                padding: 'clamp(6px, 1.2vw, 10px) 2px',
                 borderRadius: '12px',
                 background: isDone
-                  ? 'linear-gradient(145deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.1) 100%)'
+                  ? 'linear-gradient(145deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.12) 100%)'
                   : isToday
-                  ? 'rgba(139, 92, 246, 0.15)'
+                  ? 'rgba(139, 92, 246, 0.18)'
                   : 'rgba(255, 255, 255, 0.02)',
                 border: isDone
-                  ? '1.2px solid rgba(245, 158, 11, 0.5)'
+                  ? '1.2px solid rgba(245, 158, 11, 0.55)'
                   : isToday
-                  ? '1.2px solid #8B5CF6'
+                  ? '1.5px solid #8B5CF6'
                   : '1px solid rgba(255, 255, 255, 0.06)',
-                boxShadow: isDone ? '0 0 12px rgba(245, 158, 11, 0.2)' : 'none',
+                boxShadow: isDone ? '0 0 12px rgba(245, 158, 11, 0.25)' : isToday ? '0 0 14px rgba(139, 92, 246, 0.35)' : 'none',
                 transition: 'all 0.2s ease'
               }}
             >
               <span
                 style={{
-                  fontSize: '0.74rem',
+                  fontSize: 'clamp(0.62rem, 1.5vw, 0.74rem)',
                   fontWeight: 800,
-                  color: isDone ? '#FBBF24' : isToday ? '#A78BFA' : '#64748B',
-                  letterSpacing: '0.04em',
-                  marginBottom: '6px'
+                  color: isDone ? '#FBBF24' : isToday ? '#C4B5FD' : '#64748B',
+                  letterSpacing: '0.03em',
+                  marginBottom: '4px'
                 }}
               >
                 {item.label}
@@ -150,14 +151,14 @@ export const WeeklyStreakBar = ({
 
               <div
                 style={{
-                  width: '26px',
-                  height: '26px',
+                  width: 'clamp(20px, 4.5vw, 26px)',
+                  height: 'clamp(20px, 4.5vw, 26px)',
                   borderRadius: '50%',
                   background: isDone
                     ? '#F59E0B'
                     : isToday
-                    ? 'rgba(139, 92, 246, 0.3)'
-                    : 'rgba(255, 255, 255, 0.08)',
+                    ? 'rgba(139, 92, 246, 0.35)'
+                    : 'rgba(255, 255, 255, 0.07)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -165,11 +166,11 @@ export const WeeklyStreakBar = ({
                 }}
               >
                 {isDone ? (
-                  <Check size={16} strokeWidth={3} />
+                  <Check size={14} strokeWidth={3} />
                 ) : isToday ? (
-                  <Flame size={14} color="#A78BFA" />
+                  <Flame size={13} color="#C4B5FD" />
                 ) : (
-                  <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: 700 }}>
+                  <span style={{ fontSize: '0.66rem', color: '#64748B', fontWeight: 700 }}>
                     {item.dayIndex}
                   </span>
                 )}

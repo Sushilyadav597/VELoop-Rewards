@@ -118,7 +118,7 @@ export const Navbar = () => {
         </div>
 
         {/* Right Section: Stats Pills, Notifications, Profile Dropdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {/* Animated Total Points Counter Pill */}
           <div
             onClick={() => navigate('/wallet')}
@@ -127,22 +127,23 @@ export const Navbar = () => {
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
+              gap: '5px',
+              padding: '5px 10px',
               borderRadius: '999px',
               background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(217, 119, 6, 0.1) 100%)',
               border: '1.2px solid rgba(245, 158, 11, 0.45)',
-              boxShadow: '0 0 12px rgba(245, 158, 11, 0.15)'
+              boxShadow: '0 0 12px rgba(245, 158, 11, 0.15)',
+              whiteSpace: 'nowrap'
             }}
             title="Total Rewards Points Vault"
           >
             <span style={{ fontSize: '13px' }}>🪙</span>
-            <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#FBBF24' }}>
+            <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#FBBF24' }}>
               <AnimatedCounter value={wallet?.vesBalance ?? 2450} suffix=" VEs" />
             </span>
           </div>
 
-          {/* Streak Flame Counter Pill */}
+          {/* Streak Flame Counter Pill (Tablet/Desktop) */}
           <div
             onClick={() => navigate('/daily-streak')}
             className="d-none d-sm-flex hover-lift"
@@ -151,15 +152,16 @@ export const Navbar = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
-              padding: '6px 12px',
+              padding: '5px 10px',
               borderRadius: '999px',
               background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.18) 0%, rgba(99, 102, 241, 0.12) 100%)',
-              border: '1.2px solid rgba(139, 92, 246, 0.45)'
+              border: '1.2px solid rgba(139, 92, 246, 0.45)',
+              whiteSpace: 'nowrap'
             }}
             title="Current Streak"
           >
             <Flame size={15} fill="#F59E0B" color="#F59E0B" />
-            <span style={{ fontSize: '0.86rem', fontWeight: 800, color: '#FFFFFF' }}>
+            <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#FFFFFF' }}>
               {streak?.currentStreak ?? 7}d
             </span>
           </div>
@@ -167,8 +169,8 @@ export const Navbar = () => {
           {/* Elegant Notification Center */}
           <NotificationCenter />
 
-          {/* User Account / Persona Menu */}
-          <div style={{ position: 'relative' }}>
+          {/* User Account / Persona Menu (Visible on Medium+ Screens) */}
+          <div className="d-none d-md-block" style={{ position: 'relative' }}>
             <button
               onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
               className="btn-press"
@@ -176,7 +178,7 @@ export const Navbar = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '6px 12px',
+                padding: '5px 12px',
                 borderRadius: '999px',
                 background: 'rgba(255, 255, 255, 0.08)',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
@@ -200,7 +202,7 @@ export const Navbar = () => {
               >
                 {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
-              <span className="d-none d-md-inline" style={{ fontSize: '0.84rem', fontWeight: 700, maxWidth: '90px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: '0.84rem', fontWeight: 700, maxWidth: '90px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {user?.name || 'Explorer'}
               </span>
               <ChevronDown size={14} color="#94A3B8" />
@@ -211,7 +213,7 @@ export const Navbar = () => {
               <div
                 style={{
                   position: 'absolute',
-                  top: '46px',
+                  top: '44px',
                   right: 0,
                   width: '240px',
                   backgroundColor: '#120D2E',
@@ -290,11 +292,11 @@ export const Navbar = () => {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="d-flex d-lg-none btn-press"
             style={{
-              width: '38px',
-              height: '38px',
+              width: '36px',
+              height: '36px',
               borderRadius: '10px',
-              background: 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: mobileMenuOpen ? 'rgba(139, 92, 246, 0.25)' : 'rgba(255, 255, 255, 0.08)',
+              border: mobileMenuOpen ? '1px solid #8B5CF6' : '1px solid rgba(255, 255, 255, 0.15)',
               color: '#FFFFFF',
               alignItems: 'center',
               justifyContent: 'center',
@@ -302,42 +304,157 @@ export const Navbar = () => {
             }}
             aria-label="Toggle navigation drawer"
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileMenuOpen ? <X size={19} /> : <Menu size={19} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Drawer Navigation with Full Profile & Personas */}
       {mobileMenuOpen && (
         <div
           style={{
-            backgroundColor: '#0F0926',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            padding: '1rem 1.25rem',
+            backgroundColor: '#0d0824',
+            borderTop: '1px solid rgba(139, 92, 246, 0.25)',
+            borderBottom: '1px solid rgba(139, 92, 246, 0.25)',
+            padding: '1.15rem 1rem 1.4rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '12px',
+            boxShadow: '0 15px 35px rgba(0, 0, 0, 0.65)',
+            animation: 'toastSlideIn 0.22s ease-out'
           }}
           className="d-lg-none"
         >
-          <NavLink to="/dashboard" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
-            <LayoutDashboard size={16} /> Dashboard
-          </NavLink>
-          <NavLink to="/daily-streak" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
-            <Flame size={16} color="#F59E0B" /> Daily Streak
-          </NavLink>
-          <NavLink to="/tasks" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
-            <Target size={16} color="#10B981" /> Tasks & Earn
-          </NavLink>
-          <NavLink to="/leaderboard" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
-            <Trophy size={16} color="#FBBF24" /> Leaderboard
-          </NavLink>
-          <NavLink to="/wallet" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
-            <Gift size={16} color="#A78BFA" /> Rewards Wallet
-          </NavLink>
-          <NavLink to="/badges" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
-            <Award size={16} color="#38BDF8" /> Badges & Achievements
-          </NavLink>
+          {/* User Profile Card in Drawer */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '10px 14px',
+              borderRadius: '14px',
+              background: 'linear-gradient(145deg, rgba(28, 18, 64, 0.8) 0%, rgba(14, 9, 36, 0.9) 100%)',
+              border: '1px solid rgba(139, 92, 246, 0.3)'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.9rem',
+                  fontWeight: 900,
+                  color: '#FFFFFF',
+                  boxShadow: '0 0 12px rgba(139, 92, 246, 0.5)'
+                }}
+              >
+                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, color: '#FFFFFF', fontSize: '0.92rem' }}>
+                  {user?.name || 'Explorer User'}
+                </div>
+                <div style={{ fontSize: '0.74rem', color: '#94A3B8' }}>
+                  {user?.email || 'authenticated'}
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '4px 10px',
+                borderRadius: '999px',
+                background: 'rgba(245, 158, 11, 0.16)',
+                border: '1px solid rgba(245, 158, 11, 0.4)',
+                color: '#FBBF24',
+                fontSize: '0.78rem',
+                fontWeight: 800
+              }}
+            >
+              <Flame size={13} fill="#F59E0B" /> {streak?.currentStreak ?? 7}d
+            </div>
+          </div>
+
+          {/* Primary Nav Links */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <NavLink to="/dashboard" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
+              <LayoutDashboard size={16} /> Dashboard
+            </NavLink>
+            <NavLink to="/daily-streak" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
+              <Flame size={16} color="#F59E0B" /> Daily Streak & Drops
+            </NavLink>
+            <NavLink to="/tasks" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
+              <Target size={16} color="#10B981" /> Tasks & Earn
+            </NavLink>
+            <NavLink to="/leaderboard" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
+              <Trophy size={16} color="#FBBF24" /> Leaderboard
+            </NavLink>
+            <NavLink to="/wallet" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
+              <Gift size={16} color="#A78BFA" /> Rewards Wallet
+            </NavLink>
+            <NavLink to="/badges" style={navLinkStyle} onClick={() => setMobileMenuOpen(false)}>
+              <Award size={16} color="#38BDF8" /> Badges & Achievements
+            </NavLink>
+          </div>
+
+          {/* Quick Demo Personas (Mobile) */}
+          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '10px' }}>
+            <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
+              Quick Test Personas
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
+              <button
+                onClick={() => { handleDemoSwitch('new'); setMobileMenuOpen(false); }}
+                style={{ padding: '6px 4px', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '8px', color: '#38BDF8', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Day 1
+              </button>
+              <button
+                onClick={() => { handleDemoSwitch('day2'); setMobileMenuOpen(false); }}
+                style={{ padding: '6px 4px', background: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#FBBF24', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Day 2
+              </button>
+              <button
+                onClick={() => { handleDemoSwitch('vip'); setMobileMenuOpen(false); }}
+                style={{ padding: '6px 4px', background: 'rgba(52, 211, 153, 0.1)', border: '1px solid rgba(52, 211, 153, 0.3)', borderRadius: '8px', color: '#34D399', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Day 7 VIP
+              </button>
+            </div>
+          </div>
+
+          {/* Sign Out (Mobile) */}
+          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '8px' }}>
+            <button
+              onClick={() => { logout(); setMobileMenuOpen(false); navigate('/login'); }}
+              style={{
+                width: '100%',
+                padding: '9px 12px',
+                borderRadius: '10px',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                color: '#EF4444',
+                fontWeight: 700,
+                fontSize: '0.84rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                cursor: 'pointer'
+              }}
+            >
+              <LogOut size={15} /> Sign Out
+            </button>
+          </div>
         </div>
       )}
     </header>

@@ -24,6 +24,7 @@ import AnimatedCounter from '../components/AnimatedCounter';
 import TaskCard from '../components/TaskCard';
 import LoadingState from '../components/LoadingState';
 import Countdown from '../components/Countdown';
+import styles from './Dashboard.module.css';
 
 export const Dashboard = () => {
   const { user, wallet, refreshWallet } = useAuth();
@@ -152,99 +153,38 @@ export const Dashboard = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'radial-gradient(circle at 50% -10%, #1e1346 0%, #0c0822 45%, #070514 100%)' }}>
+    <div className={styles.container}>
       <Navbar />
 
-      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '2rem 1.25rem 4rem' }}>
+      <main className={styles.main}>
         {/* =========================================================================
             1. TOP WELCOME SECTION
             ========================================================================= */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '1.5rem',
-            marginBottom: '2rem'
-          }}
-        >
-          <div>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '4px 14px',
-                borderRadius: '999px',
-                background: 'rgba(139, 92, 246, 0.15)',
-                border: '1px solid rgba(139, 92, 246, 0.35)',
-                color: '#C4B5FD',
-                fontSize: '0.8rem',
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                marginBottom: '0.5rem'
-              }}
-            >
+        <div className={styles.welcomeSection}>
+          <div className={styles.welcomeContent}>
+            <div className={styles.dashboardBadge}>
               <Sparkles size={14} color="#F59E0B" /> VELoop Rewards Dashboard
             </div>
-            <h1
-              style={{
-                fontSize: 'clamp(2rem, 4vw, 2.6rem)',
-                fontWeight: 900,
-                color: '#FFFFFF',
-                margin: 0,
-                letterSpacing: '-0.025em'
-              }}
-            >
-              Welcome back 👋 {user?.name ? user.name.split(' ')[0] : 'Explorer'}
+            <h1 className={styles.welcomeTitle}>
+              Welcome back 👋 <span className={styles.userName}>{user?.name ? user.name.split(' ')[0] : 'Explorer'}</span>
             </h1>
-            <p style={{ color: '#94A3B8', fontSize: '0.96rem', marginTop: '0.35rem', margin: '0.35rem 0 0' }}>
+            <p className={styles.welcomeSubtitle}>
               Your daily rewards, streak status, and booster milestones are synchronized in real-time.
             </p>
           </div>
 
           {/* Quick Action Buttons */}
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div className={styles.quickActions}>
             <button
               onClick={() => navigate('/daily-streak')}
-              className="btn-press"
-              style={{
-                padding: '11px 20px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-                border: 'none',
-                color: '#FFFFFF',
-                fontSize: '0.9rem',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                boxShadow: '0 4px 16px rgba(245, 158, 11, 0.35)'
-              }}
+              className={`${styles.btnCheckIn} btn-press`}
             >
               <Flame size={18} fill="#FFFFFF" /> Check-In Streak
             </button>
 
             <button
               onClick={() => navigate('/tasks')}
-              className="btn-press"
-              style={{
-                padding: '11px 20px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)',
-                border: 'none',
-                color: '#FFFFFF',
-                fontSize: '0.9rem',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                boxShadow: '0 4px 16px rgba(139, 92, 246, 0.35)'
-              }}
+              className={`${styles.btnTasks} btn-press`}
             >
               <Sparkles size={18} /> Earn Extra Points
             </button>
@@ -252,138 +192,93 @@ export const Dashboard = () => {
         </div>
 
         {/* =========================================================================
-            2. FOUR FLAGSHIP STATS CARDS (Exact Specs)
-            ┌──────────────────────┐
-            │ 🪙 Total Points      │
-            │                      │
-            │ 2,450                │
-            │ +12.5% this month ↑  │
-            └──────────────────────┘
+            2. FOUR FLAGSHIP STATS CARDS (Responsive 2x2 on Mobile, 4x1 on Desktop)
             ========================================================================= */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '1.25rem',
-            marginBottom: '2.5rem'
-          }}
-        >
+        <div className={styles.statsGrid}>
           {/* 1. Total Points Card with Animated Number Counter */}
-          <div
-            className="card-lift"
-            style={{
-              background: 'linear-gradient(145deg, rgba(28, 20, 68, 0.75) 0%, rgba(14, 9, 36, 0.9) 100%)',
-              border: '1.2px solid rgba(245, 158, 11, 0.35)',
-              borderRadius: '20px',
-              padding: '1.6rem 1.5rem',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(245, 158, 11, 0.1)',
-              position: 'relative'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.82rem', color: '#FBBF24', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.04em' }}>
-                🪙 Total Points
+          <div className={`${styles.statCard} ${styles.statCardPoints} card-lift`}>
+            <div className={styles.cardHeader}>
+              <span className={styles.cardLabel} style={{ color: '#FBBF24' }}>
+                Total Points
               </span>
-              <span style={{ fontSize: '1.4rem' }}>🪙</span>
+              <div className={styles.cardIconBadge} style={{ background: 'rgba(245, 158, 11, 0.16)', border: '1px solid rgba(245, 158, 11, 0.4)' }}>
+                <Coins size={17} color="#FBBF24" />
+              </div>
             </div>
 
-            <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+            <div className={styles.cardValue}>
               <AnimatedCounter value={totalPoints} />
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '0.65rem', color: '#34D399', fontSize: '0.84rem', fontWeight: 700 }}>
-              <TrendingUp size={15} />
+            <div className={styles.cardFooter} style={{ color: '#34D399' }}>
+              <TrendingUp size={14} />
               <span>{monthlyGrowth} this month ↑</span>
             </div>
           </div>
 
           {/* 2. Streak Card */}
-          <div
-            className="card-lift"
-            style={{
-              background: 'linear-gradient(145deg, rgba(28, 20, 68, 0.75) 0%, rgba(14, 9, 36, 0.9) 100%)',
-              border: '1.2px solid rgba(245, 158, 11, 0.45)',
-              borderRadius: '20px',
-              padding: '1.6rem 1.5rem',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(245, 158, 11, 0.15)',
-              position: 'relative'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.82rem', color: '#F59E0B', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.04em' }}>
-                🔥 Streak
+          <div className={`${styles.statCard} ${styles.statCardStreak} card-lift`}>
+            <div className={styles.cardHeader}>
+              <span className={styles.cardLabel} style={{ color: '#F59E0B' }}>
+                Current Streak
               </span>
-              <Flame size={22} fill="#F59E0B" color="#F59E0B" />
+              <div className={styles.cardIconBadge} style={{ background: 'rgba(245, 158, 11, 0.18)', border: '1px solid rgba(245, 158, 11, 0.5)' }}>
+                <Flame size={18} fill="#F59E0B" color="#F59E0B" />
+              </div>
             </div>
 
-            <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#FBBF24', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+            <div className={styles.cardValue} style={{ color: '#FBBF24' }}>
               {currentStreak} {currentStreak === 1 ? 'Day' : 'Days'}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '0.65rem', color: '#CBD5E1', fontSize: '0.84rem', fontWeight: 600 }}>
-              <span>Keep it going!</span>
+            <div className={styles.cardFooter} style={{ color: '#CBD5E1' }}>
+              <span>Keep it going! 🔥</span>
             </div>
           </div>
 
           {/* 3. Level Card with Mini Progress Bar */}
-          <div
-            className="card-lift"
-            style={{
-              background: 'linear-gradient(145deg, rgba(28, 20, 68, 0.75) 0%, rgba(14, 9, 36, 0.9) 100%)',
-              border: '1.2px solid rgba(139, 92, 246, 0.35)',
-              borderRadius: '20px',
-              padding: '1.6rem 1.5rem',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-              position: 'relative'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.82rem', color: '#A78BFA', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.04em' }}>
-                ⭐ Level
+          <div className={`${styles.statCard} ${styles.statCardLevel} card-lift`}>
+            <div className={styles.cardHeader}>
+              <span className={styles.cardLabel} style={{ color: '#C4B5FD' }}>
+                Explorer Tier
               </span>
-              <Star size={20} fill="#A78BFA" color="#A78BFA" />
+              <div className={styles.cardIconBadge} style={{ background: 'rgba(139, 92, 246, 0.18)', border: '1px solid rgba(139, 92, 246, 0.4)' }}>
+                <Star size={17} fill="#A78BFA" color="#A78BFA" />
+              </div>
             </div>
 
-            <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+            <div className={styles.cardValue}>
               Level {currentLevel}
             </div>
 
-            <div style={{ marginTop: '0.65rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#CBD5E1', marginBottom: '4px' }}>
-                <span>{levelProgress}% to next level</span>
+            <div style={{ marginTop: '0.45rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: '#CBD5E1', marginBottom: '3px' }}>
+                <span>{levelProgress}% next</span>
                 <span style={{ color: '#A78BFA', fontWeight: 700 }}>Lvl {currentLevel + 1}</span>
               </div>
-              <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
+              <div style={{ width: '100%', height: '5px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', overflow: 'hidden' }}>
                 <div style={{ width: `${levelProgress}%`, height: '100%', background: 'linear-gradient(90deg, #8B5CF6, #A78BFA)', borderRadius: '999px' }} />
               </div>
             </div>
           </div>
 
           {/* 4. Rank Card */}
-          <div
-            className="card-lift"
-            style={{
-              background: 'linear-gradient(145deg, rgba(28, 20, 68, 0.75) 0%, rgba(14, 9, 36, 0.9) 100%)',
-              border: '1.2px solid rgba(16, 185, 129, 0.35)',
-              borderRadius: '20px',
-              padding: '1.6rem 1.5rem',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-              position: 'relative'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.82rem', color: '#34D399', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.04em' }}>
-                🏆 Rank
+          <div className={`${styles.statCard} ${styles.statCardRank} card-lift`}>
+            <div className={styles.cardHeader}>
+              <span className={styles.cardLabel} style={{ color: '#34D399' }}>
+                Leaderboard Rank
               </span>
-              <Trophy size={20} color="#34D399" />
+              <div className={styles.cardIconBadge} style={{ background: 'rgba(16, 185, 129, 0.18)', border: '1px solid rgba(16, 185, 129, 0.4)' }}>
+                <Trophy size={17} color="#34D399" />
+              </div>
             </div>
 
-            <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+            <div className={styles.cardValue}>
               #{userRank}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '0.65rem', color: '#34D399', fontSize: '0.84rem', fontWeight: 700 }}>
-              <span>{rankPercentile} of participants</span>
+            <div className={styles.cardFooter} style={{ color: '#34D399' }}>
+              <span>{rankPercentile} top tier</span>
             </div>
           </div>
         </div>
@@ -391,7 +286,7 @@ export const Dashboard = () => {
         {/* =========================================================================
             3. WEEKLY STREAK STRIP & CLAIM BANNER
             ========================================================================= */}
-        <div style={{ marginBottom: '2.5rem' }}>
+        <div style={{ marginBottom: '2.25rem' }}>
           <WeeklyStreakBar
             currentStreak={currentStreak}
             longestStreak={14}
@@ -401,22 +296,7 @@ export const Dashboard = () => {
 
           {/* Today's Actionable Check-In Strip */}
           <div
-            className="card-lift"
-            style={{
-              marginTop: '1rem',
-              padding: '1.25rem 1.5rem',
-              background: canClaimToday
-                ? 'linear-gradient(145deg, rgba(245, 158, 11, 0.16) 0%, rgba(20, 14, 46, 0.85) 100%)'
-                : 'linear-gradient(145deg, rgba(20, 14, 46, 0.6) 0%, rgba(10, 7, 26, 0.8) 100%)',
-              border: canClaimToday ? '1.5px solid #F59E0B' : '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '18px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1rem',
-              boxShadow: canClaimToday ? '0 0 25px rgba(245, 158, 11, 0.2)' : 'none'
-            }}
+            className={`card-lift ${styles.checkInStrip} ${canClaimToday ? styles.checkInStripActive : styles.checkInStripDone}`}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
               <div
@@ -429,17 +309,18 @@ export const Dashboard = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '1.4rem'
+                  fontSize: '1.4rem',
+                  flexShrink: 0
                 }}
               >
                 {canClaimToday ? '⚡' : '🔒'}
               </div>
 
               <div>
-                <div style={{ fontSize: '0.78rem', color: canClaimToday ? '#FBBF24' : '#94A3B8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <div style={{ fontSize: '0.74rem', color: canClaimToday ? '#FBBF24' : '#94A3B8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   {canClaimToday ? "TODAY'S CHECK-IN AVAILABLE" : 'CHECK-IN SECURED TODAY'}
                 </div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFFFFF' }}>
+                <div style={{ fontSize: 'clamp(0.95rem, 2.5vw, 1.12rem)', fontWeight: 800, color: '#FFFFFF', marginTop: '1px' }}>
                   {canClaimToday
                     ? `Claim Day ${streak?.currentDay || 1} Reward: +${todayReward.amount} ${todayReward.currency}`
                     : `Day ${streak?.currentDay || 1} reward claimed. Next check-in in countdown:`}
@@ -447,7 +328,7 @@ export const Dashboard = () => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className={styles.claimActionContainer}>
               {!canClaimToday && streak?.nextClaimAt && (
                 <Countdown
                   serverTime={serverTime}
@@ -459,23 +340,7 @@ export const Dashboard = () => {
               <button
                 onClick={handleDailyClaim}
                 disabled={!canClaimToday || isClaimButtonLoading}
-                className="btn-press"
-                style={{
-                  padding: '12px 24px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  background: canClaimToday
-                    ? 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
-                    : 'rgba(255, 255, 255, 0.08)',
-                  color: canClaimToday ? '#FFFFFF' : '#94A3B8',
-                  fontWeight: 800,
-                  fontSize: '0.95rem',
-                  cursor: canClaimToday ? 'pointer' : 'not-allowed',
-                  boxShadow: canClaimToday ? '0 4px 18px rgba(245, 158, 11, 0.4)' : 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
+                className={`btn-press ${canClaimToday ? styles.btnClaimNow : styles.btnClaimDone}`}
               >
                 {isClaimButtonLoading ? (
                   <>⏳ Claiming...</>
