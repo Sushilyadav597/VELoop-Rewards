@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
     }
   });
   const [loading, setLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   // Synchronize wallet directly from backend
   const refreshWallet = useCallback(async () => {
@@ -56,12 +57,7 @@ export const AuthProvider = ({ children }) => {
     const restoreAuth = async () => {
       const storedToken = localStorage.getItem('token');
       if (!storedToken) {
-        // Auto demo login so reviewer immediately has active interactive streak
-        try {
-          await demoLogin('new');
-        } catch (e) {
-          // ignore
-        }
+        setIsInitializing(false);
         return;
       }
 
@@ -82,6 +78,8 @@ export const AuthProvider = ({ children }) => {
         if (err?.status === 401) {
           logout();
         }
+      } finally {
+        setIsInitializing(false);
       }
     };
 
@@ -168,6 +166,7 @@ export const AuthProvider = ({ children }) => {
         wallet,
         isAuthenticated: !!token && !!user,
         loading,
+        isInitializing,
         login,
         register,
         demoLogin,

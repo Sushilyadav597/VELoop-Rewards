@@ -116,17 +116,9 @@ export const StreakProvider = ({ children }) => {
     const targetDay = overrideDay || pendingClaimDay || streakState?.currentDay || 1;
 
     try {
-      // Auto-authenticate with demo user if no token exists yet
-      let activeToken = token || localStorage.getItem('token');
-      if (!activeToken && demoLogin) {
-        try {
-          const authRes = await demoLogin('new');
-          if (authRes?.token) {
-            activeToken = authRes.token;
-          }
-        } catch (e) {
-          console.warn('[Auto-demo login notice]:', e.message);
-        }
+      const activeToken = token || localStorage.getItem('token');
+      if (!activeToken) {
+        throw new Error('Please register or log in to claim streak rewards.');
       }
 
       // Send claim request to backend

@@ -3,16 +3,16 @@ import { Navigate, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import LoadingState from './LoadingState';
 
-export const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+export const ProtectedRoute = ({ children, redirectPath = '/register' }) => {
+  const { isAuthenticated, loading, isInitializing } = useAuth();
   const location = useLocation();
 
-  if (loading) {
+  if (loading || isInitializing) {
     return <LoadingState message="Verifying session..." fullPage />;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={redirectPath} state={{ from: location }} replace />;
   }
 
   return children;

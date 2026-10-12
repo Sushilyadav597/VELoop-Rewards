@@ -18,8 +18,15 @@ export const Register = () => {
   const [formError, setFormError] = useState('');
   const [apiError, setApiError] = useState(null);
 
-  const { register } = useAuth();
+  const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // If already authenticated, redirect immediately to dashboard
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -209,6 +216,46 @@ export const Register = () => {
           <Link to="/login" style={{ color: 'var(--accent-glow)', fontWeight: 700, textDecoration: 'none' }}>
             Sign in &rarr;
           </Link>
+        </div>
+
+        {/* Quick Test Autofill Helper */}
+        <div
+          style={{
+            marginTop: '1.5rem',
+            padding: '0.85rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+            borderRadius: '10px',
+            border: '1px dashed var(--border-subtle)',
+            fontSize: '0.82rem',
+            textAlign: 'center'
+          }}
+        >
+          <div style={{ color: 'var(--text-muted)', marginBottom: '0.5rem', fontWeight: 600 }}>
+            <span>💡 Quick Test Registration:</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              const rand = Math.floor(1000 + Math.random() * 9000);
+              setName(`Explorer ${rand}`);
+              setEmail(`tester${rand}@veloop.io`);
+              setPassword('password123');
+              setFormError('');
+              setApiError(null);
+            }}
+            style={{
+              background: 'rgba(139, 92, 246, 0.15)',
+              border: '1px solid rgba(139, 92, 246, 0.35)',
+              color: '#c4b5fd',
+              borderRadius: '6px',
+              padding: '0.4rem 0.85rem',
+              fontSize: '0.8rem',
+              cursor: 'pointer',
+              fontWeight: 600
+            }}
+          >
+            Autofill New User Details ✨
+          </button>
         </div>
       </div>
     </div>

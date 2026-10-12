@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { StreakProvider } from './context/StreakContext';
 import { ToastProvider } from './context/ToastContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import LoadingState from './components/LoadingState';
 
 import Dashboard from './pages/Dashboard';
 import DailyStreakPage from './pages/DailyStreak/DailyStreakPage';
@@ -15,6 +16,20 @@ import StreakHistory from './pages/StreakHistory';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
+/**
+ * RootRoute: Enforces initial navigation to /register for unauthenticated visitors.
+ * If authenticated, proceeds directly to /dashboard.
+ */
+const RootRoute = () => {
+  const { isAuthenticated, isInitializing } = useAuth();
+
+  if (isInitializing) {
+    return <LoadingState message="Loading VELoop Rewards..." fullPage />;
+  }
+
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/register" replace />;
+};
+
 export const App = () => {
   return (
     <AuthProvider>
@@ -22,33 +37,78 @@ export const App = () => {
         <ToastProvider>
           <BrowserRouter>
             <Routes>
-              {/* Flagship Dashboard Page */}
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              {/* Initial Landing Route: Opens Register first for new/unauthenticated visitors */}
+              <Route path="/" element={<RootRoute />} />
 
-              {/* Complete Daily Streak & Rotating Drops Experience */}
-              <Route path="/daily-streak" element={<DailyStreakPage />} />
+              {/* Protected Core Application Routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* Activities & Tasks Experience */}
-              <Route path="/tasks" element={<TasksPage />} />
+              <Route
+                path="/daily-streak"
+                element={
+                  <ProtectedRoute>
+                    <DailyStreakPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* Global Leaderboard Standings */}
-              <Route path="/leaderboard" element={<LeaderboardPage />} />
+              <Route
+                path="/tasks"
+                element={
+                  <ProtectedRoute>
+                    <TasksPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* Achievements & Badges Gallery */}
-              <Route path="/badges" element={<BadgesPage />} />
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <LeaderboardPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* Cryptographic Rewards Wallet & Ledger */}
-              <Route path="/wallet" element={<Wallet />} />
+              <Route
+                path="/badges"
+                element={
+                  <ProtectedRoute>
+                    <BadgesPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* Check-In History */}
-              <Route path="/streak-history" element={<StreakHistory />} />
+              <Route
+                path="/wallet"
+                element={
+                  <ProtectedRoute>
+                    <Wallet />
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* Authentication */}
+              <Route
+                path="/streak-history"
+                element={
+                  <ProtectedRoute>
+                    <StreakHistory />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Authentication Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 
-              {/* Fallback to Dashboard */}
+              {/* Fallback Catch-All Route */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </BrowserRouter>
