@@ -24,7 +24,7 @@ services:
   # 2. Frontend Static Site (React / Vite)
   # ==========================================
   - type: static
-    name: veloop-rewards-frontend
+    name: veloop-rewards-app
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
