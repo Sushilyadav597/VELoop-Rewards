@@ -70,6 +70,20 @@ app.use(['/api/wallet', '/wallet'], walletRoutes);
 app.use(['/api/dev', '/dev'], devRoutes);
 app.use(['/api', '/'], platformRoutes);
 
+// Serve frontend static files if built
+const path = require('path');
+const fs = require('fs');
+const frontendDist = path.resolve(__dirname, '../../frontend/dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res, next) => {
+    if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/health')) {
+      return next();
+    }
+    return res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 // Catch-All 404 Handler for Unmatched API Endpoints
 app.use((req, res) => {
   res.status(404).json({
