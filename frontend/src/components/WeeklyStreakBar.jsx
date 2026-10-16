@@ -100,9 +100,9 @@ export const WeeklyStreakBar = ({
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(7, 1fr)',
-          gap: 'clamp(3px, 1vw, 8px)',
-          padding: 'clamp(8px, 1.5vw, 12px) clamp(4px, 1vw, 8px)',
+          gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+          gap: 'clamp(4px, 1.2vw, 8px)',
+          padding: 'clamp(8px, 1.5vw, 12px) clamp(6px, 1.2vw, 10px)',
           background: 'rgba(10, 6, 26, 0.7)',
           borderRadius: '16px',
           border: '1px solid rgba(255, 255, 255, 0.06)'

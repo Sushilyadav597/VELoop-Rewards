@@ -1,6 +1,7 @@
 const { advanceServerTimeMs, resetVirtualServerTime, getServerTime, getVirtualTimeOffsetMs } = require('../utils/time.utils');
 const { logAuditEvent, getRecentAuditLogs } = require('../services/audit.service');
-const streakService = require('../services/streak.service');
+const streakService = require('../services/streakService');
+const streakClaimService = require('../services/streakClaimService');
 const StreakCycle = require('../models/StreakCycle');
 const StreakClaim = require('../models/StreakClaim');
 const WalletTransaction = require('../models/WalletTransaction');
@@ -17,7 +18,7 @@ const advanceTime = async (req, res, next) => {
     const newServerTime = advanceServerTimeMs(ms);
 
     await logAuditEvent({
-      userId: req.user?.userId || null,
+      userId: req.user?.userId || req.user?.id || null,
       event: 'DEV_TIME_ADVANCE',
       details: { advancedHours: hours, newServerTime },
       req
@@ -62,10 +63,17 @@ const resetUserStreak = async (req, res, next) => {
     if (getDBStatus()) {
       await StreakCycle.updateMany({ userId, status: 'ACTIVE' }, { status: 'RESET', resetReason: 'Manual test reset' });
     }
-    const { resetRotatingClaimsForUser } = require('../services/rotatingReward.service');
-    await resetRotatingClaimsForUser(userId);
+    try {
+      const { resetRotatingClaimsForUser } = require('../services/rotatingReward.service');
+      if (resetRotatingClaimsForUser) {
+        await resetRotatingClaimsForUser(userId);
+      }
+    } catch (e) {
+      // ignore
+    }
+
     // New active cycle
-    const newCycle = await streakService.getOrCreateActiveCycle(userId);
+    const newCycle = await streakService.getOrCreateActiveCycle(userId, getServerTime());
 
     await logAuditEvent({
       userId,
@@ -95,11 +103,11 @@ const testConcurrency = async (req, res, next) => {
     const userId = req.user?.userId || req.user?.id;
 
     // Trigger two claims simultaneously
-    const promise1 = streakService.claimReward({ userId, clientPayload: {}, req })
+    const promise1 = streakClaimService.claimReward({ userId, ipAddress: '127.0.0.1', userAgent: 'test-concurrency-1' })
       .then(res => ({ request: 1, status: 'SUCCESS', data: res }))
       .catch(err => ({ request: 1, status: 'REJECTED', error: err.message, code: err.statusCode }));
 
-    const promise2 = streakService.claimReward({ userId, clientPayload: {}, req })
+    const promise2 = streakClaimService.claimReward({ userId, ipAddress: '127.0.0.1', userAgent: 'test-concurrency-2' })
       .then(res => ({ request: 2, status: 'SUCCESS', data: res }))
       .catch(err => ({ request: 2, status: 'REJECTED', error: err.message, code: err.statusCode }));
 

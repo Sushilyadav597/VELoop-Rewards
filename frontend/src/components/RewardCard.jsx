@@ -1,17 +1,19 @@
 import React from 'react';
 import { Check, Lock, ChevronRight, Clock } from 'lucide-react';
-import GoldCoins from '../assets/GoldCoins';
-import GiftBox from '../assets/GiftBox';
-import AmazonCard from '../assets/AmazonCard';
-import RoyalCrown from '../assets/RoyalCrown';
+import vesCoinImg from '../assets/images/VEs_Coin.png';
+import day4GiftImg from '../assets/images/Day-4.png';
+import day5CardImg from '../assets/images/Day-5.png';
+import day7CrownImg from '../assets/images/Day-7.png';
 import useCountdown from '../hooks/useCountdown';
+import styles from './RewardCard.module.css';
 
 export const RewardCard = ({
   reward,
   isClaiming,
   serverTime,
   onClaim,
-  onCountdownExpire
+  onCountdownExpire,
+  isFeatured = false
 }) => {
   const {
     day,
@@ -38,20 +40,21 @@ export const RewardCard = ({
   const isLocked = status === 'LOCKED';
 
   // Determine badge styling matching reference image (Page 62 & 63)
+  // "Today" badge is strictly dynamic: ONLY the active & available day
   const getBadgeConfig = () => {
     if (isClaimed) {
       return { type: 'claimed' };
     }
-    if (badge === 'Today' || (isToday && isAvailable)) {
+    if (isToday && isAvailable) {
       return { text: 'Today', bg: '#F59E0B', color: '#0F0A2A', isPill: true };
     }
-    if (badge === 'VIP' || day === 7) {
+    if (day === 7 || badge === 'VIP') {
       return { text: 'VIP', bg: '#D97706', color: '#FFFFFF', isPill: true };
     }
-    if (badge === 'Gift Card' || day === 4 || day === 5) {
+    if (day === 4 || day === 5 || badge === 'Gift Card') {
       return { text: 'Gift Card', bg: '#8B5CF6', color: '#FFFFFF', isPill: true };
     }
-    if (badge === 'Coin' || day === 6) {
+    if (day === 6 || badge === 'Coin') {
       return { text: 'Coin', bg: '#3B82F6', color: '#FFFFFF', isPill: true };
     }
     return null;
@@ -59,25 +62,34 @@ export const RewardCard = ({
 
   const badgeConfig = getBadgeConfig();
 
-  // Render 3D illustration based on assetType
-  const renderAsset = () => {
-    switch (assetType) {
-      case 'gift-box':
-        return <GiftBox size={50} className="anim-float" />;
-      case 'amazon-card':
-        return <AmazonCard size={48} />;
-      case 'crown':
-        return <RoyalCrown size={52} className="anim-float" />;
-      case 'coin-stack':
-      case 'coin':
-      default:
-        return (
-          <GoldCoins
-            size={50}
-            className={isAvailable ? 'anim-float' : ''}
-          />
-        );
+  // Render Official 3D Asset matching task design
+  const renderAsset = (sizeOverride = null) => {
+    let imgSrc = vesCoinImg;
+    let altText = 'Reward Coins';
+
+    if (day === 4 || assetType === 'gift-box') {
+      imgSrc = day4GiftImg;
+      altText = 'Amazon Gift Card Box';
+    } else if (day === 5 || assetType === 'amazon-card') {
+      imgSrc = day5CardImg;
+      altText = 'Amazon Gift Voucher';
+    } else if (day === 7 || assetType === 'crown') {
+      imgSrc = day7CrownImg;
+      altText = 'VIP Crown Ultimate Reward';
+    } else {
+      imgSrc = vesCoinImg;
+      altText = 'VEs Coins Stack';
     }
+
+    return (
+      <img
+        src={imgSrc}
+        alt={altText}
+        className={`${styles.cardAssetImg} ${isAvailable ? 'anim-float' : ''}`}
+        style={sizeOverride ? { maxHeight: `${sizeOverride}px` } : undefined}
+        loading="lazy"
+      />
+    );
   };
 
   // Value color styling based on state
@@ -86,41 +98,111 @@ export const RewardCard = ({
     if (isAvailable) return '#FBBF24'; // Bright Gold
     if (day === 7) return '#FBBF24'; // Day 7 VIP Gold
     if (currency === 'INR') return '#C4B5FD'; // Light Lavender
-    return '#E2E8F0'; // Crisp White
+    return '#FFFFFF'; // Crisp White
   };
 
+  // Render Action Button
+  const renderActionButton = () => {
+    if (isClaimed) {
+      return (
+        <div className={styles.btnClaimed}>
+          <Check size={14} strokeWidth={3} />
+          <span>Claimed</span>
+        </div>
+      );
+    }
+    if (isAvailable) {
+      return (
+        <button
+          onClick={() => onClaim(day)}
+          disabled={isClaiming}
+          className={`${styles.btnClaim} anim-shine`}
+          title={`Claim Day ${day} reward`}
+        >
+          <span>{isClaiming ? 'Claiming...' : 'Claim Now'}</span>
+          <ChevronRight size={15} strokeWidth={2.8} />
+        </button>
+      );
+    }
+    if (isToday && !countdown.isExpired) {
+      return (
+        <div className={styles.btnCountdown} title="Next check-in unlocks in">
+          <Clock size={13} />
+          <span>{countdown.formatted}</span>
+        </div>
+      );
+    }
+    return (
+      <div className={styles.btnLocked}>
+        <Lock size={13} />
+        <span>Locked</span>
+      </div>
+    );
+  };
+
+  // Day 7 Full-Width Featured Layout for Mobile
+  if (isFeatured && day === 7) {
+    return (
+      <div
+        className={`${styles.cardFeaturedDay7} ${isAvailable ? styles.cardAvailable : ''}`}
+      >
+        <div className={styles.featuredLeft}>
+          <div className={styles.featuredAssetWrapper}>
+            {renderAsset(54)}
+          </div>
+          <div className={styles.featuredInfo}>
+            <div className={styles.featuredHeaderRow}>
+              <span className={styles.dayTitle} style={{ color: '#FBBF24', fontSize: '0.9rem' }}>
+                Day 7
+              </span>
+              <span
+                className={styles.badgePill}
+                style={{ backgroundColor: '#D97706', color: '#FFFFFF' }}
+              >
+                VIP ULTIMATE
+              </span>
+            </div>
+            <div
+              className={styles.rewardAmount}
+              style={{ color: '#FBBF24', fontSize: '1.4rem' }}
+            >
+              ₹{amount} Amazon Voucher
+            </div>
+            <span className={styles.rewardSubtitle} style={{ color: '#E2E8F0', fontSize: '0.78rem' }}>
+              {subtitle || 'Guaranteed Amazon Gift Card'}
+            </span>
+          </div>
+        </div>
+
+        <div className={styles.featuredRight}>
+          {renderActionButton()}
+        </div>
+      </div>
+    );
+  }
+
+  // Standard Card Layout
+  const cardStateClass = isAvailable
+    ? styles.cardAvailable
+    : isClaimed
+    ? styles.cardClaimed
+    : styles.cardLocked;
+
   return (
-    <div
-      className={`card h-100 border-0 text-center position-relative hover-lift ${
-        isAvailable ? 'anim-glow-gold' : ''
-      }`}
-      style={{
-        background: isAvailable
-          ? 'linear-gradient(180deg, #251758 0%, #170e3c 100%)'
-          : isClaimed
-          ? 'linear-gradient(180deg, #111a2e 0%, #0d1222 100%)'
-          : 'linear-gradient(180deg, #150e38 0%, #0d0824 100%)',
-        borderRadius: '16px',
-        border: isAvailable
-          ? '2px solid #F59E0B'
-          : isClaimed
-          ? '1.2px solid rgba(16, 185, 129, 0.45)'
-          : '1px solid rgba(139, 92, 246, 0.22)',
-        boxShadow: isAvailable
-          ? '0 0 28px rgba(245, 158, 11, 0.35), 0 8px 25px rgba(0, 0, 0, 0.5)'
-          : '0 6px 18px rgba(0, 0, 0, 0.35)',
-        transform: isAvailable ? 'scale(1.02)' : 'none',
-        zIndex: isAvailable ? 2 : 1,
-        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
-      }}
-    >
+    <div className={`${styles.card} ${cardStateClass}`}>
+      {/* Ambient background glow */}
+      <div
+        className={`${styles.ambientGlow} ${
+          isAvailable ? styles.glowGold : isClaimed ? styles.glowGreen : styles.glowPurple
+        }`}
+      />
+
       {/* Top Header of Card: Day label & Badge */}
-      <div className="d-flex align-items-center justify-content-between p-2 pb-1">
+      <div className={styles.cardHeader}>
         <span
-          className="fw-bold"
+          className={styles.dayTitle}
           style={{
-            fontSize: 'clamp(0.72rem, 1.8vw, 0.8rem)',
-            color: isAvailable ? '#FBBF24' : isClaimed ? '#10B981' : '#94A3B8'
+            color: isAvailable ? '#FBBF24' : isClaimed ? '#10B981' : '#CBD5E1'
           }}
         >
           Day {day}
@@ -128,31 +210,15 @@ export const RewardCard = ({
 
         {/* Dynamic Badge */}
         {badgeConfig?.type === 'claimed' ? (
-          <span
-            className="d-inline-flex align-items-center justify-content-center text-white"
-            style={{
-              width: '18px',
-              height: '18px',
-              backgroundColor: '#10B981',
-              borderRadius: '50%',
-              boxShadow: '0 0 8px rgba(16, 185, 129, 0.5)'
-            }}
-            title="Claimed"
-          >
+          <span className={styles.claimedCheckBadge} title="Claimed">
             <Check size={12} strokeWidth={3.5} />
           </span>
         ) : badgeConfig?.isPill ? (
           <span
-            className="badge fw-bold"
+            className={styles.badgePill}
             style={{
               backgroundColor: badgeConfig.bg,
-              color: badgeConfig.color,
-              fontSize: '0.62rem',
-              borderRadius: '999px',
-              padding: '2px 7px',
-              lineHeight: '1.2',
-              letterSpacing: '0.3px',
-              boxShadow: `0 0 8px ${badgeConfig.bg}66`
+              color: badgeConfig.color
             }}
           >
             {badgeConfig.text}
@@ -161,17 +227,13 @@ export const RewardCard = ({
       </div>
 
       {/* Visual Artwork Center */}
-      <div
-        className="d-flex align-items-center justify-content-center py-1 position-relative"
-        style={{ minHeight: '64px' }}
-      >
+      <div className={styles.assetContainer}>
         <div
           style={{
-            opacity: isClaimed ? 0.75 : 1,
+            opacity: isClaimed ? 0.8 : 1,
             filter: isAvailable
-              ? 'drop-shadow(0 0 14px rgba(245, 158, 11, 0.45))'
-              : 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35))',
-            transition: 'all 0.3s ease'
+              ? 'drop-shadow(0 0 16px rgba(245, 158, 11, 0.5))'
+              : 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4))'
           }}
         >
           {renderAsset()}
@@ -179,107 +241,29 @@ export const RewardCard = ({
       </div>
 
       {/* Title & Amount Info */}
-      <div className="px-1.5 py-1">
-        <span
-          className="d-block text-truncate"
-          style={{
-            color: '#8E8EA0',
-            fontSize: 'clamp(0.64rem, 1.4vw, 0.7rem)',
-            fontWeight: 500
-          }}
-        >
+      <div className={styles.infoSection}>
+        <span className={styles.rewardTitle}>
           {day === 7 ? 'Ultimate Reward' : title}
         </span>
 
         <div
-          className="fw-extrabold my-0.5"
+          className={styles.rewardAmount}
           style={{
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(1.05rem, 2.5vw, 1.28rem)',
-            lineHeight: '1.2',
             color: getValueColor(),
-            textShadow: isAvailable ? '0 0 12px rgba(251, 191, 36, 0.4)' : 'none'
+            textShadow: isAvailable ? '0 0 14px rgba(251, 191, 36, 0.45)' : 'none'
           }}
         >
           {currency === 'INR' ? `₹${amount}` : `+${amount}`}
         </div>
 
-        <span
-          className="d-block text-truncate"
-          style={{
-            color: '#94A3B8',
-            fontSize: 'clamp(0.64rem, 1.4vw, 0.72rem)',
-            fontWeight: 500
-          }}
-        >
+        <span className={styles.rewardSubtitle}>
           {subtitle || `${amount} ${currency}`}
         </span>
       </div>
 
-      {/* Bottom Action Button / Status Badge */}
-      <div className="p-1.5 pt-2 mt-auto">
-        {isClaimed ? (
-          <div
-            className="w-100 py-1 px-1.5 d-flex align-items-center justify-content-center gap-1 text-success fw-bold"
-            style={{
-              backgroundColor: 'rgba(16, 185, 129, 0.15)',
-              border: '1px solid rgba(16, 185, 129, 0.4)',
-              borderRadius: '999px',
-              fontSize: '0.72rem',
-              height: '30px'
-            }}
-          >
-            <Check size={13} strokeWidth={3} />
-            <span>Claimed</span>
-          </div>
-        ) : isAvailable ? (
-          <button
-            onClick={() => onClaim(day)}
-            disabled={isClaiming}
-            className="btn w-100 py-1 px-1.5 d-flex align-items-center justify-content-center gap-1 fw-bold text-dark border-0 anim-shine"
-            style={{
-              background: 'linear-gradient(90deg, #F59E0B 0%, #FBBF24 100%)',
-              borderRadius: '999px',
-              fontSize: '0.78rem',
-              boxShadow: '0 4px 16px rgba(245, 158, 11, 0.5)',
-              height: '30px',
-              cursor: isClaiming ? 'not-allowed' : 'pointer'
-            }}
-          >
-            <span>{isClaiming ? 'Claiming...' : 'Claim Now'}</span>
-            <ChevronRight size={14} strokeWidth={2.5} />
-          </button>
-        ) : isToday && !countdown.isExpired ? (
-          <div
-            className="w-100 py-1 px-1 d-flex align-items-center justify-content-center gap-1 text-warning fw-semibold"
-            style={{
-              backgroundColor: 'rgba(245, 158, 11, 0.12)',
-              border: '1px solid rgba(245, 158, 11, 0.35)',
-              borderRadius: '999px',
-              fontSize: '0.7rem',
-              height: '30px'
-            }}
-            title="Next check-in unlocks in"
-          >
-            <Clock size={12} />
-            <span>{countdown.formatted}</span>
-          </div>
-        ) : (
-          <div
-            className="w-100 py-1 px-1.5 d-flex align-items-center justify-content-center gap-1"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '999px',
-              color: '#94A3B8',
-              fontSize: '0.72rem',
-              height: '30px'
-            }}
-          >
-            <Lock size={12} />
-            <span>Locked</span>
-          </div>
-        )}
+      {/* Bottom Action Button */}
+      <div className={styles.actionSection}>
+        {renderActionButton()}
       </div>
     </div>
   );

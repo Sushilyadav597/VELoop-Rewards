@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lock, Check, Sparkles } from 'lucide-react';
-import RoyalCrown from '../assets/RoyalCrown';
+import day7CrownImg from '../assets/images/Day-7.png';
 
 export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
   const isClaimed = currentStreak >= 7;
@@ -9,23 +9,23 @@ export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
 
   return (
     <div
-      className="card border-0 mb-3 mb-md-4 overflow-hidden position-relative h-100 hover-lift anim-shine"
+      className="card border-0 mb-3 overflow-hidden position-relative h-100 hover-lift anim-shine"
       style={{
         background: 'linear-gradient(135deg, #1f134c 0%, #130b32 60%, #0c0722 100%)',
         borderRadius: '22px',
         border: '1.5px solid rgba(245, 158, 11, 0.5)',
         boxShadow: '0 12px 36px rgba(0, 0, 0, 0.55), 0 0 24px rgba(245, 158, 11, 0.18)',
-        minHeight: '135px'
+        minHeight: '130px'
       }}
     >
       {/* Radiant Golden Glow Orb Background */}
       <div
         className="position-absolute"
         style={{
-          width: '320px',
-          height: '320px',
+          width: '300px',
+          height: '300px',
           background: 'radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, transparent 70%)',
-          top: '-70px',
+          top: '-60px',
           left: '20px',
           pointerEvents: 'none'
         }}
@@ -33,25 +33,33 @@ export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
       <div
         className="position-absolute"
         style={{
-          width: '260px',
-          height: '260px',
+          width: '240px',
+          height: '240px',
           background: 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%)',
-          bottom: '-60px',
+          bottom: '-50px',
           right: '-20px',
           pointerEvents: 'none'
         }}
       />
 
-      <div className="card-body p-3 p-md-4 position-relative z-1 d-flex flex-column justify-content-center">
+      <div className="card-body p-3 p-sm-3.5 p-md-4 position-relative z-1 d-flex flex-column justify-content-center">
         <div className="d-flex align-items-center justify-content-between gap-2 gap-sm-3">
           {/* Left: 3D Royal Crown with Golden Aura */}
-          <div className="d-flex align-items-center gap-2 gap-sm-3">
+          <div className="d-flex align-items-center gap-2.5 gap-sm-3">
             <div
               className="anim-float flex-shrink-0"
-              style={{ filter: 'drop-shadow(0 0 16px rgba(245, 158, 11, 0.45))' }}
+              style={{ filter: 'drop-shadow(0 0 20px rgba(245, 158, 11, 0.55))' }}
             >
-              <RoyalCrown size={72} className="d-none d-sm-block" />
-              <RoyalCrown size={58} className="d-block d-sm-none" />
+              <img
+                src={day7CrownImg}
+                alt="VIP Ultimate Crown"
+                style={{
+                  height: 'clamp(52px, 8vw, 68px)',
+                  width: 'auto',
+                  objectFit: 'contain'
+                }}
+                loading="lazy"
+              />
             </div>
 
             {/* Center Info: Ultimate Reward, ₹5, Amazon Gift Card */}
@@ -61,20 +69,20 @@ export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
                   className="d-block fw-bold text-uppercase tracking-wider mb-0"
                   style={{
                     color: '#C4B5FD',
-                    fontSize: 'clamp(0.72rem, 1.8vw, 0.82rem)',
+                    fontSize: 'clamp(0.7rem, 1.8vw, 0.8rem)',
                     letterSpacing: '1px'
                   }}
                 >
                   Ultimate Reward
                 </span>
-                <Sparkles size={13} color="#FBBF24" />
+                <Sparkles size={12} color="#FBBF24" />
               </div>
 
               <div
-                className="fw-extrabold text-white my-0"
+                className="fw-extrabold text-white my-0.5"
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(1.85rem, 4.2vw, 2.5rem)',
+                  fontSize: 'clamp(1.75rem, 4vw, 2.35rem)',
                   lineHeight: '1.05',
                   textShadow: '0 2px 14px rgba(245, 158, 11, 0.4)'
                 }}
@@ -84,7 +92,7 @@ export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
 
               {/* Amazon Gift Card Brand Pill */}
               <div
-                className="d-inline-flex align-items-center gap-1.5 mt-1 px-2 py-0.5"
+                className="d-inline-flex align-items-center gap-1.5 mt-0.5 px-2 py-0.5"
                 style={{
                   background: 'rgba(255, 255, 255, 0.06)',
                   borderRadius: '999px',
@@ -93,12 +101,12 @@ export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
               >
                 <span
                   className="d-inline-flex align-items-center justify-content-center bg-white rounded-circle flex-shrink-0"
-                  style={{ width: '16px', height: '16px' }}
+                  style={{ width: '15px', height: '15px' }}
                 >
                   <span
                     style={{
                       color: '#111827',
-                      fontSize: '11px',
+                      fontSize: '10px',
                       fontWeight: 900,
                       lineHeight: '1',
                       fontFamily: 'system-ui, sans-serif'
@@ -110,7 +118,7 @@ export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
                 <span
                   className="fw-semibold text-truncate text-white"
                   style={{
-                    fontSize: 'clamp(0.72rem, 1.8vw, 0.82rem)'
+                    fontSize: 'clamp(0.7rem, 1.7vw, 0.78rem)'
                   }}
                 >
                   {rewardSubtitle}
@@ -123,21 +131,21 @@ export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
           <div className="text-end flex-shrink-0">
             {isClaimed ? (
               <div
-                className="d-inline-flex flex-column align-items-center gap-1 px-3 py-2 text-success fw-bold small"
+                className="d-inline-flex flex-column align-items-center gap-1 px-2.5 py-1.5 text-success fw-bold small"
                 style={{
                   backgroundColor: 'rgba(16, 185, 129, 0.18)',
                   border: '1.2px solid rgba(16, 185, 129, 0.5)',
-                  borderRadius: '16px',
+                  borderRadius: '14px',
                   boxShadow: '0 0 14px rgba(16, 185, 129, 0.3)'
                 }}
               >
                 <div
                   className="rounded-circle d-flex align-items-center justify-content-center"
-                  style={{ width: '34px', height: '34px', backgroundColor: '#10B981', color: '#FFFFFF' }}
+                  style={{ width: '32px', height: '32px', backgroundColor: '#10B981', color: '#FFFFFF' }}
                 >
-                  <Check size={20} strokeWidth={3.5} />
+                  <Check size={18} strokeWidth={3.5} />
                 </div>
-                <span style={{ fontSize: '0.78rem' }}>Claimed</span>
+                <span style={{ fontSize: '0.74rem' }}>Claimed</span>
               </div>
             ) : (
               <div className="d-inline-flex flex-column align-items-center gap-1">
@@ -145,21 +153,21 @@ export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
                 <div
                   className="rounded-circle d-flex align-items-center justify-content-center"
                   style={{
-                    width: '42px',
-                    height: '42px',
+                    width: '38px',
+                    height: '38px',
                     backgroundColor: 'rgba(139, 92, 246, 0.22)',
                     border: '1.5px solid rgba(167, 139, 250, 0.45)',
-                    boxShadow: '0 0 18px rgba(139, 92, 246, 0.35)'
+                    boxShadow: '0 0 16px rgba(139, 92, 246, 0.35)'
                   }}
                 >
-                  <Lock size={19} color="#E9D5FF" />
+                  <Lock size={17} color="#E9D5FF" />
                 </div>
                 <span
                   className="fw-bold text-center d-block"
                   style={{
                     color: '#C4B5FD',
-                    fontSize: 'clamp(0.68rem, 1.6vw, 0.78rem)',
-                    letterSpacing: '0.3px'
+                    fontSize: 'clamp(0.66rem, 1.5vw, 0.76rem)',
+                    letterSpacing: '0.2px'
                   }}
                 >
                   Unlock on Day 7

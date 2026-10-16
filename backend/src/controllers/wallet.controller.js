@@ -1,33 +1,40 @@
-const { getOrCreateWallet, getWalletTransactions } = require('../services/wallet.service');
+const walletService = require('../services/walletService');
 
 const getWallet = async (req, res, next) => {
   try {
-    const userId = req.user?.userId || req.user?.id;
-    const wallet = await getOrCreateWallet(userId);
-    res.json({
+    const userId = req.user?.id || req.user?.userId;
+    const wallet = await walletService.getWalletByUserId(userId);
+    return res.status(200).json({
       success: true,
-      wallet: {
-        vesBalance: wallet.vesBalance,
-        gemsBalance: wallet.gemsBalance,
-        amazonVouchersTotal: wallet.amazonVouchersTotal,
-        updatedAt: wallet.updatedAt
-      }
+      data: wallet,
+      wallet
     });
   } catch (err) {
-    next(err);
+    const status = err.statusCode || 500;
+    return res.status(status).json({
+      success: false,
+      error: err.message || 'Failed to retrieve wallet.'
+    });
   }
 };
 
 const getTransactions = async (req, res, next) => {
   try {
-    const userId = req.user?.userId || req.user?.id;
-    const transactions = await getWalletTransactions(userId);
-    res.json({
+    const userId = req.user?.id || req.user?.userId;
+    const { page, limit } = req.query;
+    const result = await walletService.getWalletTransactions(userId, { page, limit });
+    return res.status(200).json({
       success: true,
-      transactions
+      data: result,
+      transactions: result.transactions,
+      pagination: result.pagination
     });
   } catch (err) {
-    next(err);
+    const status = err.statusCode || 500;
+    return res.status(status).json({
+      success: false,
+      error: err.message || 'Failed to retrieve transactions.'
+    });
   }
 };
 

@@ -14,9 +14,12 @@ const getJwtSecret = () => {
  * @returns {string} - Signed JWT
  */
 const generateToken = (user) => {
+  const uid = user._id ? user._id.toString() : user.id;
   const payload = {
-    id: user._id ? user._id.toString() : user.id,
+    id: uid,
+    userId: uid,
     email: user.email,
+    username: user.username,
     role: user.role || 'USER'
   };
 

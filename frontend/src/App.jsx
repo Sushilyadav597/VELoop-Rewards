@@ -15,6 +15,7 @@ import Wallet from './pages/Wallet';
 import StreakHistory from './pages/StreakHistory';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import NotFound from './pages/NotFound';
 
 /**
  * RootRoute: Enforces initial navigation to /register for unauthenticated visitors.
@@ -109,7 +110,7 @@ export const App = () => {
               <Route path="/register" element={<Register />} />
 
               {/* Fallback Catch-All Route */}
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </ToastProvider>

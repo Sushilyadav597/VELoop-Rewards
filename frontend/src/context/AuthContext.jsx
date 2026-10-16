@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
           logout();
         }
       } catch (err) {
-        if (err?.status === 401) {
+        if (err?.status === 401 || err?.status === 404) {
           logout();
         }
       } finally {

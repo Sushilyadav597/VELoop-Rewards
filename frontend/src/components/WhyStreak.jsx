@@ -1,33 +1,32 @@
 import React from 'react';
-import { CalendarCheck, TrendingUp, Gift, ShieldCheck } from 'lucide-react';
+import stayActiveImg from '../assets/images/Stay_Active.png';
+import biggerStreakImg from '../assets/images/Bigger_Streak.png';
+import exclusiveRewardImg from '../assets/images/Exclusive-reward.png';
+import trustImg from '../assets/images/Trust.png';
 
 export const WhyStreak = () => {
   const benefits = [
     {
-      icon: <CalendarCheck size={18} color="#C084FC" />,
-      bgIcon: 'rgba(139, 92, 246, 0.2)',
-      borderIcon: 'rgba(167, 139, 250, 0.35)',
+      img: stayActiveImg,
+      alt: 'Stay Active',
       title: 'Stay Active',
       description: 'Keep your streak alive & earn more!'
     },
     {
-      icon: <TrendingUp size={18} color="#FBBF24" />,
-      bgIcon: 'rgba(245, 158, 11, 0.2)',
-      borderIcon: 'rgba(245, 158, 11, 0.4)',
+      img: biggerStreakImg,
+      alt: 'Bigger Streak',
       title: 'Bigger Streak',
       description: 'More consecutive logins, bigger rewards!'
     },
     {
-      icon: <Gift size={18} color="#A78BFA" />,
-      bgIcon: 'rgba(139, 92, 246, 0.2)',
-      borderIcon: 'rgba(167, 139, 250, 0.35)',
+      img: exclusiveRewardImg,
+      alt: 'Exclusive Rewards',
       title: 'Exclusive Rewards',
       description: 'Get coins, gift cards & special bonuses!'
     },
     {
-      icon: <ShieldCheck size={18} color="#34D399" />,
-      bgIcon: 'rgba(16, 185, 129, 0.2)',
-      borderIcon: 'rgba(52, 211, 153, 0.35)',
+      img: trustImg,
+      alt: "Don't Miss Out",
       title: "Don't Miss Out",
       description: 'Come back every day & unlock all rewards!'
     }
@@ -64,18 +63,23 @@ export const WhyStreak = () => {
                 boxShadow: '0 6px 18px rgba(0, 0, 0, 0.35)'
               }}
             >
-              {/* Rounded Glowing Icon Holder */}
+              {/* 3D Visual Benefit Asset */}
               <div
-                className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
+                className="d-inline-flex align-items-center justify-content-center mb-2 flex-shrink-0 anim-float"
                 style={{
-                  backgroundColor: item.bgIcon,
-                  border: `1px solid ${item.borderIcon}`,
-                  width: '36px',
-                  height: '36px',
-                  boxShadow: `0 0 10px ${item.bgIcon}`
+                  filter: 'drop-shadow(0 6px 14px rgba(139, 92, 246, 0.4))'
                 }}
               >
-                {item.icon}
+                <img
+                  src={item.img}
+                  alt={item.alt}
+                  style={{
+                    width: 'clamp(40px, 6vw, 48px)',
+                    height: 'clamp(40px, 6vw, 48px)',
+                    objectFit: 'contain'
+                  }}
+                  loading="lazy"
+                />
               </div>
 
               {/* Title */}

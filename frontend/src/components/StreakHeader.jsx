@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Flame, User, LogOut, Sparkles, History, Wallet } from 'lucide-react';
+import { ChevronLeft, User, LogOut, Sparkles, History, Wallet } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStreak } from '../context/StreakContext';
 import GemIcon from '../assets/GemIcon';
+import flameImg from '../assets/images/Flame.png';
+import vesCoinImg from '../assets/images/VEs_Coin.png';
 
 export const StreakHeader = ({ onOpenAuth, onOpenHistory }) => {
   const { user, wallet, logout, demoLogin } = useAuth();
@@ -59,11 +61,15 @@ export const StreakHeader = ({ onOpenAuth, onOpenHistory }) => {
             Daily Streak
           </h1>
           <span className="d-inline-flex align-items-center" title="Daily Streak Active">
-            <Flame
-              size={22}
-              fill="#F59E0B"
-              color="#F59E0B"
-              style={{ filter: 'drop-shadow(0 0 8px rgba(245, 158, 11, 0.6))' }}
+            <img
+              src={flameImg}
+              alt="Streak Flame"
+              style={{
+                width: '24px',
+                height: '24px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 0 10px rgba(245, 158, 11, 0.75))'
+              }}
             />
           </span>
         </div>
@@ -82,7 +88,11 @@ export const StreakHeader = ({ onOpenAuth, onOpenHistory }) => {
           }}
           title="VEs Balance"
         >
-          <span style={{ fontSize: '13px' }}>🪙</span>
+          <img
+            src={vesCoinImg}
+            alt="VEs"
+            style={{ width: '18px', height: '18px', objectFit: 'contain' }}
+          />
           <span
             className="fw-bold"
             style={{ color: '#FBBF24', fontFamily: 'var(--font-heading)', fontSize: '0.92rem' }}

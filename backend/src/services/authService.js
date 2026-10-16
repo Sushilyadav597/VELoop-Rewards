@@ -137,6 +137,8 @@ const loginUser = async ({ email, username, password }) => {
   // 4. Generate JWT
   const token = generateToken(user);
 
+  const wallet = await Wallet.findOne({ userId: user._id });
+
   // 5. Return safe payload (NEVER return passwordHash)
   return {
     token,
@@ -145,7 +147,12 @@ const loginUser = async ({ email, username, password }) => {
       name: user.name,
       email: user.email,
       role: user.role
-    }
+    },
+    wallet: wallet ? {
+      id: wallet._id.toString(),
+      vesBalance: wallet.vesBalance,
+      amazonVouchersTotal: wallet.amazonVouchersTotal
+    } : null
   };
 };
 

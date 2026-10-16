@@ -1,271 +1,153 @@
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const authService = require('../services/authService');
 const User = require('../models/User');
-const { getDBStatus } = require('../config/db');
-const { getOrCreateWallet } = require('../services/wallet.service');
-const { logAuditEvent } = require('../services/audit.service');
-const { JWT_SECRET } = require('../middleware/auth.middleware');
+const Wallet = require('../models/Wallet');
+const bcrypt = require('bcryptjs');
+const { generateToken } = require('../utils/token');
 
 // In-memory demo users store for fallback/quick testing
 const inMemoryUsers = new Map();
 
-// Helper to sign JWT
-const signToken = (user) => {
-  return jwt.sign(
-    {
-      userId: user._id ? user._id.toString() : user.id,
-      username: user.username,
-      role: user.role || 'USER'
-    },
-    JWT_SECRET,
-    { expiresIn: '7d' }
-  );
-};
-
 /**
  * Register a new user
+ * POST /api/auth/register
  */
 const register = async (req, res, next) => {
   try {
-    const { username, email, password, name } = req.body;
-    const effectiveUsername = (username || name || (email && email.split('@')[0]) || 'user').trim();
-
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        error: 'Please provide email and password.'
-      });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    let user = null;
-    if (getDBStatus()) {
-      try {
-        const existing = await User.findOne({ $or: [{ email }, { username: effectiveUsername }] });
-        if (existing) {
-          return res.status(400).json({
-            success: false,
-            error: 'Username or email already in use.'
-          });
-        }
-        user = await User.create({
-          username: effectiveUsername.toLowerCase(),
-          email: email.toLowerCase(),
-          passwordHash,
-          name: name || effectiveUsername
-        });
-      } catch (err) {
-        console.warn('[Register DB fallback]:', err.message);
-      }
-    }
-
-    if (!user) {
-      const id = `usr-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
-      user = {
-        _id: id,
-        id,
-        username: effectiveUsername.toLowerCase(),
-        email: email.toLowerCase(),
-        passwordHash,
-        name: name || effectiveUsername,
-        role: 'USER'
-      };
-      inMemoryUsers.set(user.username, user);
-    }
-
-    const token = signToken(user);
-    const wallet = await getOrCreateWallet(user._id || user.id);
-
-    await logAuditEvent({
-      userId: user._id || user.id,
-      event: 'USER_REGISTER',
-      details: { username: user.username },
-      req
+    const { name, username, email, password } = req.body;
+    const effectiveName = name || username || (email ? email.split('@')[0] : 'User');
+    const result = await authService.registerUser({
+      name: effectiveName,
+      email,
+      password
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      token,
-      user: {
-        id: user._id || user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role
-      },
-      wallet: {
-        vesBalance: wallet.vesBalance,
-        gemsBalance: wallet.gemsBalance,
-        amazonVouchersTotal: wallet.amazonVouchersTotal
-      }
+      message: 'User registered successfully.',
+      token: result.token,
+      user: result.user,
+      wallet: result.wallet
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    const status = error.statusCode || 400;
+    return res.status(status).json({
+      success: false,
+      error: error.message || 'Registration failed.'
+    });
   }
 };
 
 /**
- * Login existing user
+ * Log in existing user
+ * POST /api/auth/login
  */
 const login = async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { email, username, password } = req.body;
+    const result = await authService.loginUser({ email, username, password });
 
-    if (!username || !password) {
-      return res.status(400).json({
-        success: false,
-        error: 'Please provide username and password.'
-      });
-    }
-
-    let user = null;
-    if (getDBStatus()) {
-      try {
-        user = await User.findOne({
-          $or: [{ username: username.toLowerCase() }, { email: username.toLowerCase() }]
-        });
-      } catch (e) {
-        // fallback
-      }
-    }
-
-    if (!user) {
-      user = inMemoryUsers.get(username.toLowerCase());
-    }
-
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        error: 'Invalid username or password.'
-      });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!isMatch) {
-      return res.status(401).json({
-        success: false,
-        error: 'Invalid username or password.'
-      });
-    }
-
-    const token = signToken(user);
-    const wallet = await getOrCreateWallet(user._id || user.id);
-
-    await logAuditEvent({
-      userId: user._id || user.id,
-      event: 'USER_LOGIN',
-      details: { username: user.username },
-      req
-    });
-
-    res.json({
+    return res.status(200).json({
       success: true,
-      token,
-      user: {
-        id: user._id || user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role
-      },
-      wallet: {
-        vesBalance: wallet.vesBalance,
-        gemsBalance: wallet.gemsBalance,
-        amazonVouchersTotal: wallet.amazonVouchersTotal
-      }
+      message: 'Login successful.',
+      token: result.token,
+      user: result.user,
+      wallet: result.wallet
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    const status = error.statusCode || 401;
+    return res.status(status).json({
+      success: false,
+      error: error.message || 'Authentication failed.'
+    });
   }
 };
 
 /**
- * Get current authenticated user details and wallet
+ * Get current authenticated user profile
+ * GET /api/auth/me
  */
 const getMe = async (req, res, next) => {
   try {
-    const wallet = await getOrCreateWallet(req.user.userId);
-    res.json({
+    const userId = req.user.id || req.user.userId;
+    const userProfile = await authService.getUserById(userId);
+
+    const wallet = await Wallet.findOne({ userId });
+
+    return res.status(200).json({
       success: true,
-      user: req.user,
-      wallet: {
+      user: userProfile,
+      wallet: wallet ? {
+        id: wallet._id.toString(),
         vesBalance: wallet.vesBalance,
-        gemsBalance: wallet.gemsBalance,
         amazonVouchersTotal: wallet.amazonVouchersTotal
-      }
+      } : null
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    const status = error.statusCode || 500;
+    return res.status(status).json({
+      success: false,
+      error: error.message || 'Failed to retrieve profile.'
+    });
   }
 };
 
 /**
  * Demo Login: provides instant token for evaluation accounts
+ * POST /api/auth/demo-login
  */
 const demoLogin = async (req, res, next) => {
   try {
     const { accountType = 'new' } = req.body;
     const username = accountType === 'vip' ? 'demo_day7' : (accountType === 'day2' ? 'demo_day2' : 'demo_new');
 
-    let user = null;
-    if (getDBStatus()) {
-      try {
-        user = await User.findOne({ username });
-        if (!user) {
-          const salt = await bcrypt.genSalt(10);
-          const passwordHash = await bcrypt.hash('password123', salt);
-          user = await User.create({
-            username,
-            email: `${username}@veloop.io`,
-            passwordHash,
-            name: accountType === 'vip' ? 'VIP VELoop Tester' : (accountType === 'day2' ? 'Active Streak Tester' : 'New VELoop Member'),
-            role: 'TESTER'
-          });
-        }
-      } catch (err) {
-        console.warn('[Demo login DB lookup]:', err.message);
-      }
-    }
+    let user = await User.findOne({
+      $or: [{ username }, { email: `${username}@veloop.io` }]
+    });
 
     if (!user) {
-      user = inMemoryUsers.get(username);
-      if (!user) {
-        const id = new mongoose.Types.ObjectId().toString();
-        user = {
-          _id: id,
-          id,
-          username,
-          name: accountType === 'vip' ? 'VIP VELoop Tester' : (accountType === 'day2' ? 'Active Streak Tester' : 'New VELoop Member'),
-          role: 'TESTER'
-        };
-        inMemoryUsers.set(username, user);
-      }
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash('password123', salt);
+      user = await User.create({
+        username,
+        email: `${username}@veloop.io`,
+        passwordHash,
+        name: accountType === 'vip' ? 'VIP VELoop Tester' : (accountType === 'day2' ? 'Active Streak Tester' : 'New VELoop Member'),
+        role: 'TESTER'
+      });
     }
 
-    const token = signToken(user);
-    const userId = user._id || user.id;
-    const wallet = await getOrCreateWallet(userId);
+    let wallet = await Wallet.findOne({ userId: user._id });
+    if (!wallet) {
+      wallet = await Wallet.create({
+        userId: user._id,
+        vesBalance: 100,
+        amazonVouchersTotal: 0
+      });
+    }
 
-    res.json({
+    const token = generateToken(user);
+
+    return res.status(200).json({
       success: true,
       token,
       user: {
-        id: userId,
+        id: user._id.toString(),
         username: user.username,
+        email: user.email,
         name: user.name,
         role: user.role
       },
       wallet: {
+        id: wallet._id.toString(),
         vesBalance: wallet.vesBalance,
-        gemsBalance: wallet.gemsBalance,
         amazonVouchersTotal: wallet.amazonVouchersTotal
       }
     });
   } catch (err) {
-    next(err);
+    return res.status(500).json({
+      success: false,
+      error: err.message || 'Demo login failed.'
+    });
   }
 };
 

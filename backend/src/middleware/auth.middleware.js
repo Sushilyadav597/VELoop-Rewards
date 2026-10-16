@@ -20,10 +20,13 @@ const requireAuth = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, JWT_SECRET);
 
+    const uid = decoded.userId || decoded.id;
     // Securely bind user identity exclusively from the verified token
     req.user = {
-      userId: decoded.userId,
-      username: decoded.username,
+      userId: uid,
+      id: uid,
+      username: decoded.username || (decoded.email ? decoded.email.split('@')[0] : 'user'),
+      email: decoded.email,
       role: decoded.role || 'USER'
     };
 
@@ -52,9 +55,12 @@ const optionalAuth = (req, res, next) => {
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
       const decoded = jwt.verify(token, JWT_SECRET);
+      const uid = decoded.userId || decoded.id;
       req.user = {
-        userId: decoded.userId,
-        username: decoded.username,
+        userId: uid,
+        id: uid,
+        username: decoded.username || (decoded.email ? decoded.email.split('@')[0] : 'user'),
+        email: decoded.email,
         role: decoded.role || 'USER'
       };
     }

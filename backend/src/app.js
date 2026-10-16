@@ -70,6 +70,14 @@ app.use(['/api/wallet', '/wallet'], walletRoutes);
 app.use(['/api/dev', '/dev'], devRoutes);
 app.use(['/api', '/'], platformRoutes);
 
+// Catch-All 404 Handler for Unmatched API Endpoints
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: `Endpoint not found: ${req.method} ${req.originalUrl}`
+  });
+});
+
 const errorHandler = require('./middleware/errorHandler.middleware');
 app.use(errorHandler);
 

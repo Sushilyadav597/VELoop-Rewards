@@ -38,7 +38,7 @@ const DEFAULT_REWARDS = [
     currency: 'VES',
     amount: 10,
     assetType: 'coin',
-    badge: 'Today',
+    badge: null,
     active: true,
     metadata: {
       description: 'Day 2 streak reward'

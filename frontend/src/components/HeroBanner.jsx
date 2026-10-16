@@ -1,21 +1,20 @@
 import React from 'react';
-import { Flame, Calendar, ChevronRight, Gift, Sparkles, Clock } from 'lucide-react';
-import CalendarHero from '../assets/CalendarHero';
-import GiftBox from '../assets/GiftBox';
+import { Calendar, ChevronRight, Gift, Sparkles } from 'lucide-react';
+import topLeftImg from '../assets/images/Top_Left.png';
+import topRightImg from '../assets/images/Top_right.png';
+import flameImg from '../assets/images/Flame.png';
 import CountdownTimer from './CountdownTimer';
 import ClaimButton from './ClaimButton';
 
 /**
- * HeroBanner Component (Section 4):
- * Creates a strong, visually dominant hero section with:
- * - Small VELoop branding
- * - Main heading: "Your Daily Streak"
- * - Current streak: "🔥 X Day Streak"
- * - Short motivational message: "Keep your streak alive and unlock bigger rewards."
- * - Today's reward: "🎁 Today's Reward: +30 VEs"
- * - Countdown: "⏳ Next reward available in 08:42:17"
- * - Attractive reward/streak visuals
- * - Primary CTA: [ Claim Today's Reward ] (Visually dominant)
+ * HeroBanner Component (Section 4 & Page 62/63):
+ * Matches the official VELoop Rewards Daily Streak hero:
+ * - 3D Calendar Hero on left
+ * - Headline: "Login Daily & Earn Bigger Rewards!"
+ * - Subtitle: "Maintain your streak and unlock exciting rewards every day."
+ * - 3D Gift Box on right
+ * - Status pills: [🔥 X Day Streak] and [📅 Streak Calendar >]
+ * - Primary CTA / Countdown timer when cooling down
  */
 export const HeroBanner = ({
   streak,
@@ -49,34 +48,33 @@ export const HeroBanner = ({
   }
 
   return (
-    <div className="mb-3 mb-md-4">
-      {/* Main Hero Card Container */}
+    <div className="mb-3">
       <div
         className="card border-0 overflow-hidden position-relative hover-lift anim-shine"
         style={{
           background: 'linear-gradient(135deg, #181045 0%, #110a2e 50%, #0a061c 100%)',
           borderRadius: '24px',
-          border: '1.5px solid rgba(139, 92, 246, 0.45)',
-          boxShadow: '0 18px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14)'
+          border: '1.5px solid rgba(139, 92, 246, 0.42)',
+          boxShadow: '0 16px 45px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
         }}
       >
         {/* Ambient background glow orbs */}
         <div
           className="position-absolute"
           style={{
-            width: '280px',
-            height: '280px',
+            width: '260px',
+            height: '260px',
             background: 'radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, transparent 70%)',
-            top: '-60px',
-            left: '-30px',
+            top: '-50px',
+            left: '-20px',
             pointerEvents: 'none'
           }}
         />
         <div
           className="position-absolute"
           style={{
-            width: '260px',
-            height: '260px',
+            width: '240px',
+            height: '240px',
             background: 'radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%)',
             bottom: '-40px',
             right: '-20px',
@@ -84,8 +82,8 @@ export const HeroBanner = ({
           }}
         />
 
-        <div className="card-body p-3 p-sm-4 p-md-4 position-relative z-1">
-          {/* Top Row: Small VELoop Branding & Live Status */}
+        <div className="card-body p-3 p-sm-3.5 p-md-4 position-relative z-1">
+          {/* Top Row: Small Brand Tag + Streak Calendar Link */}
           <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2 pb-1">
             <div
               className="d-inline-flex align-items-center gap-1.5 px-2.5 py-1"
@@ -96,7 +94,7 @@ export const HeroBanner = ({
                 color: '#C4B5FD',
                 fontSize: '0.72rem',
                 fontWeight: 700,
-                letterSpacing: '0.6px',
+                letterSpacing: '0.5px',
                 textTransform: 'uppercase'
               }}
             >
@@ -123,46 +121,66 @@ export const HeroBanner = ({
           </div>
 
           <div className="row align-items-center justify-content-between g-2 g-md-3">
-            {/* Left Visual: 3D Calendar Hero Illustration */}
-            <div className="col-auto d-none d-sm-flex justify-content-start">
+            {/* Left 3D Calendar Hero Illustration (Shown on all screen sizes) */}
+            <div className="col-auto d-flex justify-content-start flex-shrink-0">
               <div
                 className="anim-float"
                 style={{
                   transformOrigin: 'center bottom',
-                  filter: 'drop-shadow(0 8px 20px rgba(139, 92, 246, 0.4))'
+                  filter: 'drop-shadow(0 8px 20px rgba(139, 92, 246, 0.45))'
                 }}
               >
-                <CalendarHero size={88} />
+                <img
+                  src={topLeftImg}
+                  alt="Daily Streak Calendar"
+                  style={{
+                    height: 'clamp(44px, 8vw, 80px)',
+                    width: 'auto',
+                    objectFit: 'contain'
+                  }}
+                  loading="lazy"
+                />
               </div>
             </div>
 
-            {/* Center Content: Main Heading, Message, Streak Info & Primary CTA */}
+            {/* Center Content: Headline, Subtitle, Status Pills & CTA */}
             <div className="col text-center px-1 px-md-3">
               <h2
-                className="fw-extrabold mb-1 text-white tracking-tight"
+                className="fw-extrabold mb-1 tracking-tight"
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(1.4rem, 3.8vw, 2.1rem)',
-                  lineHeight: '1.15'
+                  fontSize: 'clamp(1.2rem, 3.2vw, 2.05rem)',
+                  lineHeight: '1.18',
+                  color: '#FFFFFF'
                 }}
               >
-                Your Daily Streak
+                Login Daily & Earn{' '}
+                <span
+                  style={{
+                    background: 'linear-gradient(90deg, #F59E0B 0%, #FBBF24 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    display: 'inline-block'
+                  }}
+                >
+                  Bigger Rewards!
+                </span>
               </h2>
 
               <p
-                className="mb-3 mx-auto"
+                className="mb-2.5 mx-auto"
                 style={{
                   color: '#94A3B8',
-                  fontSize: 'clamp(0.78rem, 1.8vw, 0.92rem)',
+                  fontSize: 'clamp(0.74rem, 1.6vw, 0.88rem)',
                   maxWidth: '440px',
                   lineHeight: '1.4'
                 }}
               >
-                Keep your streak alive and unlock bigger rewards.
+                Maintain your streak and unlock exciting rewards every day.
               </p>
 
-              {/* Motivational Highlight Row: Streak + Today's Reward + Countdown */}
-              <div className="d-flex align-items-center justify-content-center flex-wrap gap-2 mb-3">
+              {/* Status Pills Row: Flame Streak + Today's Reward + Timer */}
+              <div className="d-flex align-items-center justify-content-center flex-wrap gap-2 mb-2.5">
                 {/* Streak Pill */}
                 <div
                   className="d-flex align-items-center gap-1.5 px-3 py-1 hover-lift"
@@ -173,13 +191,17 @@ export const HeroBanner = ({
                     boxShadow: '0 0 16px rgba(245, 158, 11, 0.2)'
                   }}
                 >
-                  <Flame
-                    size={16}
-                    fill="#F59E0B"
-                    color="#F59E0B"
-                    style={{ filter: 'drop-shadow(0 0 6px rgba(245, 158, 11, 0.8))' }}
+                  <img
+                    src={flameImg}
+                    alt="Streak Flame"
+                    style={{
+                      width: '18px',
+                      height: '18px',
+                      objectFit: 'contain',
+                      filter: 'drop-shadow(0 0 6px rgba(245, 158, 11, 0.8))'
+                    }}
                   />
-                  <span className="fw-extrabold text-warning" style={{ fontSize: '0.88rem' }}>
+                  <span className="fw-extrabold text-warning" style={{ fontSize: '0.86rem' }}>
                     {currentStreakDays} Day Streak
                   </span>
                 </div>
@@ -195,7 +217,7 @@ export const HeroBanner = ({
                   }}
                 >
                   <Gift size={15} color="#C4B5FD" />
-                  <span className="fw-bold" style={{ color: '#E2E8F0', fontSize: '0.86rem' }}>
+                  <span className="fw-bold" style={{ color: '#E2E8F0', fontSize: '0.84rem' }}>
                     Today's Reward:{' '}
                     <strong style={{ color: '#FBBF24', fontFamily: 'var(--font-heading)' }}>
                       {rewardDisplay}
@@ -203,7 +225,7 @@ export const HeroBanner = ({
                   </span>
                 </div>
 
-                {/* Countdown Timer or Ready Indicator */}
+                {/* Countdown Timer if Cooling Down */}
                 {nextClaimAt && !isEligibleToday && (
                   <CountdownTimer
                     serverTime={serverTime}
@@ -214,21 +236,23 @@ export const HeroBanner = ({
                 )}
               </div>
 
-              {/* Primary CTA (Visually Dominant) */}
-              <div className="d-flex justify-content-center pt-1">
-                <ClaimButton
-                  status={claimStatus}
-                  rewardText={rewardDisplay}
-                  size="lg"
-                  disabled={isClaiming || (!isEligibleToday && Boolean(nextClaimAt))}
-                  onClick={() => onClaim && onClaim(currentDay)}
-                  ariaLabel={`Claim Today's Reward ${rewardDisplay}`}
-                />
-              </div>
+              {/* Primary Claim Action Button (if eligible today) */}
+              {isEligibleToday && (
+                <div className="d-flex justify-content-center pt-1">
+                  <ClaimButton
+                    status={claimStatus}
+                    rewardText={rewardDisplay}
+                    size="md"
+                    disabled={isClaiming}
+                    onClick={() => onClaim && onClaim(currentDay)}
+                    ariaLabel={`Claim Today's Reward ${rewardDisplay}`}
+                  />
+                </div>
+              )}
             </div>
 
-            {/* Right Visual: 3D Gift Box Illustration */}
-            <div className="col-auto d-none d-sm-flex justify-content-end">
+            {/* Right 3D Gift Box Illustration (Shown on all screen sizes) */}
+            <div className="col-auto d-flex justify-content-end flex-shrink-0">
               <div
                 className="anim-float"
                 style={{
@@ -237,7 +261,16 @@ export const HeroBanner = ({
                   filter: 'drop-shadow(0 8px 20px rgba(245, 158, 11, 0.4))'
                 }}
               >
-                <GiftBox size={86} />
+                <img
+                  src={topRightImg}
+                  alt="Streak Gift Box"
+                  style={{
+                    height: 'clamp(44px, 8vw, 80px)',
+                    width: 'auto',
+                    objectFit: 'contain'
+                  }}
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>

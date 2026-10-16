@@ -138,6 +138,59 @@ const evaluateMissedStreak = async (cycle, config, now) => {
  * - card states for 7-day cycle
  */
 const getStreakStatus = async (userId) => {
+  const now = getServerTime();
+  const config = await getActiveConfig();
+  const rewards = await getActiveRewards();
+  const totalDays = config.cycleDays || 7;
+
+  // Guest view (unauthenticated dashboard visit)
+  if (!userId) {
+    const cardStates = rewards.map((r) => ({
+      day: r.day,
+      status: r.day === 1 ? 'AVAILABLE' : 'LOCKED',
+      badge: r.badge,
+      title: r.title,
+      subtitle: r.subtitle,
+      rewardType: r.rewardType,
+      currency: r.currency,
+      amount: r.amount,
+      assetType: r.assetType,
+      isToday: r.day === 1,
+      nextClaimAt: null
+    }));
+
+    return {
+      success: true,
+      serverTime: now.toISOString(),
+      streak: {
+        cycleId: 'CYC-GUEST-0',
+        cycleNumber: 1,
+        currentStreak: 0,
+        currentDay: 1,
+        checkedIn: 0,
+        totalRewards: totalDays,
+        canClaim: false,
+        nextClaimAt: null,
+        cooldownRemainingMs: 0,
+        streakStatus: 'GUEST'
+      },
+      rewards: cardStates,
+      data: {
+        serverTime: now.toISOString(),
+        cycleId: 'CYC-GUEST-0',
+        currentDay: 1,
+        currentStreak: 0,
+        checkedIn: 0,
+        canClaim: false,
+        nextClaimAt: null,
+        lastClaimAt: null,
+        streakStatus: 'GUEST',
+        currentReward: rewards[0],
+        nextReward: rewards[1] || rewards[0]
+      }
+    };
+  }
+
   // 1. Validate user existence
   const user = await User.findById(userId);
   if (!user) {
@@ -145,14 +198,6 @@ const getStreakStatus = async (userId) => {
     error.statusCode = 404;
     throw error;
   }
-
-  // 2. Authoritative Server Time
-  const now = getServerTime();
-
-  // 3. Retrieve active configuration & rewards from MongoDB
-  const config = await getActiveConfig();
-  const rewards = await getActiveRewards();
-  const totalDays = config.cycleDays || 7;
 
   // 4. Retrieve or initialize current active cycle
   let cycle = await getOrCreateActiveCycle(userId, now);
@@ -249,10 +294,19 @@ const getStreakStatus = async (userId) => {
       cardStatus = 'LOCKED';
     }
 
+    // Ensure Today badge only attaches if the card is actually today's active day
+    let dynamicBadge = reward.badge;
+    if (dynamicBadge === 'Today' && (day !== currentTargetDay || !canClaim)) {
+      dynamicBadge = null;
+    }
+    if (day === currentTargetDay && canClaim) {
+      dynamicBadge = 'Today';
+    }
+
     return {
       day,
       status: cardStatus,
-      badge: reward.badge,
+      badge: dynamicBadge,
       title: reward.title,
       subtitle: reward.subtitle,
       rewardType: reward.rewardType,

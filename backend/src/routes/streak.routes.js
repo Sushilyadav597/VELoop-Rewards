@@ -10,7 +10,7 @@ const rotatingController = require('../controllers/rotatingReward.controller');
 router.get('/', optionalAuth, streakController.getStreak);
 
 // GET /api/daily-streak/status
-router.get('/status', optionalAuth, streakController.getStatus);
+router.get('/status', requireAuth, streakController.getStatus);
 
 // POST /api/daily-streak/claim (rate-limited and authenticated)
 router.post('/claim', requireAuth, claimLimiter, streakController.claimStreak);

@@ -7,8 +7,8 @@ const StreakContext = createContext();
 
 // Resilient default rewards matching standard 7-day configuration
 const INITIAL_DEFAULT_REWARDS = [
-  { day: 1, title: 'Daily Reward', subtitle: '5 VEs', amount: 5, currency: 'VES', assetType: 'coin', status: 'CLAIMED', isToday: false },
-  { day: 2, title: 'Daily Reward', subtitle: '10 VEs', amount: 10, currency: 'VES', assetType: 'coin', badge: 'Today', status: 'AVAILABLE', isToday: true },
+  { day: 1, title: 'Daily Reward', subtitle: '5 VEs', amount: 5, currency: 'VES', assetType: 'coin', status: 'AVAILABLE', isToday: true },
+  { day: 2, title: 'Daily Reward', subtitle: '10 VEs', amount: 10, currency: 'VES', assetType: 'coin', status: 'LOCKED', isToday: false },
   { day: 3, title: 'Daily Reward', subtitle: '15 VEs', amount: 15, currency: 'VES', assetType: 'coin', status: 'LOCKED', isToday: false },
   { day: 4, title: 'Daily Reward', subtitle: 'Amazon Gift Card', amount: 1, currency: 'INR', assetType: 'gift-box', badge: 'Gift Card', status: 'LOCKED', isToday: false },
   { day: 5, title: 'Daily Reward', subtitle: 'Amazon Gift Card', amount: 2, currency: 'INR', assetType: 'amazon-card', badge: 'Gift Card', status: 'LOCKED', isToday: false },
@@ -79,22 +79,25 @@ export const StreakProvider = ({ children }) => {
   }, [token, refreshStreak]);
 
   /**
-   * Primary Direct Claim flow (Section 8):
-   * User clicks Claim -> disable button -> show loading spinner -> POST /claim -> celebration modal
+   * Primary Claim flow (Section 7, 68, 91):
+   * User clicks Claim -> open CPA Demo modal (preparing reward / verification) -> finalize backend claim -> celebration
    */
-  const initiateClaim = async (day) => {
+  const initiateClaim = async (day, skipCpa = false) => {
     if (isClaiming) return;
     setError(null);
     const targetDay = day || pendingClaimDay || streakState?.currentDay || 1;
     setPendingClaimDay(targetDay);
-    return await finalizeAuthoritativeClaim(targetDay);
+    if (skipCpa) {
+      return await finalizeAuthoritativeClaim(targetDay);
+    }
+    setCpaModalOpen(true);
   };
 
   /**
    * Alias for direct dashboard check-in claim
    */
-  const claimToday = async (day) => {
-    return await initiateClaim(day);
+  const claimToday = async (day, skipCpa = false) => {
+    return await initiateClaim(day, skipCpa);
   };
 
   /**

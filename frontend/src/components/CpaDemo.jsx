@@ -36,7 +36,7 @@ export const CpaDemo = ({
         // Triggers the authoritative backend claim
         onComplete();
       }
-    }, 120);
+    }, 60);
 
     return () => clearInterval(interval);
   }, [isOpen, onComplete]);
@@ -165,8 +165,19 @@ export const CpaDemo = ({
               }}
             />
           </div>
-          <div className="d-flex justify-content-between text-muted small mt-1" style={{ fontSize: '0.72rem' }}>
+          <div className="d-flex justify-content-between align-items-center text-muted small mt-1" style={{ fontSize: '0.72rem' }}>
             <span>Please wait...</span>
+            <button
+              onClick={() => {
+                setProgress(100);
+                onComplete();
+              }}
+              disabled={isClaiming}
+              className="btn btn-link p-0 text-warning text-decoration-none fw-semibold"
+              style={{ fontSize: '0.72rem' }}
+            >
+              Skip & Claim ⚡
+            </button>
             <span>{progress}%</span>
           </div>
         </div>

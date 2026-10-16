@@ -44,11 +44,12 @@ api.interceptors.response.use(
     const status = error.response ? error.response.status : null;
     const message = error.response?.data?.error || error.response?.data?.message || error.message || 'An unexpected network error occurred.';
 
-    // If 401 Unauthorized, token is expired or invalid
-    if (status === 401) {
+    // If 401 Unauthorized or 404 on current user profile, credentials are stale or user is deleted
+    if (status === 401 || (status === 404 && error.config?.url?.includes('/auth/me'))) {
       // Clear credentials to allow clean redirect to login
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('wallet');
     }
 
     const enhancedError = new Error(message);

@@ -63,11 +63,12 @@ export const Register = () => {
   return (
     <div
       style={{
-        minHeight: 'calc(100vh - 90px)',
+        minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1.5rem'
+        padding: '2.5rem 1.25rem',
+        boxSizing: 'border-box'
       }}
     >
       <div
@@ -75,7 +76,8 @@ export const Register = () => {
         style={{
           maxWidth: '440px',
           width: '100%',
-          padding: '2.75rem 2.25rem',
+          margin: 'auto',
+          padding: '2.5rem 2rem',
           border: '1px solid var(--border-subtle)',
           boxShadow: '0 12px 40px rgba(0, 0, 0, 0.45)',
           position: 'relative'

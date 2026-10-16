@@ -4,11 +4,10 @@ import { useAuth } from '../../context/AuthContext';
 import StreakHeader from '../../components/StreakHeader';
 import HeroBanner from '../../components/HeroBanner';
 import StreakStats from '../../components/StreakStats';
-import StreakProgress from '../../components/StreakProgress';
 import UltimateReward from '../../components/UltimateReward';
 import RewardGrid from '../../components/RewardGrid';
 import WhyStreak from '../../components/WhyStreak';
-import Footer from '../../components/Footer';
+import TrustFooter from '../../components/TrustFooter';
 import SuccessState from '../../components/SuccessState';
 import ErrorState from '../../components/ErrorState';
 import CpaDemo from '../../components/CpaDemo';
@@ -18,31 +17,29 @@ import HistoryModal from '../../components/HistoryModal';
 import EvaluatorToolbar from '../../components/EvaluatorToolbar';
 import StreakLoader from '../../components/StreakLoader';
 import StreakSkeleton from '../../components/StreakSkeleton';
-import DailyRotatingDrop from '../../components/DailyRotatingDrop';
 import Navbar from '../../components/Navbar';
 import styles from './DailyStreak.module.css';
 
 /**
- * DailyStreakPage Component (Section 17):
- * Main production-grade daily streak orchestrator.
+ * DailyStreakPage Component (Section 87 of PDF):
+ * Primary production-grade daily streak orchestrator.
  * Follows the required component hierarchy:
  * DailyStreakPage
  * ├── StreakHeader
  * ├── HeroBanner
  * ├── StreakStats
- * ├── StreakProgress
+ * ├── UltimateReward
  * ├── RewardGrid
  * │   └── RewardCard
- * ├── UltimateReward
- * ├── ClaimButton
- * ├── ClaimModal
- * ├── CountdownTimer
- * ├── SuccessState
- * ├── ErrorState
- * ├── StreakLoader
- * ├── StreakSkeleton
  * ├── WhyStreak
- * └── Footer
+ * ├── TrustFooter
+ * ├── CpaDemo
+ * ├── ClaimModal
+ * ├── AuthModal
+ * ├── HistoryModal
+ * ├── EvaluatorToolbar
+ * ├── StreakLoader
+ * └── StreakSkeleton
  */
 export const DailyStreakPage = () => {
   const {
@@ -92,9 +89,13 @@ export const DailyStreakPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <Navbar />
+      {/* Desktop Global Navigation (Hidden on mobile for native app header experience) */}
+      <div className={styles.desktopNavbar}>
+        <Navbar />
+      </div>
+
       <div className={styles.contentWrapper}>
-        {/* Sub-Header with Streak Title & quick actions */}
+        {/* Dedicated Daily Streak Top Header (Page 62 & 63) */}
         <StreakHeader
           onOpenAuth={() => setAuthModalOpen(true)}
           onOpenHistory={() => setHistoryModalOpen(true)}
@@ -125,7 +126,7 @@ export const DailyStreakPage = () => {
           />
         )}
 
-        {/* Hero & Ultimate Reward Section: Responsive 2-Col on Desktop/Tablet, Stacked on Mobile */}
+        {/* Hero & Ultimate Reward Section: Responsive 2-Col on Desktop, Stacked on Mobile */}
         <div className="row g-2 g-md-3 mb-2 mb-md-3 align-items-stretch">
           <div className="col-12 col-lg-7 d-flex flex-column justify-content-between">
             <HeroBanner
@@ -148,19 +149,7 @@ export const DailyStreakPage = () => {
           </div>
         </div>
 
-        {/* 7-Day Streak Progression Bar / Stepper (Section 5) */}
-        <StreakProgress
-          rewards={rewards}
-          streak={streak}
-          onSelectDay={(day) => {
-            const target = rewards.find((r) => r.day === day);
-            if (target?.status === 'AVAILABLE') {
-              initiateClaim(day);
-            }
-          }}
-        />
-
-        {/* 7 Daily Reward Cards Responsive Grid (Desktop: 7-Row, Mobile: 4+3 Grid) */}
+        {/* 7 Daily Reward Cards Responsive Grid (Section 28 & Page 62/63 - Avoids Long Cramped Rows!) */}
         <RewardGrid
           rewards={rewards}
           isClaiming={isClaiming}
@@ -169,17 +158,14 @@ export const DailyStreakPage = () => {
           onCountdownExpire={() => refreshStreak(false)}
         />
 
-        {/* Supporting Benefits Information Section */}
+        {/* Supporting Benefits Information Section (Page 62 & 63) */}
         <WhyStreak />
 
-        {/* 24-Hour Rotating Surprise Drop Bonus Showcase */}
-        <DailyRotatingDrop />
-
-        {/* SaaS Platform Footer with Trust Strip */}
-        <Footer />
+        {/* SaaS Platform Footer with Official Trust Strip */}
+        <TrustFooter />
       </div>
 
-      {/* CPA Advertisement Demo Modal */}
+      {/* CPA Advertisement Demo Modal (Section 7 & 68) */}
       <CpaDemo
         isOpen={cpaModalOpen}
         day={pendingClaimDay}
