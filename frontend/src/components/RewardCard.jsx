@@ -1,19 +1,27 @@
 import React from 'react';
 import { Check, Lock, ChevronRight, Clock } from 'lucide-react';
 import vesCoinImg from '../assets/images/VEs_Coin.png';
-import day4GiftImg from '../assets/images/Day-4.png';
-import day5CardImg from '../assets/images/Day-5.png';
+import day4GiftBoxImg from '../assets/images/Day-4.png';
+import amazonCardImg from '../assets/images/Day-5.png';
 import day7CrownImg from '../assets/images/Day-7.png';
+import crownPedestalImg from '../assets/images/Top_right.png';
 import useCountdown from '../hooks/useCountdown';
 import styles from './RewardCard.module.css';
 
+/**
+ * RewardCard Component:
+ * Renders individual Daily Streak cards for Days 1 to 7 using official assets:
+ * - Days 1, 2, 3, 6: VEs_Coin.png (3D Gold coins stack)
+ * - Day 4: Day-4.png (3D Open Purple Gift Box with Amazon card, gold coins, and confetti - high visual impact!)
+ * - Day 5: Day-5.png (3D Amazon Gift Card)
+ * - Day 7: Day-7.png (VIP Royal Crown on pedestal with 'Ultimate Reward' plate & Amazon card)
+ */
 export const RewardCard = ({
   reward,
   isClaiming,
   serverTime,
   onClaim,
-  onCountdownExpire,
-  isFeatured = false
+  onCountdownExpire
 }) => {
   const {
     day,
@@ -39,8 +47,7 @@ export const RewardCard = ({
   const isAvailable = status === 'AVAILABLE';
   const isLocked = status === 'LOCKED';
 
-  // Determine badge styling matching reference image (Page 62 & 63)
-  // "Today" badge is strictly dynamic: ONLY the active & available day
+  // Determine badge styling matching reference design
   const getBadgeConfig = () => {
     if (isClaimed) {
       return { type: 'claimed' };
@@ -62,31 +69,31 @@ export const RewardCard = ({
 
   const badgeConfig = getBadgeConfig();
 
-  // Render Official 3D Asset matching task design
-  const renderAsset = (sizeOverride = null) => {
+  // Render Official 3D Asset matching task design specifications
+  const renderAsset = () => {
     let imgSrc = vesCoinImg;
     let altText = 'Reward Coins';
+    let assetClass = styles.assetCoins;
 
     if (day === 4 || assetType === 'gift-box') {
-      imgSrc = day4GiftImg;
-      altText = 'Amazon Gift Card Box';
+      imgSrc = day4GiftBoxImg;
+      altText = 'Day 4 Surprise Gift Box with Amazon Voucher';
+      assetClass = styles.assetGiftBox;
     } else if (day === 5 || assetType === 'amazon-card') {
-      imgSrc = day5CardImg;
-      altText = 'Amazon Gift Voucher';
+      imgSrc = amazonCardImg;
+      altText = 'Amazon Gift Card';
+      assetClass = styles.assetAmazonCard;
     } else if (day === 7 || assetType === 'crown') {
       imgSrc = day7CrownImg;
       altText = 'VIP Crown Ultimate Reward';
-    } else {
-      imgSrc = vesCoinImg;
-      altText = 'VEs Coins Stack';
+      assetClass = styles.assetCrown;
     }
 
     return (
       <img
         src={imgSrc}
         alt={altText}
-        className={`${styles.cardAssetImg} ${isAvailable ? 'anim-float' : ''}`}
-        style={sizeOverride ? { maxHeight: `${sizeOverride}px` } : undefined}
+        className={`${styles.cardAssetImg} ${assetClass} ${isAvailable ? 'anim-float' : ''}`}
         loading="lazy"
       />
     );
@@ -97,7 +104,7 @@ export const RewardCard = ({
     if (isClaimed) return '#10B981'; // Green
     if (isAvailable) return '#FBBF24'; // Bright Gold
     if (day === 7) return '#FBBF24'; // Day 7 VIP Gold
-    if (currency === 'INR') return '#C4B5FD'; // Light Lavender
+    if (currency === 'INR') return '#C4B5FD'; // Lavender
     return '#FFFFFF'; // Crisp White
   };
 
@@ -140,64 +147,25 @@ export const RewardCard = ({
     );
   };
 
-  // Day 7 Full-Width Featured Layout for Mobile
-  if (isFeatured && day === 7) {
-    return (
-      <div
-        className={`${styles.cardFeaturedDay7} ${isAvailable ? styles.cardAvailable : ''}`}
-      >
-        <div className={styles.featuredLeft}>
-          <div className={styles.featuredAssetWrapper}>
-            {renderAsset(54)}
-          </div>
-          <div className={styles.featuredInfo}>
-            <div className={styles.featuredHeaderRow}>
-              <span className={styles.dayTitle} style={{ color: '#FBBF24', fontSize: '0.9rem' }}>
-                Day 7
-              </span>
-              <span
-                className={styles.badgePill}
-                style={{ backgroundColor: '#D97706', color: '#FFFFFF' }}
-              >
-                VIP ULTIMATE
-              </span>
-            </div>
-            <div
-              className={styles.rewardAmount}
-              style={{ color: '#FBBF24', fontSize: '1.4rem' }}
-            >
-              ₹{amount} Amazon Voucher
-            </div>
-            <span className={styles.rewardSubtitle} style={{ color: '#E2E8F0', fontSize: '0.78rem' }}>
-              {subtitle || 'Guaranteed Amazon Gift Card'}
-            </span>
-          </div>
-        </div>
-
-        <div className={styles.featuredRight}>
-          {renderActionButton()}
-        </div>
-      </div>
-    );
-  }
-
-  // Standard Card Layout
+  // Card State Styling
   const cardStateClass = isAvailable
     ? styles.cardAvailable
     : isClaimed
     ? styles.cardClaimed
+    : day === 7
+    ? styles.cardDay7
     : styles.cardLocked;
 
   return (
     <div className={`${styles.card} ${cardStateClass}`}>
-      {/* Ambient background glow */}
+      {/* Ambient background glow inside card */}
       <div
         className={`${styles.ambientGlow} ${
           isAvailable ? styles.glowGold : isClaimed ? styles.glowGreen : styles.glowPurple
         }`}
       />
 
-      {/* Top Header of Card: Day label & Badge */}
+      {/* Top Header of Card: Day label & Dynamic Badge */}
       <div className={styles.cardHeader}>
         <span
           className={styles.dayTitle}
@@ -226,14 +194,12 @@ export const RewardCard = ({
         ) : null}
       </div>
 
-      {/* Visual Artwork Center */}
+      {/* Visual Artwork Center (Enlarged and visually prominent) */}
       <div className={styles.assetContainer}>
         <div
           style={{
             opacity: isClaimed ? 0.8 : 1,
-            filter: isAvailable
-              ? 'drop-shadow(0 0 16px rgba(245, 158, 11, 0.5))'
-              : 'drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4))'
+            transition: 'transform 0.3s ease'
           }}
         >
           {renderAsset()}
@@ -257,7 +223,7 @@ export const RewardCard = ({
         </div>
 
         <span className={styles.rewardSubtitle}>
-          {subtitle || `${amount} ${currency}`}
+          {subtitle || (currency === 'INR' ? 'Amazon Gift Card' : `${amount} ${currency}`)}
         </span>
       </div>
 

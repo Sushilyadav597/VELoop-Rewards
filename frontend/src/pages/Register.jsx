@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import ErrorState from '../components/ErrorState';
+import crownImg from '../assets/images/Top_right.png';
+import coinsImg from '../assets/images/VEs_Coin.png';
 import styles from '../styles/globals.module.css';
 
 /**
- * Register Page (Step 9 Polish):
- * Clean registration form with password visibility toggle,
- * input validation, loading state, and auto-login redirection.
+ * Register Page:
+ * Clean registration form with official VELoop 3D assets,
+ * input validation, loading state, and 1-click test setup.
  */
 export const Register = () => {
   const [name, setName] = useState('');
@@ -18,7 +20,7 @@ export const Register = () => {
   const [formError, setFormError] = useState('');
   const [apiError, setApiError] = useState(null);
 
-  const { register, isAuthenticated } = useAuth();
+  const { register, isAuthenticated, demoLogin } = useAuth();
   const navigate = useNavigate();
 
   // If already authenticated, redirect immediately to dashboard
@@ -85,8 +87,29 @@ export const Register = () => {
       >
         {/* Brand Header */}
         <div style={{ textAlign: 'center', marginBottom: '2.25rem' }}>
-          <div style={{ fontSize: '2.6rem', marginBottom: '0.4rem', filter: 'drop-shadow(0 0 10px rgba(139, 92, 246, 0.4))' }}>
-            🌟
+          <div className="d-flex justify-content-center align-items-center gap-2 mb-2">
+            <img
+              src={crownImg}
+              alt="VIP Crown"
+              style={{
+                width: '62px',
+                height: '62px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 0 18px rgba(245, 158, 11, 0.8))'
+              }}
+              className="anim-float"
+            />
+            <img
+              src={coinsImg}
+              alt="VEs Coins"
+              style={{
+                width: '46px',
+                height: '46px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 0 14px rgba(245, 158, 11, 0.7))'
+              }}
+              className="anim-float"
+            />
           </div>
           <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.35rem', letterSpacing: '-0.02em' }}>
             Join VELoop Rewards
@@ -220,44 +243,80 @@ export const Register = () => {
           </Link>
         </div>
 
-        {/* Quick Test Autofill Helper */}
+        {/* Instant 1-Click Evaluator Personas */}
         <div
           style={{
-            marginTop: '1.5rem',
+            marginTop: '1.25rem',
             padding: '0.85rem',
             backgroundColor: 'rgba(255, 255, 255, 0.03)',
-            borderRadius: '10px',
-            border: '1px dashed var(--border-subtle)',
+            borderRadius: '12px',
+            border: '1px dashed rgba(139, 92, 246, 0.4)',
             fontSize: '0.82rem',
             textAlign: 'center'
           }}
         >
-          <div style={{ color: 'var(--text-muted)', marginBottom: '0.5rem', fontWeight: 600 }}>
-            <span>💡 Quick Test Registration:</span>
+          <div style={{ color: '#C4B5FD', marginBottom: '0.5rem', fontWeight: 700, fontSize: '0.78rem' }}>
+            ⚡ Instant 1-Click Evaluator Personas:
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              const rand = Math.floor(1000 + Math.random() * 9000);
-              setName(`Explorer ${rand}`);
-              setEmail(`tester${rand}@veloop.io`);
-              setPassword('password123');
-              setFormError('');
-              setApiError(null);
-            }}
-            style={{
-              background: 'rgba(139, 92, 246, 0.15)',
-              border: '1px solid rgba(139, 92, 246, 0.35)',
-              color: '#c4b5fd',
-              borderRadius: '6px',
-              padding: '0.4rem 0.85rem',
-              fontSize: '0.8rem',
-              cursor: 'pointer',
-              fontWeight: 600
-            }}
-          >
-            Autofill New User Details ✨
-          </button>
+          <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={async () => {
+                await demoLogin('new');
+                navigate('/dashboard');
+              }}
+              style={{
+                background: 'rgba(139, 92, 246, 0.2)',
+                border: '1px solid #8B5CF6',
+                color: '#C4B5FD',
+                borderRadius: '8px',
+                padding: '0.35rem 0.65rem',
+                fontSize: '0.76rem',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              Day 1 New
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                await demoLogin('day2');
+                navigate('/dashboard');
+              }}
+              style={{
+                background: 'rgba(245, 158, 11, 0.2)',
+                border: '1px solid #F59E0B',
+                color: '#FBBF24',
+                borderRadius: '8px',
+                padding: '0.35rem 0.65rem',
+                fontSize: '0.76rem',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              Day 2 Active
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                await demoLogin('vip');
+                navigate('/dashboard');
+              }}
+              style={{
+                background: 'rgba(16, 185, 129, 0.2)',
+                border: '1px solid #10B981',
+                color: '#34D399',
+                borderRadius: '8px',
+                padding: '0.35rem 0.65rem',
+                fontSize: '0.76rem',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              Day 7 VIP
+            </button>
+          </div>
         </div>
       </div>
     </div>

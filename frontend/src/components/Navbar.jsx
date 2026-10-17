@@ -5,6 +5,8 @@ import useAuth from '../hooks/useAuth';
 import { useStreak } from '../context/StreakContext';
 import NotificationCenter from './NotificationCenter';
 import AnimatedCounter from './AnimatedCounter';
+import vesCoinImg from '../assets/images/VEs_Coin.png';
+import flameImg from '../assets/images/Flame.png';
 
 export const Navbar = () => {
   const { user, wallet, isAuthenticated, logout, demoLogin } = useAuth();
@@ -137,7 +139,7 @@ export const Navbar = () => {
             }}
             title="Total Rewards Points Vault"
           >
-            <span style={{ fontSize: '13px' }}>🪙</span>
+            <img src={vesCoinImg} alt="VEs" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
             <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#FBBF24' }}>
               <AnimatedCounter value={wallet?.vesBalance ?? 2450} suffix=" VEs" />
             </span>
@@ -160,7 +162,7 @@ export const Navbar = () => {
             }}
             title="Current Streak"
           >
-            <Flame size={15} fill="#F59E0B" color="#F59E0B" />
+            <img src={flameImg} alt="Streak" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
             <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#FFFFFF' }}>
               {streak?.currentStreak ?? 7}d
             </span>

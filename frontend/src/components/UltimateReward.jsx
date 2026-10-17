@@ -1,175 +1,98 @@
 import React from 'react';
-import { Lock, Check, Sparkles } from 'lucide-react';
-import day7CrownImg from '../assets/images/Day-7.png';
+import { Lock, Check, Sparkles, ChevronRight } from 'lucide-react';
+import crownImg from '../assets/images/Top_right.png';
+import styles from './UltimateReward.module.css';
 
-export const UltimateReward = ({ ultimateReward, currentStreak = 0 }) => {
+/**
+ * UltimateReward Component:
+ * Features the Royal Crown on illuminated pedestal (Top_right.png),
+ * large ₹5 amount, Amazon Gift Card pill, and status badge.
+ */
+export const UltimateReward = ({
+  ultimateReward,
+  currentStreak = 0,
+  isEligibleToday = false,
+  onClaim,
+  isClaiming = false
+}) => {
   const isClaimed = currentStreak >= 7;
   const rewardAmount = ultimateReward?.amount ?? 5;
   const rewardSubtitle = ultimateReward?.subtitle || 'Amazon Gift Card';
 
   return (
-    <div
-      className="card border-0 mb-3 overflow-hidden position-relative h-100 hover-lift anim-shine"
-      style={{
-        background: 'linear-gradient(135deg, #1f134c 0%, #130b32 60%, #0c0722 100%)',
-        borderRadius: '22px',
-        border: '1.5px solid rgba(245, 158, 11, 0.5)',
-        boxShadow: '0 12px 36px rgba(0, 0, 0, 0.55), 0 0 24px rgba(245, 158, 11, 0.18)',
-        minHeight: '130px'
-      }}
-    >
-      {/* Radiant Golden Glow Orb Background */}
-      <div
-        className="position-absolute"
-        style={{
-          width: '300px',
-          height: '300px',
-          background: 'radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, transparent 70%)',
-          top: '-60px',
-          left: '20px',
-          pointerEvents: 'none'
-        }}
-      />
-      <div
-        className="position-absolute"
-        style={{
-          width: '240px',
-          height: '240px',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%)',
-          bottom: '-50px',
-          right: '-20px',
-          pointerEvents: 'none'
-        }}
-      />
+    <div className={`${styles.ultimateCard} anim-shine`}>
+      {/* Radiant Golden & Purple Glow Orbs */}
+      <div className={styles.glowGold} />
+      <div className={styles.glowPurple} />
 
-      <div className="card-body p-3 p-sm-3.5 p-md-4 position-relative z-1 d-flex flex-column justify-content-center">
+      <div className="card-body p-3 p-sm-3.5 p-md-4 position-relative z-1 d-flex flex-column justify-content-center h-100">
         <div className="d-flex align-items-center justify-content-between gap-2 gap-sm-3">
           {/* Left: 3D Royal Crown with Golden Aura */}
-          <div className="d-flex align-items-center gap-2.5 gap-sm-3">
+          <div className="d-flex align-items-center gap-2.5 gap-sm-3 flex-grow-1 min-w-0">
             <div
               className="anim-float flex-shrink-0"
-              style={{ filter: 'drop-shadow(0 0 20px rgba(245, 158, 11, 0.55))' }}
+              style={{
+                filter: 'drop-shadow(0 0 24px rgba(245, 158, 11, 0.65)) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.65))'
+              }}
             >
               <img
-                src={day7CrownImg}
-                alt="VIP Ultimate Crown"
-                style={{
-                  height: 'clamp(52px, 8vw, 68px)',
-                  width: 'auto',
-                  objectFit: 'contain'
-                }}
+                src={crownImg}
+                alt="VIP Royal Crown Ultimate Reward"
+                className={styles.crownImg}
                 loading="lazy"
               />
             </div>
 
             {/* Center Info: Ultimate Reward, ₹5, Amazon Gift Card */}
-            <div>
-              <div className="d-flex align-items-center gap-1.5">
-                <span
-                  className="d-block fw-bold text-uppercase tracking-wider mb-0"
-                  style={{
-                    color: '#C4B5FD',
-                    fontSize: 'clamp(0.7rem, 1.8vw, 0.8rem)',
-                    letterSpacing: '1px'
-                  }}
-                >
+            <div className="flex-grow-1 min-w-0">
+              <div className="d-flex align-items-center gap-1.5 mb-0.5">
+                <span className={styles.ultimateTag}>
                   Ultimate Reward
                 </span>
-                <Sparkles size={12} color="#FBBF24" />
+                <Sparkles size={13} color="#FBBF24" />
               </div>
 
-              <div
-                className="fw-extrabold text-white my-0.5"
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(1.75rem, 4vw, 2.35rem)',
-                  lineHeight: '1.05',
-                  textShadow: '0 2px 14px rgba(245, 158, 11, 0.4)'
-                }}
-              >
+              <div className={styles.rewardAmount}>
                 ₹{rewardAmount}
               </div>
 
               {/* Amazon Gift Card Brand Pill */}
-              <div
-                className="d-inline-flex align-items-center gap-1.5 mt-0.5 px-2 py-0.5"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  borderRadius: '999px',
-                  border: '1px solid rgba(255, 255, 255, 0.12)'
-                }}
-              >
-                <span
-                  className="d-inline-flex align-items-center justify-content-center bg-white rounded-circle flex-shrink-0"
-                  style={{ width: '15px', height: '15px' }}
-                >
-                  <span
-                    style={{
-                      color: '#111827',
-                      fontSize: '10px',
-                      fontWeight: 900,
-                      lineHeight: '1',
-                      fontFamily: 'system-ui, sans-serif'
-                    }}
-                  >
-                    a
-                  </span>
+              <div className={styles.amazonPill}>
+                <span className={styles.amazonLogoBadge}>
+                  <span className={styles.amazonLetterA}>a</span>
                 </span>
-                <span
-                  className="fw-semibold text-truncate text-white"
-                  style={{
-                    fontSize: 'clamp(0.7rem, 1.7vw, 0.78rem)'
-                  }}
-                >
+                <span className={styles.amazonText}>
                   {rewardSubtitle}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Right: Lock / Claimed Status Badge */}
-          <div className="text-end flex-shrink-0">
+          {/* Right: Status Indicator (Lock / Claimed / Claim Now) */}
+          <div className="text-end flex-shrink-0 ps-1">
             {isClaimed ? (
-              <div
-                className="d-inline-flex flex-column align-items-center gap-1 px-2.5 py-1.5 text-success fw-bold small"
-                style={{
-                  backgroundColor: 'rgba(16, 185, 129, 0.18)',
-                  border: '1.2px solid rgba(16, 185, 129, 0.5)',
-                  borderRadius: '14px',
-                  boxShadow: '0 0 14px rgba(16, 185, 129, 0.3)'
-                }}
-              >
-                <div
-                  className="rounded-circle d-flex align-items-center justify-content-center"
-                  style={{ width: '32px', height: '32px', backgroundColor: '#10B981', color: '#FFFFFF' }}
-                >
+              <div className={styles.statusClaimed}>
+                <div className={styles.claimedCircle}>
                   <Check size={18} strokeWidth={3.5} />
                 </div>
-                <span style={{ fontSize: '0.74rem' }}>Claimed</span>
+                <span className="fw-bold small text-success">Claimed</span>
               </div>
+            ) : currentStreak === 7 && isEligibleToday ? (
+              <button
+                onClick={() => onClaim && onClaim(7)}
+                disabled={isClaiming}
+                className={styles.btnClaimDay7}
+                title="Claim Ultimate Day 7 Reward"
+              >
+                <span>{isClaiming ? 'Claiming...' : 'Claim Now'}</span>
+                <ChevronRight size={15} strokeWidth={2.8} />
+              </button>
             ) : (
-              <div className="d-inline-flex flex-column align-items-center gap-1">
-                {/* Purple Lock Icon Circle with Ambient Glow */}
-                <div
-                  className="rounded-circle d-flex align-items-center justify-content-center"
-                  style={{
-                    width: '38px',
-                    height: '38px',
-                    backgroundColor: 'rgba(139, 92, 246, 0.22)',
-                    border: '1.5px solid rgba(167, 139, 250, 0.45)',
-                    boxShadow: '0 0 16px rgba(139, 92, 246, 0.35)'
-                  }}
-                >
+              <div className={styles.statusLocked}>
+                <div className={styles.lockedCircle}>
                   <Lock size={17} color="#E9D5FF" />
                 </div>
-                <span
-                  className="fw-bold text-center d-block"
-                  style={{
-                    color: '#C4B5FD',
-                    fontSize: 'clamp(0.66rem, 1.5vw, 0.76rem)',
-                    letterSpacing: '0.2px'
-                  }}
-                >
+                <span className={styles.statusLockedText}>
                   Unlock on Day 7
                 </span>
               </div>

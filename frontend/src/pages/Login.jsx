@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import ErrorState from '../components/ErrorState';
+import flameImg from '../assets/images/Flame.png';
+import giftBoxImg from '../assets/images/Top_Left.png';
 import styles from '../styles/globals.module.css';
 
 /**
- * Login Page (Step 9 Polish):
- * Production-ready authentication form with password visibility toggle,
- * input validation, loading state, and error handling.
+ * Login Page:
+ * Production-ready authentication form with official VELoop 3D assets,
+ * input validation, loading state, error handling, and 1-click test personas.
  */
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -82,8 +84,29 @@ export const Login = () => {
       >
         {/* Brand Header */}
         <div style={{ textAlign: 'center', marginBottom: '2.25rem' }}>
-          <div style={{ fontSize: '2.6rem', marginBottom: '0.4rem', filter: 'drop-shadow(0 0 10px rgba(245, 158, 11, 0.4))' }}>
-            ⚡
+          <div className="d-flex justify-content-center align-items-center gap-2 mb-2">
+            <img
+              src={flameImg}
+              alt="VELoop Flame"
+              style={{
+                width: '46px',
+                height: '46px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 0 16px rgba(245, 158, 11, 0.8))'
+              }}
+              className="anim-float"
+            />
+            <img
+              src={giftBoxImg}
+              alt="VELoop Gift Box"
+              style={{
+                width: '54px',
+                height: '54px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 0 16px rgba(139, 92, 246, 0.7))'
+              }}
+              className="anim-float"
+            />
           </div>
           <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.35rem', letterSpacing: '-0.02em' }}>
             Welcome Back

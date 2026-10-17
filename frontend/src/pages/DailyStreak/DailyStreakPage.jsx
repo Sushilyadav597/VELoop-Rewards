@@ -145,6 +145,9 @@ export const DailyStreakPage = () => {
             <UltimateReward
               ultimateReward={ultimateReward}
               currentStreak={streak?.currentStreak || 0}
+              isEligibleToday={streak?.isEligibleToday && streak?.currentDay === 7}
+              onClaim={(day) => initiateClaim(day || 7)}
+              isClaiming={isClaiming}
             />
           </div>
         </div>

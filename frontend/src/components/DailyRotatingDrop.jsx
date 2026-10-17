@@ -14,6 +14,11 @@ import {
 import confetti from 'canvas-confetti';
 import streakApi from '../services/streakApi';
 import { useAuth } from '../context/AuthContext';
+import vesCoinImg from '../assets/images/VEs_Coin.png';
+import day4GiftBoxImg from '../assets/images/Day-4.png';
+import amazonCardImg from '../assets/images/Day-5.png';
+import day7CrownImg from '../assets/images/Day-7.png';
+import giftBoxClosedImg from '../assets/images/Top_Left.png';
 import GoldCoins from '../assets/GoldCoins';
 import GiftBox from '../assets/GiftBox';
 import AmazonCard from '../assets/AmazonCard';
@@ -120,19 +125,34 @@ export const DailyRotatingDrop = () => {
 
   const { todayDrop, isClaimedToday, schedule = [], dayOfWeek } = dropData;
 
-  const renderIcon = (assetType, size = 64) => {
-    switch (assetType) {
-      case 'gift-box':
-        return <GiftBox size={size} className="anim-float" />;
-      case 'amazon-card':
-        return <AmazonCard size={size} />;
-      case 'crown':
-        return <RoyalCrown size={size} className="anim-float" />;
-      case 'coin-stack':
-      case 'coin':
-      default:
-        return <GoldCoins size={size} />;
+  const renderIcon = (assetType, size = 90) => {
+    let imgSrc = vesCoinImg;
+    let alt = 'Bonus Coins';
+
+    if (assetType === 'gift-box') {
+      imgSrc = giftBoxClosedImg;
+      alt = '3D Mystery Gift Box';
+    } else if (assetType === 'amazon-card') {
+      imgSrc = amazonCardImg;
+      alt = 'Amazon Gift Card';
+    } else if (assetType === 'crown') {
+      imgSrc = day7CrownImg;
+      alt = 'VIP Crown';
     }
+
+    return (
+      <img
+        src={imgSrc}
+        alt={alt}
+        className="anim-float"
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          objectFit: 'contain',
+          filter: 'drop-shadow(0 10px 22px rgba(139, 92, 246, 0.6)) drop-shadow(0 0 20px rgba(245, 158, 11, 0.45))'
+        }}
+      />
+    );
   };
 
   return (
@@ -232,20 +252,20 @@ export const DailyRotatingDrop = () => {
           {/* Left: 3D Animated Illustration */}
           <div className="col-auto text-center">
             <div
-              className="p-3 d-inline-flex align-items-center justify-content-center position-relative"
+              className="p-2 d-inline-flex align-items-center justify-content-center position-relative"
               style={{
-                width: '90px',
-                height: '90px',
-                borderRadius: '20px',
+                width: '120px',
+                height: '120px',
+                borderRadius: '24px',
                 background: todayDrop.gradient || 'linear-gradient(135deg, #FF8008 0%, #FFC837 100%)',
-                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.35)'
+                boxShadow: '0 12px 28px rgba(0, 0, 0, 0.45), 0 0 24px rgba(245, 158, 11, 0.3)'
               }}
             >
-              {renderIcon(todayDrop.assetType, 58)}
+              {renderIcon(todayDrop.assetType, 92)}
               {isClaimedToday && (
                 <div
                   className="position-absolute top-0 end-0 translate-middle-y me-1 bg-success text-white rounded-circle p-1"
-                  style={{ width: '24px', height: '24px', display: 'grid', placeItems: 'center' }}
+                  style={{ width: '26px', height: '26px', display: 'grid', placeItems: 'center', boxShadow: '0 0 10px rgba(16, 185, 129, 0.6)' }}
                   title="Claimed today"
                 >
                   <Check size={14} strokeWidth={3} />

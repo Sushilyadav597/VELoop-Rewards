@@ -1,3 +1,5 @@
+/* RewardCard.module.css - Premium VELoop Reward Cards */
+
 .card {
   position: relative;
   display: flex;
@@ -5,9 +7,9 @@
   height: 100%;
   width: 100%;
   border-radius: 18px;
-  background: linear-gradient(180deg, #181044 0%, #0d0828 100%);
-  border: 1.2px solid rgba(139, 92, 246, 0.24);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(180deg, #170f3f 0%, #0d0828 100%);
+  border: 1.2px solid rgba(139, 92, 246, 0.28);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.38);
   padding: 12px 10px;
   text-align: center;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
@@ -17,22 +19,34 @@
 
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-  border-color: rgba(139, 92, 246, 0.45);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+  border-color: rgba(139, 92, 246, 0.5);
 }
 
 /* Today's Actionable Available Card */
 .cardAvailable {
-  background: linear-gradient(180deg, #2b186b 0%, #190e42 100%);
+  background: linear-gradient(180deg, #2c166d 0%, #190e44 100%);
   border: 2px solid #f59e0b;
-  box-shadow: 0 0 28px rgba(245, 158, 11, 0.38), 0 8px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5);
   transform: scale(1.02);
   z-index: 2;
 }
 
 .cardAvailable:hover {
-  transform: scale(1.03) translateY(-3px);
-  box-shadow: 0 0 35px rgba(245, 158, 11, 0.5), 0 14px 34px rgba(0, 0, 0, 0.6);
+  transform: scale(1.04) translateY(-3px);
+  box-shadow: 0 0 38px rgba(245, 158, 11, 0.55), 0 14px 34px rgba(0, 0, 0, 0.6);
+}
+
+/* Day 7 VIP Special Styling */
+.cardDay7 {
+  background: linear-gradient(180deg, #241355 0%, #110930 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.16), 0 6px 20px rgba(0, 0, 0, 0.38);
+}
+
+.cardDay7:hover {
+  border-color: rgba(245, 158, 11, 0.85);
+  box-shadow: 0 0 32px rgba(245, 158, 11, 0.32), 0 12px 30px rgba(0, 0, 0, 0.55);
 }
 
 /* Claimed Card */
@@ -44,9 +58,9 @@
 
 /* Locked Card */
 .cardLocked {
-  background: linear-gradient(180deg, #130d33 0%, #0b071e 100%);
-  border: 1px solid rgba(139, 92, 246, 0.18);
-  opacity: 0.92;
+  background: linear-gradient(180deg, #140d35 0%, #0c0722 100%);
+  border: 1.2px solid rgba(139, 92, 246, 0.2);
+  opacity: 0.94;
 }
 
 /* Ambient glow accent inside card */
@@ -86,14 +100,14 @@
 }
 
 .dayTitle {
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 800;
   letter-spacing: 0.3px;
   font-family: var(--font-heading);
 }
 
 .badgePill {
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   font-weight: 800;
   border-radius: 999px;
   padding: 2px 8px;
@@ -115,33 +129,59 @@
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
 }
 
-/* 3D Visual Asset Container */
+/* 3D Visual Asset Container (Enlarged, Attractive & Prominent) */
 .assetContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 68px;
+  min-height: 90px;
   padding: 4px 0;
   position: relative;
   z-index: 1;
 }
 
 .cardAssetImg {
-  max-height: 52px;
+  height: 74px;
+  max-height: 84px;
   width: auto;
-  max-width: 88%;
+  max-width: 95%;
   object-fit: contain;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+}
+
+/* Asset-Specific Volumetric Glows */
+.assetCoins {
+  height: 72px;
+  filter: drop-shadow(0 8px 18px rgba(245, 158, 11, 0.55));
+}
+
+/* Day 4 High-Impact 3D Open Gift Box */
+.assetGiftBox {
+  height: 88px;
+  max-height: 96px;
+  filter: drop-shadow(0 12px 24px rgba(139, 92, 246, 0.65)) drop-shadow(0 0 22px rgba(245, 158, 11, 0.45));
+  transform: scale(1.08);
+}
+
+.assetAmazonCard {
+  height: 66px;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 14px rgba(245, 158, 11, 0.3));
+}
+
+/* Day 7 VIP Crown */
+.assetCrown {
+  height: 82px;
+  max-height: 90px;
+  filter: drop-shadow(0 10px 22px rgba(245, 158, 11, 0.7));
+  transform: scale(1.05);
 }
 
 .card:hover .cardAssetImg {
-  transform: scale(1.08) translateY(-2px);
-  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.6));
+  transform: scale(1.14) translateY(-3px);
 }
 
 .cardAvailable .cardAssetImg {
-  filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.55));
+  filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.75));
 }
 
 /* Info Section */
@@ -190,9 +230,9 @@
 
 .btnClaim {
   width: 100%;
-  min-height: 36px;
+  min-height: 35px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 60%, #fde68a 100%);
   color: #0d0824;
   font-weight: 800;
   font-size: 0.8rem;
@@ -201,7 +241,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45);
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.5);
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 6px 12px;
@@ -209,7 +249,7 @@
 
 .btnClaim:hover {
   background: linear-gradient(90deg, #fbbf24 0%, #fde68a 100%);
-  box-shadow: 0 6px 22px rgba(245, 158, 11, 0.6);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.7);
   transform: translateY(-1px);
 }
 
@@ -219,7 +259,7 @@
 
 .btnClaimed {
   width: 100%;
-  min-height: 36px;
+  min-height: 35px;
   border-radius: 999px;
   background: rgba(16, 185, 129, 0.16);
   border: 1px solid rgba(16, 185, 129, 0.45);
@@ -235,7 +275,7 @@
 
 .btnLocked {
   width: 100%;
-  min-height: 36px;
+  min-height: 35px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -251,7 +291,7 @@
 
 .btnCountdown {
   width: 100%;
-  min-height: 36px;
+  min-height: 35px;
   border-radius: 999px;
   background: rgba(245, 158, 11, 0.14);
   border: 1px solid rgba(245, 158, 11, 0.4);
@@ -266,58 +306,127 @@
 }
 
 /* =========================================================================
-   MOBILE RESPONSIVE CARD STYLES (< 640px)
+   RESPONSIVE ADJUSTMENTS
    ========================================================================= */
-@media (max-width: 639px) {
-  .card {
-    padding: 8px 5px;
-    border-radius: 14px;
-  }
 
-  .cardHeader {
-    margin-bottom: 3px;
-  }
-
-  .dayTitle {
-    font-size: 0.72rem;
-  }
-
-  .badgePill {
-    font-size: 0.56rem;
-    padding: 1px 5px;
-  }
-
-  .claimedCheckBadge {
-    width: 16px;
-    height: 16px;
-  }
-
+@media (min-width: 992px) {
   .assetContainer {
-    min-height: 46px;
-    padding: 2px 0;
+    min-height: 80px;
+    padding: 8px 0;
   }
-
+  
   .cardAssetImg {
-    max-height: 40px;
-  }
-
-  .infoSection {
-    margin-top: 2px;
-    margin-bottom: 5px;
-  }
-
-  .rewardTitle {
-    font-size: 0.60rem;
-    margin-bottom: 1px;
+    max-height: 68px;
   }
 
   .rewardAmount {
-    font-size: 1.05rem;
-    margin: 1px 0;
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .card {
+    padding: 9px 6px;
+    border-radius: 15px;
+  }
+
+  .dayTitle {
+    font-size: 0.74rem;
+  }
+
+  .badgePill {
+    font-size: 0.58rem;
+    padding: 1px 6px;
+  }
+
+  .claimedCheckBadge {
+    width: 17px;
+    height: 17px;
+  }
+
+  .assetContainer {
+    min-height: 72px;
+    padding: 4px 0;
+  }
+
+  .cardAssetImg {
+    height: 60px;
+    max-height: 68px;
+  }
+
+  .assetGiftBox {
+    height: 72px;
+    max-height: 78px;
+  }
+
+  .assetCrown {
+    height: 68px;
+    max-height: 74px;
+  }
+
+  .rewardTitle {
+    font-size: 0.62rem;
+  }
+
+  .rewardAmount {
+    font-size: 1.1rem;
   }
 
   .rewardSubtitle {
-    font-size: 0.58rem;
+    font-size: 0.62rem;
+  }
+
+  .btnClaim,
+  .btnClaimed,
+  .btnLocked,
+  .btnCountdown {
+    min-height: 30px;
+    font-size: 0.72rem;
+    padding: 4px 6px;
+    gap: 3px;
+  }
+}
+
+@media (max-width: 360px) {
+  .card {
+    padding: 7px 4px;
+    border-radius: 12px;
+  }
+
+  .dayTitle {
+    font-size: 0.68rem;
+  }
+
+  .badgePill {
+    font-size: 0.52rem;
+    padding: 1px 4px;
+  }
+
+  .assetContainer {
+    min-height: 60px;
+  }
+
+  .cardAssetImg {
+    height: 50px;
+    max-height: 56px;
+  }
+
+  .assetGiftBox {
+    height: 60px;
+    max-height: 66px;
+  }
+
+  .assetCrown {
+    height: 56px;
+    max-height: 62px;
+  }
+
+  .rewardAmount {
+    font-size: 1rem;
+  }
+
+  .rewardSubtitle {
+    font-size: 0.56rem;
   }
 
   .btnClaim,
@@ -325,94 +434,7 @@
   .btnLocked,
   .btnCountdown {
     min-height: 28px;
-    font-size: 0.68rem;
-    padding: 3px 5px;
-    gap: 3px;
-  }
-}
-
-@media (max-width: 360px) {
-  .card {
-    padding: 6px 3px;
-    border-radius: 12px;
-  }
-
-  .dayTitle {
     font-size: 0.66rem;
+    padding: 3px 4px;
   }
-
-  .badgePill {
-    font-size: 0.50rem;
-    padding: 1px 3px;
-  }
-
-  .cardAssetImg {
-    max-height: 34px;
-  }
-
-  .rewardTitle {
-    font-size: 0.56rem;
-  }
-
-  .rewardAmount {
-    font-size: 0.95rem;
-  }
-
-  .rewardSubtitle {
-    font-size: 0.54rem;
-  }
-
-  .btnClaim,
-  .btnClaimed,
-  .btnLocked,
-  .btnCountdown {
-    min-height: 26px;
-    font-size: 0.64rem;
-    padding: 2px 3px;
-  }
-}
-
-/* Day 7 Full-Width Featured Card on Mobile */
-.cardFeaturedDay7 {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  text-align: left;
-  background: linear-gradient(135deg, #2b1263 0%, #1a0a40 60%, #10062a 100%);
-  border: 1.5px solid rgba(245, 158, 11, 0.55);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.2);
-  border-radius: 20px;
-  width: 100%;
-}
-
-.featuredLeft {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
-}
-
-.featuredAssetWrapper {
-  flex-shrink: 0;
-  filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.5));
-}
-
-.featuredInfo {
-  min-width: 0;
-}
-
-.featuredHeaderRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 2px;
-}
-
-.featuredRight {
-  flex-shrink: 0;
-  margin-left: 12px;
-  min-width: 110px;
 }

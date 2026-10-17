@@ -1,11 +1,13 @@
+/* DailyStreak.module.css - Dedicated Daily Streak Page Styling */
+
 .pageContainer {
   min-height: 100vh;
   background-color: #070414;
   background-image: 
-    radial-gradient(ellipse 85% 45% at 50% -5%, rgba(139, 92, 246, 0.25) 0%, transparent 60%),
-    radial-gradient(circle at 90% 28%, rgba(245, 158, 11, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 10% 60%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse 70% 35% at 50% 100%, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
+    radial-gradient(ellipse 90% 50% at 50% -5%, rgba(139, 92, 246, 0.28) 0%, transparent 65%),
+    radial-gradient(circle at 92% 25%, rgba(245, 158, 11, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 8% 55%, rgba(99, 102, 241, 0.14) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(139, 92, 246, 0.18) 0%, transparent 65%);
   color: #f8fafc;
   padding-bottom: 70px;
   position: relative;
@@ -68,7 +70,7 @@
 }
 
 /* =========================================================================
-   RESPONSIVE CARD GRID SYSTEM (AVOIDS LONG ROWS & PREVENTS CRAMPED SLIVERS)
+   RESPONSIVE CARD GRID SYSTEM
    ========================================================================= */
 
 .gridWrapper {
@@ -76,30 +78,49 @@
   flex-direction: column;
   gap: 12px;
   width: 100%;
+  margin-top: 0.25rem;
   margin-bottom: 1.5rem;
 }
 
-.gridContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  width: 100%;
-}
-
-.rowTop {
+/* Desktop Grid: Single continuous 7-column row */
+.desktopGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 12px;
   width: 100%;
 }
 
-.rowBottom {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  width: 100%;
-  max-width: 840px;
-  margin: 0 auto;
+.mobileGrid {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .desktopGrid {
+    display: none;
+  }
+
+  .mobileGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .rowTop {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 100%;
+  }
+
+  .rowBottom {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+  }
 }
 
 .cardCol {
@@ -109,7 +130,7 @@
 }
 
 @media (max-width: 639px) {
-  .gridContainer {
+  .mobileGrid {
     gap: 8px;
   }
 
@@ -119,12 +140,11 @@
 
   .rowBottom {
     gap: 6px;
-    max-width: 100%;
   }
 }
 
 @media (max-width: 360px) {
-  .gridContainer {
+  .mobileGrid {
     gap: 6px;
   }
 
@@ -142,7 +162,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 16px;
+  padding: 6px 18px;
   background: rgba(139, 92, 246, 0.12);
   border: 1px solid rgba(167, 139, 250, 0.32);
   border-radius: 999px;
@@ -150,7 +170,7 @@
   font-size: clamp(0.72rem, 1.8vw, 0.82rem);
   font-weight: 600;
   letter-spacing: 0.4px;
-  box-shadow: 0 0 16px rgba(139, 92, 246, 0.12);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.15);
 }
 
 /* Notice / Error Banner */

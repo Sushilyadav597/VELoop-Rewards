@@ -1,5 +1,10 @@
 import React from 'react';
 import { Check, Sparkles, X } from 'lucide-react';
+import vesCoinImg from '../assets/images/VEs_Coin.png';
+import day4GiftBoxImg from '../assets/images/Day-4.png';
+import amazonCardImg from '../assets/images/Day-5.png';
+import day7CrownImg from '../assets/images/Day-7.png';
+import giftBoxClosedImg from '../assets/images/Top_Left.png';
 import GoldCoins from '../assets/GoldCoins';
 import AmazonCard from '../assets/AmazonCard';
 import RoyalCrown from '../assets/RoyalCrown';
@@ -25,17 +30,44 @@ export const ClaimModal = ({ isOpen = true, claimData, onClose }) => {
   const isUltimate = reward?.day === 7 || reward?.rewardType?.includes('ULTIMATE');
 
   const renderCelebrationAsset = () => {
-    if (isUltimate) {
-      return <RoyalCrown size={90} className="anim-float" />;
+    let imgSrc = vesCoinImg;
+    let altText = 'Rewards Coins';
+    let size = 135;
+
+    if (isUltimate || reward?.day === 7) {
+      imgSrc = day7CrownImg;
+      altText = 'VIP Crown Ultimate Reward';
+      size = 145;
+    } else if (reward?.day === 4 || (isGiftCard && reward?.amount === 1)) {
+      imgSrc = day4GiftBoxImg;
+      altText = '3D Surprise Gift Box';
+      size = 155;
+    } else if (isGiftCard || reward?.day === 5) {
+      imgSrc = amazonCardImg;
+      altText = 'Amazon Gift Card';
+      size = 140;
     }
-    if (isGiftCard) {
-      return reward?.amount >= 2 ? (
-        <AmazonCard size={86} className="anim-float" />
-      ) : (
-        <GiftBox size={86} className="anim-float" />
-      );
-    }
-    return <GoldCoins size={86} className="anim-float" />;
+
+    return (
+      <div
+        className="anim-float position-relative"
+        style={{
+          filter: 'drop-shadow(0 16px 36px rgba(139, 92, 246, 0.6)) drop-shadow(0 0 30px rgba(245, 158, 11, 0.5))',
+          margin: '0.5rem auto'
+        }}
+      >
+        <img
+          src={imgSrc}
+          alt={altText}
+          style={{
+            height: `${size}px`,
+            width: 'auto',
+            maxHeight: '160px',
+            objectFit: 'contain'
+          }}
+        />
+      </div>
+    );
   };
 
   return (

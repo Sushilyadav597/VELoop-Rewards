@@ -74,8 +74,8 @@ export const WhyStreak = () => {
                   src={item.img}
                   alt={item.alt}
                   style={{
-                    width: 'clamp(40px, 6vw, 48px)',
-                    height: 'clamp(40px, 6vw, 48px)',
+                    width: 'clamp(46px, 7vw, 56px)',
+                    height: 'clamp(46px, 7vw, 56px)',
                     objectFit: 'contain'
                   }}
                   loading="lazy"
