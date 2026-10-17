@@ -267,6 +267,28 @@
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
+@media (max-width: 991px) {
+  .roadmapCard {
+    padding: 1.35rem 1.15rem;
+    border-radius: 20px;
+    margin-bottom: 1.75rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .roadmapCard {
+    padding: 1rem 0.75rem;
+    border-radius: 18px;
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .roadmapCard {
+    padding: 0.85rem 0.5rem;
+  }
+}
+
 .roadmapHeader {
   display: flex;
   align-items: center;
@@ -274,6 +296,15 @@
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 1.4rem;
+}
+
+@media (max-width: 540px) {
+  .roadmapHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
 }
 
 .roadmapTitle {
@@ -287,6 +318,39 @@
   gap: 10px;
 }
 
+@media (max-width: 540px) {
+  .roadmapTitle {
+    font-size: 1.12rem;
+    gap: 8px;
+  }
+}
+
+.btnOpenStreakRoom {
+  background: transparent;
+  border: none;
+  color: #A78BFA;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.btnOpenStreakRoom:hover {
+  color: #C4B5FD;
+  transform: translateX(2px);
+}
+
+@media (max-width: 540px) {
+  .btnOpenStreakRoom {
+    font-size: 0.82rem;
+  }
+}
+
+/* 7 Daily Cards Grid: Desktop 7-Col Row, Tablet/Mobile 12-Col Balanced Layout */
 .roadmapGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -296,18 +360,20 @@
 
 @media (max-width: 991px) {
   .roadmapGrid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(12, 1fr);
     gap: 8px;
-  }
-  .roadmapGrid > div:nth-child(n+5) {
-    grid-column: span 1;
   }
 }
 
 @media (max-width: 540px) {
   .roadmapGrid {
-    grid-template-columns: repeat(4, 1fr);
     gap: 6px;
+  }
+}
+
+@media (max-width: 380px) {
+  .roadmapGrid {
+    gap: 4px;
   }
 }
 
@@ -323,13 +389,49 @@
   align-items: center;
   justify-content: space-between;
   min-height: 140px;
+  min-width: 0; /* CRITICAL: Prevents track overflow in CSS Grid */
+  box-sizing: border-box;
+  width: 100%;
   transition: all 0.25s ease;
+}
+
+/* Tablet/Mobile Row Splitting: Row 1 = Days 1-4 (span 3), Row 2 = Days 5-7 (span 4) */
+@media (max-width: 991px) {
+  .roadmapDayItem {
+    grid-column: span 3; /* 4 items * 3 = 12 columns (100% full width) */
+    padding: 8px 6px;
+    min-height: 130px;
+    border-radius: 14px;
+  }
+  .roadmapDayItemRow2 {
+    grid-column: span 4; /* 3 items * 4 = 12 columns (100% full width, balanced) */
+  }
+}
+
+@media (max-width: 540px) {
+  .roadmapDayItem {
+    padding: 7px 4px;
+    min-height: 116px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .roadmapDayItem {
+    padding: 6px 3px;
+    min-height: 106px;
+    border-radius: 10px;
+  }
 }
 
 .roadmapDayItem:hover {
   transform: translateY(-3px);
   border-color: rgba(139, 92, 246, 0.6);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.roadmapDayItem:active {
+  transform: scale(0.97);
 }
 
 .roadmapDayActive {
@@ -347,6 +449,7 @@
 .roadmapDayDay7 {
   border: 1.5px solid rgba(245, 158, 11, 0.45);
   background: linear-gradient(180deg, #241355 0%, #110930 100%);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
 }
 
 .roadmapDayLabel {
@@ -354,16 +457,76 @@
   font-weight: 800;
   font-family: var(--font-heading);
   color: #cbd5e1;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+@media (max-width: 540px) {
+  .roadmapDayLabel {
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .roadmapDayLabel {
+    font-size: 0.62rem;
+  }
 }
 
 .roadmapAssetImg {
-  height: 52px;
+  height: 50px;
   width: auto;
   max-width: 90%;
   object-fit: contain;
-  margin: 6px 0;
+  margin: 4px 0;
+  filter: drop-shadow(0 4px 10px rgba(245, 158, 11, 0.4));
   transition: transform 0.25s ease;
+}
+
+.assetImgDay4 {
+  height: 58px;
+  filter: drop-shadow(0 6px 14px rgba(139, 92, 246, 0.6));
+}
+
+.assetImgDay7 {
+  height: 54px;
+  filter: drop-shadow(0 6px 16px rgba(245, 158, 11, 0.65));
+}
+
+@media (max-width: 991px) {
+  .roadmapAssetImg {
+    height: 44px;
+  }
+  .assetImgDay4 {
+    height: 50px;
+  }
+  .assetImgDay7 {
+    height: 48px;
+  }
+}
+
+@media (max-width: 540px) {
+  .roadmapAssetImg {
+    height: 38px;
+  }
+  .assetImgDay4 {
+    height: 44px;
+  }
+  .assetImgDay7 {
+    height: 42px;
+  }
+}
+
+@media (max-width: 360px) {
+  .roadmapAssetImg {
+    height: 32px;
+  }
+  .assetImgDay4 {
+    height: 36px;
+  }
+  .assetImgDay7 {
+    height: 34px;
+  }
 }
 
 .roadmapDayItem:hover .roadmapAssetImg {
@@ -375,6 +538,20 @@
   font-weight: 900;
   color: #ffffff;
   margin-bottom: 2px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+@media (max-width: 540px) {
+  .roadmapDayValue {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .roadmapDayValue {
+    font-size: 0.72rem;
+  }
 }
 
 .roadmapDaySubtitle {
@@ -386,15 +563,49 @@
   max-width: 100%;
 }
 
+@media (max-width: 540px) {
+  .roadmapDaySubtitle {
+    font-size: 0.58rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .roadmapDaySubtitle {
+    font-size: 0.52rem;
+  }
+}
+
 .roadmapStatusBadge {
-  margin-top: 6px;
+  margin-top: 5px;
   font-size: 0.68rem;
   font-weight: 800;
   border-radius: 999px;
   padding: 2px 8px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 3px;
+  max-width: 100%;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+@media (max-width: 540px) {
+  .roadmapStatusBadge {
+    font-size: 0.6rem;
+    padding: 2px 5px;
+    gap: 2px;
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 360px) {
+  .roadmapStatusBadge {
+    font-size: 0.54rem;
+    padding: 1.5px 3.5px;
+    gap: 1px;
+    margin-top: 3px;
+  }
 }
 
 /* --------------------------------------------------------------------------

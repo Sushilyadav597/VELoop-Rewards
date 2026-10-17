@@ -401,17 +401,7 @@ export const Dashboard = () => {
 
             <button
               onClick={() => navigate('/daily-streak')}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: '#A78BFA',
-                fontSize: '0.88rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
+              className={styles.btnOpenStreakRoom}
             >
               Open Daily Streak Room <ArrowRight size={14} />
             </button>
@@ -427,6 +417,7 @@ export const Dashboard = () => {
               const asset = getRoadmapAsset(r.day);
 
               let itemClass = styles.roadmapDayItem;
+              if (r.day >= 5) itemClass += ` ${styles.roadmapDayItemRow2}`;
               if (isAvailable) itemClass += ` ${styles.roadmapDayActive}`;
               else if (isClaimed) itemClass += ` ${styles.roadmapDayClaimed}`;
               else if (isDay7) itemClass += ` ${styles.roadmapDayDay7}`;
@@ -446,14 +437,9 @@ export const Dashboard = () => {
                   <img
                     src={asset.src}
                     alt={asset.alt}
-                    className={`${styles.roadmapAssetImg} ${isAvailable ? 'anim-float' : ''}`}
-                    style={
-                      r.day === 4
-                        ? { height: '62px', filter: 'drop-shadow(0 6px 14px rgba(139, 92, 246, 0.6))' }
-                        : r.day === 7
-                        ? { height: '58px', filter: 'drop-shadow(0 6px 16px rgba(245, 158, 11, 0.65))' }
-                        : { filter: 'drop-shadow(0 4px 10px rgba(245, 158, 11, 0.4))' }
-                    }
+                    className={`${styles.roadmapAssetImg} ${
+                      r.day === 4 ? styles.assetImgDay4 : r.day === 7 ? styles.assetImgDay7 : ''
+                    } ${isAvailable ? 'anim-float' : ''}`}
                   />
 
                   <div>

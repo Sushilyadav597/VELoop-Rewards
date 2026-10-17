@@ -6,6 +6,8 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   border-radius: 18px;
   background: linear-gradient(180deg, #170f3f 0%, #0d0828 100%);
   border: 1.2px solid rgba(139, 92, 246, 0.28);
